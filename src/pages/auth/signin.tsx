@@ -7,6 +7,7 @@ import Image from "next/image";
 
 import LogoCt from "../../assets/images/ct-black-horizontal-logo.svg"
 import { FcGoogle } from "react-icons/fc";
+import { fireAuthErrorToast } from "../../common/utils";
 interface Props {
   error?: string | string[]
 }
@@ -16,16 +17,9 @@ const SignIn: NextPage<Props> = ({ error }) => {
 
   useEffect(() => {
     if (error) {
-      toast({
+      fireAuthErrorToast(toast, {
         title: error,
-        description: "Um erro inesperado ocorreu. Tente novamente.",
-        status: "error",
-        variant: "left-accent",
-        containerStyle: {
-          paddingBottom: "180px"
-        },
-        duration: 9000,
-        isClosable: true,
+        description: "Um erro inesperado ocorreu. Tente novamente."
       })
     }
   }, [error])

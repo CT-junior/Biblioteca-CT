@@ -4,6 +4,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { Button, Center, Code, Flex, Heading, Text, useToast } from "@chakra-ui/react";
+import { fireAuthErrorToast } from "../../common/utils";
 
 interface Props {
   error?: string | string[]
@@ -17,19 +18,12 @@ const Error: NextPage<Props> = ({ error }) => {
 
   useEffect(() => {
     if (error && error === 'AccessDenied') {
-      toast({
+      fireAuthErrorToast(toast, {
         description: (
           <Text>
             O email não é do domínio da <Text as={'strong'}>CT Junior</Text>
           </Text>
-        ),
-        status: "error",
-        variant: "left-accent",
-        containerStyle: {
-          paddingBottom: '180px'
-        },
-        duration: 9000,
-        isClosable: true,
+        )
       })
       router.push('/auth/signin')
     }
