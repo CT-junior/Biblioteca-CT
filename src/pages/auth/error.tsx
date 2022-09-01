@@ -15,11 +15,12 @@ const Error: NextPage<Props> = ({ error }) => {
   const toast = useToast()
 
   useEffect(() => {
-    if (error) {
-      fireAuthErrorToast(toast, error)
-    }
-
-    router.push('/auth/signin')
+    router.push({
+      pathname: '/auth/signin',
+      query: {
+        error
+      }
+    })
   }, [error])
 
   return (

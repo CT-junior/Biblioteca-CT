@@ -1,7 +1,12 @@
 import { CreateToastFnReturn, UseToastOptions, Text } from "@chakra-ui/react"
 
 export const fireAuthErrorToast = (chackraToast: CreateToastFnReturn, error: string | string[]) => {
+    if (chackraToast.isActive(error)) { // error is a valid toadId
+        return
+    }
+    
     const options: UseToastOptions = {
+        id: error, // error is a valid toadId
         status: "error",
         variant: "left-accent",
         containerStyle: {
