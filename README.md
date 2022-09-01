@@ -2,7 +2,22 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+### 1. Set up your local environment
+
+Copy the .env.local.example file in this directory to .env.local (which will be ignored by Git):
+
+```
+cp .env.local.example .env.local
+```
+
+Add Google provider config info.
+
+```
+GOOGLE_ID=YOUR_CLIENT_ID
+GOOGLE_SECRET=YOUR_CLIENT_SECRET
+```
+
+### 2. *Next*, run the development server:
 
 ```bash
 npm run dev
