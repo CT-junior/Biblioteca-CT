@@ -1,9 +1,11 @@
-import { Box, Button, Center, Divider, Flex, Stack, useToast } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { Box, Button, Center, Divider, Flex, Stack, useToast} from "@chakra-ui/react";
 import type { NextPage } from "next";
-import { signIn } from "next-auth/react"
+import { signIn } from "next-auth/react";
 
 import Image from "next/image";
-import { useEffect } from "react";
+
+import LogoCt from "../../assets/images/ct-black-horizontal-logo.svg"
 import { FcGoogle } from "react-icons/fc";
 interface Props {
   error?: string | string[]
@@ -30,42 +32,37 @@ const SignIn: NextPage<Props> = ({ error }) => {
 
   return (
     <Flex w="100vw" h="100vh" align="center" justify="center">
-      <Box bgColor="#F6F6F6" w="1120px" h="300" borderRadius={40} shadow="lg">
-        <Stack direction="row" justify="center" align="center" h="100%">
-          <Box w="45%" pl="80px">
+      <Box bgColor="blackAlpha.50" w="100%" maxW="1120px" h="300" borderRadius={40} shadow="lg" m={8} p={8}>
+        <Stack direction={["column","column", "row"]} justify="center" align="center" h="100%" gap={12}>
+          <Flex w="100%" align="center" justify="center">
             <Image
-              src="/images/ct-black-horizontal-logo.svg"
+              priority
+              src={LogoCt}
               alt="CT Junior's company logo"
               width="400px"
               height="85px"
             />
-          </Box>
-          <Center height="120px">
-            <Divider orientation="vertical" borderColor="blackAlpha.300" />
+          </Flex>
+          <Center height="120px" display={["none", "none", "unset"]}>
+            <Divider orientation={"vertical"}  borderColor="blackAlpha.300" />
           </Center>
-          <Box
-            w="45%"
-            display="flex"
-            alignItems="center"
-            justifyContent="end"
-            pr="120px"
-          >
+          <Flex w="100%" align="center" justify="center">
             <Button
               onClick={() => signIn('google', { callbackUrl: '/' })}
-              size="lg"
+              pr={8}
+              pl={8}
+              h="60px"
               leftIcon={<FcGoogle size={24} />}
               bg="white"
-              shadow="md"
               color="blackAlpha.700"
-              fontSize="20px"
-              h="60px"
+              shadow="md"
               _hover={{
-                bgColor: "blackAlpha.50",
+                bgColor: "gray.50",
               }}              
             >
-              Logar com a conta da CT
+              Continuar com o google
             </Button>
-          </Box>
+          </Flex>
         </Stack>
       </Box>
     </Flex>
