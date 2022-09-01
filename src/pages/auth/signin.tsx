@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Box, Button, Center, Divider, Flex, Stack, useToast} from "@chakra-ui/react";
+import { Box, Button, Center, Divider, Flex, Stack, Text, useToast, UseToastOptions} from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { signIn } from "next-auth/react";
 
@@ -8,7 +8,7 @@ import Image from "next/image";
 import LogoCt from "../../assets/images/ct-black-horizontal-logo.svg"
 import { FcGoogle } from "react-icons/fc";
 
-import { fireAuthErrorToast } from "../../common/utils"
+import { fireErrorToast } from "../../common/utils"
 
 interface Props {
   error?: string | string[]
@@ -19,7 +19,21 @@ const SignIn: NextPage<Props> = ({ error }) => {
 
   useEffect(() => {
     if (error) {
-      fireAuthErrorToast(toast, error)
+      const toastOptions: UseToastOptions = {};
+
+      if (error === 'AccessDenied') {
+        toastOptions.description = (
+          <Text>
+            O email não é do domínio da <Text as={'strong'}>CT Junior</Text>
+          </Text>
+        )
+      }
+      else {
+        toastOptions.title = error
+        toastOptions.description = "Um erro inesperado ocorreu. Tente novamente."
+      }
+
+      fireErrorToast(toast, toastOptions)
     }
   }, [error])
 
