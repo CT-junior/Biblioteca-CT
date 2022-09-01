@@ -1,11 +1,11 @@
 import { Box, Button, Center, Divider, Flex, Stack } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import { getProviders, signIn } from "next-auth/react"
+import { signIn } from "next-auth/react"
 
 import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
 
-const SignIn: NextPage = ({ providers }) => {
+const SignIn: NextPage = () => {
   return (
     <Flex w="100vw" h="100vh" align="center" justify="center">
       <Box bgColor="#F6F6F6" w="1120px" h="300" borderRadius={40} shadow="lg">
@@ -29,7 +29,7 @@ const SignIn: NextPage = ({ providers }) => {
             pr="120px"
           >
             <Button
-              onClick={() => signIn(providers['google'].id)}
+              onClick={() => signIn('google')}
               size="lg"
               leftIcon={<FcGoogle size={24} />}
               bg="white"
@@ -51,10 +51,3 @@ const SignIn: NextPage = ({ providers }) => {
 };
 
 export default SignIn;
-
-export async function getServerSideProps() {
-  const providers = await getProviders()
-  return {
-    props: { providers },
-  }
-}
