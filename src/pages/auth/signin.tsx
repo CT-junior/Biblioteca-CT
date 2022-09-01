@@ -28,7 +28,7 @@ const SignIn: NextPage<Props> = ({ error }) => {
         isClosable: true,
       })
     }
-  }, [])
+  }, [error])
 
   return (
     <Flex w="100vw" h="100vh" align="center" justify="center">

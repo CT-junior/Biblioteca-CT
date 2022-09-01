@@ -16,7 +16,7 @@ const Error: NextPage<Props> = ({ error }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (error && error == 'AccessDenied') {
+    if (error && error === 'AccessDenied') {
       toast({
         description: (
           <Text>
@@ -36,7 +36,7 @@ const Error: NextPage<Props> = ({ error }) => {
     else {
       setLoading(false)
     }
-  }, [])
+  }, [error])
 
   if (loading) {
     return (
