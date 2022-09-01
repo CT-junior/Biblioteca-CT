@@ -1,11 +1,33 @@
-import { Box, Button, Center, Divider, Flex, Stack } from "@chakra-ui/react";
+import { Box, Button, Center, Divider, Flex, Stack, useToast } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { signIn } from "next-auth/react"
 
 import Image from "next/image";
+import { useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
+interface Props {
+  error?: string | string[]
+}
 
-const SignIn: NextPage = () => {
+const SignIn: NextPage<Props> = ({ error }) => {
+  const toast = useToast()
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: error,
+        description: "Um erro inesperado ocorreu. Tente novamente.",
+        status: "error",
+        variant: "left-accent",
+        containerStyle: {
+          paddingBottom: "180px"
+        },
+        duration: 9000,
+        isClosable: true,
+      })
+    }
+  }, [])
+
   return (
     <Flex w="100vw" h="100vh" align="center" justify="center">
       <Box bgColor="#F6F6F6" w="1120px" h="300" borderRadius={40} shadow="lg">
@@ -49,5 +71,11 @@ const SignIn: NextPage = () => {
     </Flex>
   );
 };
+
+SignIn.getInitialProps = async ({ query }) => {
+  const { error } = query
+
+  return { error }
+}
 
 export default SignIn;
