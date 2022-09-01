@@ -9,7 +9,7 @@ function MyApp({
 }: AppProps) {
   return (
     <SessionProvider session={session}>
-      <ChakraProvider theme={theme}>
+      <ChakraProvider theme={theme} >
         <Component {...pageProps} />
       </ChakraProvider>
     </SessionProvider>
