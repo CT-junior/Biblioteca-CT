@@ -4,7 +4,7 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
 
-const Login: NextPage = () => {
+const SignIn: NextPage = () => {
   return (
     <Flex w="100vw" h="100vh" align="center" justify="center">
       <Box bgColor="#F6F6F6" w="1120px" h="300" borderRadius={40} shadow="lg">
@@ -12,6 +12,7 @@ const Login: NextPage = () => {
           <Box w="45%" pl="80px">
             <Image
               src="/images/ct-black-horizontal-logo.svg"
+              alt="CT Junior's company logo"
               width="400px"
               height="85px"
             />
@@ -47,4 +48,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default SignIn;

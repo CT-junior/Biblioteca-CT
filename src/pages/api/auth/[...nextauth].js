@@ -15,5 +15,8 @@ export default NextAuth({
       }
       return true // if there is no specific handling for the provider, sign in is allowed
     },
+  },
+  pages: {
+    signIn: '/auth/signin',
   }
 })
