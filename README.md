@@ -2,7 +2,14 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+1. Create a `.env.local` file at the root of your project and add the client ID and client secret:
+
+```
+GOOGLE_ID=YOUR_CLIENT_ID
+GOOGLE_SECRET=YOUR_CLIENT_SECRET
+```
+
+2. *Next*, run the development server:
 
 ```bash
 npm run dev
