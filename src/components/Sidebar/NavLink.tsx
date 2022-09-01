@@ -18,8 +18,6 @@ interface NavLinkProps extends ChakraLinkProps {
 }
 
 export function NavLink({ icon, children, href, ...rest }: NavLinkProps) {
-  const { isOpen } = useSidebarDrawer();
-
   return (
     <Flex h="10" w="100%">
       <ActiveLink href={href} passHref>
@@ -30,13 +28,10 @@ export function NavLink({ icon, children, href, ...rest }: NavLinkProps) {
           w="200px"
           {...rest}
         >
-          <Icon as={icon} boxSize="6" />
-
-        
+          <Icon as={icon} boxSize="6" />        
             <Text fontWeight="medium" fontSize="sm" ml="8" overflow="clip"  w="300px" display="inline">
               {children}
             </Text>
-         
         </ChakraLink>
       </ActiveLink>
     </Flex>
