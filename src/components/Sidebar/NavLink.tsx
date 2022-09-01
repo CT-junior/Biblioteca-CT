@@ -21,23 +21,22 @@ export function NavLink({ icon, children, href, ...rest }: NavLinkProps) {
   const { isOpen } = useSidebarDrawer();
 
   return (
-    <Flex h="10">
+    <Flex h="10" w="100%">
       <ActiveLink href={href} passHref>
         <ChakraLink
           display="flex"
           alignItems="center"
-          justifyItems="center"
-          justifyContent="center"
-          w="100%"
+          px="1"
+          w="200px"
           {...rest}
         >
           <Icon as={icon} boxSize="6" />
 
-          {isOpen && (
-            <Text fontWeight="medium" fontSize="sm" ml="4">
+        
+            <Text fontWeight="medium" fontSize="sm" ml="8" overflow="clip"  w="300px" display="inline">
               {children}
             </Text>
-          )}
+         
         </ChakraLink>
       </ActiveLink>
     </Flex>
