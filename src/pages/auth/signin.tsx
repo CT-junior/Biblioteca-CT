@@ -29,7 +29,7 @@ const SignIn: NextPage = () => {
             pr="120px"
           >
             <Button
-              onClick={() => signIn('google')}
+              onClick={() => signIn('google', { callbackUrl: '/' })}
               size="lg"
               leftIcon={<FcGoogle size={24} />}
               bg="white"
