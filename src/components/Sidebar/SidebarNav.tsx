@@ -1,4 +1,4 @@
-import { Flex, Stack} from "@chakra-ui/react";
+import { Flex, Stack } from "@chakra-ui/react";
 
 import {
   HiOutlineHome,
@@ -15,9 +15,9 @@ import { NavLink } from "./NavLink";
 import biblioctecaLogo from "../../assets/images/bibliocteca-simple-logo.svg";
 import vercelLogo from "../../assets/images/vercel-horizontal-logo.svg";
 
-import { useSidebarDrawerFixed } from "../../context/SidebarDrawerFixedContext";
-import { useSidebarDrawerTemp } from "../../context/SidebarDrawerTempContext";
 import { setTimeout } from "timers";
+import { toggleSidebar } from "../../store/sidebar/actions";
+import { useState } from "react";
 
 interface SidebarNavProps {
   size: string;
@@ -25,18 +25,17 @@ interface SidebarNavProps {
 }
 
 export function SidebarNav({ size, isOpen }: SidebarNavProps) {
-    const isOpenFixed = useSidebarDrawerFixed().isOpen;
-   
-    const onCloseTempAux = useSidebarDrawerTemp().onClose;
-    const onOpenTempAux = useSidebarDrawerTemp().onOpen;
-    
-    const onCloseTemp = () =>{
-        new Promise(res => setTimeout(res,600)).then(onCloseTempAux);
-    } 
+  const onMouseLeave = () => {
+    new Promise(res => setTimeout(res, 400)).then(() => {
+      toggleSidebar(false);
+    });
+  }
 
-    const onOpenTemp = () =>{
-        new Promise(res => setTimeout(res,300)).then(onOpenTempAux);
-    } 
+  const onMouseEnter = () => {
+    new Promise(res => setTimeout(res, 300)).then(() => {
+      toggleSidebar(true);
+    });
+  }
 
   return (
     <Flex
@@ -52,9 +51,8 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
       justify="space-between"
       overflow="hidden"
       transition="0.3s"
-      onMouseOver={!isOpenFixed ? onOpenTemp : () => {}}
-      onMouseLeave={!isOpenFixed ? onCloseTemp : () => {}}
-
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={() => { onMouseLeave() }}
     >
       <Stack spacing="4" align="flex-start">
         <NavLink icon={HiOutlineHome} href="/">
