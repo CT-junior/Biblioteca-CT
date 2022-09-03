@@ -250,6 +250,13 @@
   dependencies:
     "@chakra-ui/shared-utils" "2.0.1"
 
+"@chakra-ui/icons@^2.0.9":
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/icons/-/icons-2.0.9.tgz#35edcf9c61b8e158a5d03aeda6bd4e756960dfc7"
+  integrity sha512-6xvV2rC8wATgfnRH+fC9mi0nLcgKjhHKO29lV1pGioVI0yWK0dqc//zjcyBhMMpW5ABnSfig7ujVBf3op/Syzg==
+  dependencies:
+    "@chakra-ui/icon" "3.0.9"
+
 "@chakra-ui/image@2.0.10":
   version "2.0.10"
   resolved "https://registry.yarnpkg.com/@chakra-ui/image/-/image-2.0.10.tgz#712c0e1c579d959225bd8316d8d8f66cbeb95bb8"
@@ -2114,6 +2121,11 @@ ignore@^5.2.0:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.0.tgz#6d3bac8fa7fe0d45d9f9be7bac2fc279577e345a"
   integrity sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==
 
+immer@^9.0.12:
+  version "9.0.15"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.15.tgz#0b9169e5b1d22137aba7d43f8a81a495dd1b62dc"
+  integrity sha512-2eB/sswms9AEUSkOm4SbV5Y7Vmt/bKRwByd52jfLkW4OLYeaTP3EEiJ9agqU0O/tq6Dk62Zfj+TJSqfm1rLVGQ==
+
 import-fresh@^3.0.0, import-fresh@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.3.0.tgz#37162c25fcb9ebaa2e6e53d5b4d88ce17d9e0c2b"
@@ -2678,6 +2690,14 @@ prop-types@^15.6.2, prop-types@^15.8.1:
     loose-envify "^1.4.0"
     object-assign "^4.1.1"
     react-is "^16.13.1"
+
+pullstate@^1.24.0:
+  version "1.24.0"
+  resolved "https://registry.yarnpkg.com/pullstate/-/pullstate-1.24.0.tgz#2928b0826cde85f504ece5f7d88263b2d028effb"
+  integrity sha512-uKXQjGnZUNb3wg7STF3HvCDbGtYg7tju42QjVtaefMik6JpbadnmKgI8DgZL02SvtTNlFPosMQkAwuI/a9D8dg==
+  dependencies:
+    fast-deep-equal "^3.1.3"
+    immer "^9.0.12"
 
 punycode@^2.1.0:
   version "2.1.1"
