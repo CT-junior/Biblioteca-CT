@@ -3,10 +3,10 @@ import { Box, Flex, Icon, IconButton } from "@chakra-ui/react";
 import { Sidebar } from "../components/Sidebar";
 
 import { HiOutlineMenu } from "react-icons/hi";
-import { useSidebarDrawer } from "../context/SidebarDrawerContext";
+import { useSidebarDrawerFixed } from "../context/SidebarDrawerFixedContext";
 
 const Home: NextPage = () => {
-  const { onToggle } = useSidebarDrawer();
+  const { onToggle, isOpen } = useSidebarDrawerFixed();
 
   return (
     <Flex direction="column" h="100vh">
@@ -25,6 +25,7 @@ const Home: NextPage = () => {
           variant="unstyled"
           onClick={onToggle}
           mr="2"
+          bg={isOpen ? "gray.300" : ""}
           >
 
         </IconButton>

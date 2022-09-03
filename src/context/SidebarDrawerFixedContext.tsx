@@ -2,17 +2,17 @@ import { useDisclosure, UseDisclosureReturn } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { createContext, ReactNode, useContext, useEffect } from "react";
 
-interface SidebarDrawerProviderProps {
+interface SidebarDrawerFixedProviderProps {
     children: ReactNode;
 }
 
 type SiderbarDrawerContextData = UseDisclosureReturn;
 
-const SidebarDrawerContext = createContext({} as SiderbarDrawerContextData);
+const SidebarDrawerFixedContext = createContext({} as SiderbarDrawerContextData);
 
-export function SidebarDrawerProvider({
+export function SidebarDrawerFixedProvider({
     children,
-}: SidebarDrawerProviderProps) {
+}: SidebarDrawerFixedProviderProps) {
     const disclousure = useDisclosure();
     const router = useRouter();
 
@@ -21,10 +21,10 @@ export function SidebarDrawerProvider({
     }, [router.asPath])
     
     return (
-        <SidebarDrawerContext.Provider value={disclousure}>
+        <SidebarDrawerFixedContext.Provider value={disclousure}>
             {children}
-        </SidebarDrawerContext.Provider>
+        </SidebarDrawerFixedContext.Provider>
     );
 }
 
-export const useSidebarDrawer = () => useContext(SidebarDrawerContext);
+export const useSidebarDrawerFixed = () => useContext(SidebarDrawerFixedContext);

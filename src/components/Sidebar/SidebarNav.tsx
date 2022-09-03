@@ -1,8 +1,4 @@
-import {
-  Flex,
-  Stack,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { Flex, Stack} from "@chakra-ui/react";
 
 import {
   HiOutlineHome,
@@ -19,27 +15,46 @@ import { NavLink } from "./NavLink";
 import biblioctecaLogo from "../../assets/images/bibliocteca-simple-logo.svg";
 import vercelLogo from "../../assets/images/vercel-horizontal-logo.svg";
 
+import { useSidebarDrawerFixed } from "../../context/SidebarDrawerFixedContext";
+import { useSidebarDrawerTemp } from "../../context/SidebarDrawerTempContext";
+import { setTimeout } from "timers";
+
 interface SidebarNavProps {
-    size: string;
-    isOpen: boolean;
-    isMobile: boolean;
+  size: string;
+  isOpen: boolean;
 }
 
-export function SidebarNav({size, isOpen, isMobile}: SidebarNavProps) {
+export function SidebarNav({ size, isOpen }: SidebarNavProps) {
+    const isOpenFixed = useSidebarDrawerFixed().isOpen;
+   
+    const onCloseTempAux = useSidebarDrawerTemp().onClose;
+    const onOpenTempAux = useSidebarDrawerTemp().onOpen;
+    
+    const onCloseTemp = () =>{
+        new Promise(res => setTimeout(res,600)).then(onCloseTempAux);
+    } 
+
+    const onOpenTemp = () =>{
+        new Promise(res => setTimeout(res,300)).then(onOpenTempAux);
+    } 
+
   return (
     <Flex
       as="aside"
       w={size}
-      px={["0","6"]}
+      px={["0", "6"]}
       py="5"
       h="calc(100vh - var(--chakra-space-16))"
       borderRightColor="blackAlpha.200"
       borderRightStyle="solid"
-      borderRightWidth={["","1px"]}
+      borderRightWidth={["", "1px"]}
       direction="column"
       justify="space-between"
       overflow="hidden"
       transition="0.3s"
+      onMouseOver={!isOpenFixed ? onOpenTemp : () => {}}
+      onMouseLeave={!isOpenFixed ? onCloseTemp : () => {}}
+
     >
       <Stack spacing="4" align="flex-start">
         <NavLink icon={HiOutlineHome} href="/">
@@ -61,11 +76,14 @@ export function SidebarNav({size, isOpen, isMobile}: SidebarNavProps) {
           Controle de usuários
         </NavLink>
       </Stack>
-      <Stack gap={["10","6"]} direction={["row","column"]} align="center" justify="center">
+      <Stack
+        gap={["10", "6"]}
+        direction={["row", "column"]}
+        align="center"
+        justify="center"
+      >
         <Image src={biblioctecaLogo} alt="Logo da Bibliocteca" />
-        {isOpen && (
-            <Image src={vercelLogo} alt="Logo da Vercel" />
-        )}
+        {isOpen && <Image src={vercelLogo} alt="Logo da Vercel" />}
       </Stack>
     </Flex>
   );

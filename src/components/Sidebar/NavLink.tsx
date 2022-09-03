@@ -4,11 +4,9 @@ import {
   Text,
   Link as ChakraLink,
   LinkProps as ChakraLinkProps,
-  Center,
 } from "@chakra-ui/react";
 
 import { ElementType } from "react";
-import { useSidebarDrawer } from "../../context/SidebarDrawerContext";
 import { ActiveLink } from "../ActiveLink";
 
 interface NavLinkProps extends ChakraLinkProps {
