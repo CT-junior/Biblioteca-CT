@@ -6,30 +6,28 @@ import {
   DrawerOverlay,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { on } from "events";
 
-import { useSidebarDrawerFixed } from "../../context/SidebarDrawerFixedContext";
-import { useSidebarDrawerTemp } from "../../context/SidebarDrawerTempContext";
+import { useSidebar } from "../../hooks/sidebar";
+import { toggleSidebar } from "../../store/sidebar/actions";
 
 import { SidebarNav } from "./SidebarNav";
 
 export function Sidebar() {
-  const { isOpen, onClose } = useSidebarDrawerFixed();
-  
-  const isOpenTemp = useSidebarDrawerTemp().isOpen;
+  const { isOpen } = useSidebar();
 
   const isWideMobile = useBreakpointValue({
     base: true,
     sm: false,
   });
 
-  if (!isWideMobile && isOpen || isOpenTemp) {
+  if (!isWideMobile && isOpen) {
     return <SidebarNav size="64" isOpen={true} key={1} />; 
   } else if (!isWideMobile) {
     return <SidebarNav size="20" isOpen={false} key={1}/>;
   }
+
   return (
-    <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+    <Drawer isOpen={isOpen} placement="left" onClose={toggleSidebar}>
       <DrawerOverlay>
         <DrawerContent p="4">
           <DrawerCloseButton mt="6" />
