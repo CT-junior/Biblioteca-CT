@@ -68,8 +68,6 @@ export function Header() {
             onClick={onOpen}
           />
         </HStack>
-      
-
       </Flex>
       <SignOutModal isOpen={isOpen} onClose={onClose} leastDestructiveRef={cancelRef} children/>
     </>
