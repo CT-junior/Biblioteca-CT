@@ -39,10 +39,10 @@ export function Header() {
         borderBottomColor="blackAlpha.200"
         borderBottomWidth="1px"
         borderBottomStyle="solid"
-        gap="6"
+        gap={["3","6"]}
 
       >
-        <HStack gap="8" >
+        <HStack gap={["2","8"]} >
           <IconButton 
             aria-label="Open navigation"
             icon={<Icon as={HiOutlineMenu} color="gray.700"/>}
@@ -52,12 +52,12 @@ export function Header() {
             bg={isFixed ? "blackAlpha.200" : ""}
           />
           
-          <Image src={biblioctecaLogo} alt="Logo da Bibliocteca" width="198.4px" height="28.8"/>
+          <Image src={biblioctecaLogo} alt="Logo da Bibliocteca" width="198.4px" height="28.8" objectFit="contain"/>
         </HStack>
 
         {isWideVersion && <SearchBox />}
 
-        <HStack spacing="5">
+        <HStack>
           <Profile showProfileData={isWideVersion}/>
           <IconButton 
             aria-label="Open signOut"
