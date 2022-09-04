@@ -17,7 +17,6 @@ import vercelLogo from "../../assets/images/vercel-horizontal-logo.svg";
 
 import { setTimeout } from "timers";
 import { toggleSidebar } from "../../store/sidebar/actions";
-import { useState } from "react";
 
 interface SidebarNavProps {
   size: string;
@@ -25,6 +24,7 @@ interface SidebarNavProps {
 }
 
 export function SidebarNav({ size, isOpen }: SidebarNavProps) {
+  
   const onMouseLeave = () => {
     new Promise(res => setTimeout(res, 400)).then(() => {
       toggleSidebar(false);

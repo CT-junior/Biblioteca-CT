@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 
 import { useSidebar } from "../../hooks/sidebar";
-import { toggleSidebar } from "../../store/sidebar/actions";
+import {toggleFixedSidebar } from "../../store/sidebar/actions";
 
 import { SidebarNav } from "./SidebarNav";
 
@@ -27,7 +27,7 @@ export function Sidebar() {
   }
 
   return (
-    <Drawer isOpen={isOpen} placement="left" onClose={toggleSidebar}>
+    <Drawer isOpen={isOpen} placement="left" onClose={toggleFixedSidebar}>
       <DrawerOverlay>
         <DrawerContent p="4">
           <DrawerCloseButton mt="6" />
