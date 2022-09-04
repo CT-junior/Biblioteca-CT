@@ -1,4 +1,4 @@
-import { Flex, HStack, Icon, IconButton, useDisclosure} from "@chakra-ui/react";
+import { Flex, HStack, Icon, IconButton, useBreakpointValue, useDisclosure} from "@chakra-ui/react";
 import Image from "next/image";
 import { useRef } from "react";
 
@@ -19,7 +19,12 @@ import { SignOutModal } from "../SignOutModal";
 export function Header() {
   const { isFixed } = useSidebar();
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const cancelRef: any = useRef();
+
+  const cancelRef: any = useRef(); 
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    md: true,
+  })
 
   return (
     <>
@@ -34,6 +39,7 @@ export function Header() {
         borderBottomColor="blackAlpha.200"
         borderBottomWidth="1px"
         borderBottomStyle="solid"
+        gap="6"
 
       >
         <HStack gap="8" >
@@ -49,10 +55,10 @@ export function Header() {
           <Image src={biblioctecaLogo} alt="Logo da Bibliocteca" width="198.4px" height="28.8"/>
         </HStack>
 
-        <SearchBox />
+        {isWideVersion && <SearchBox />}
 
         <HStack spacing="5">
-          <Profile />
+          <Profile showProfileData={isWideVersion}/>
           <IconButton 
             aria-label="Open signOut"
             icon={<Icon as={FiLogOut} color="gray.700"/>}
