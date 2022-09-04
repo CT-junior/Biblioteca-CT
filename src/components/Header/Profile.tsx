@@ -10,6 +10,7 @@ interface ProfileProps {
 export function Profile({ showProfileData = true }: ProfileProps) {
 
 const { data: session } = useSession();
+console.log(session)
   return (
     <Flex align="center">
       {showProfileData && (
