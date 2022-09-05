@@ -9,7 +9,7 @@ import {
 
 import Image from "next/image";
 
-import { BiBookAdd, BiBookAlt } from "react-icons/bi";
+import { BiBookAlt } from "react-icons/bi";
 import { NavLink } from "./NavLink";
 
 import biblioctecaLogo from "../../assets/images/bibliocteca-simple-logo.svg";
@@ -59,13 +59,10 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
           Página Inicial
         </NavLink>
         <NavLink icon={HiSearch} href="/search">
-          Pesquisar
+          Buscar livro
         </NavLink>
-        <NavLink icon={BiBookAlt} href="/catalog">
-          Catálogo
-        </NavLink>
-        <NavLink icon={BiBookAdd} href="/add-book">
-          Adicionar livro
+        <NavLink icon={BiBookAlt} href="/library-manager">
+          Gerenciar biblioteca
         </NavLink>
         <NavLink icon={HiOutlineTerminal} href="/backlog">
           Backlog
