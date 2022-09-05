@@ -49,7 +49,7 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
       borderRightWidth={["", "1px"]}
       direction="column"
       justify="space-between"
-      overflow="hidden"
+      overflow="clip"
       transition="0.3s"
       onMouseEnter={onMouseEnter}
       onMouseLeave={() => { onMouseLeave() }}
