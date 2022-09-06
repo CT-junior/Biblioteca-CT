@@ -5,6 +5,7 @@ import {
   Heading,
   HStack,
   Icon,
+  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
@@ -12,7 +13,7 @@ import {
   TableContainer,
   Tbody,
   Td,
-
+  Text,
   Th,
   Thead,
   Tr,
@@ -22,7 +23,7 @@ import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 
 import { HiPlus, HiSearch, HiCloudDownload } from "react-icons/hi";
-import { FiMoreVertical } from "react-icons/fi"
+import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import {
   colorSchemeOrangeCt,
   colorSchemeOrangeCtOutline,
@@ -94,14 +95,16 @@ const LibraryManager: NextPage = () => {
                   <Th></Th>
                 </Tr>
               </Thead>
-              <Tbody >
+              <Tbody>
                 <Tr>
                   <Td>Sussuros na floresta</Td>
                   <Td>Volume 1</Td>
                   <Td>Maria Silveira</Td>
                   <Td>Suspense</Td>
                   <Td>04 de setembro, 2022</Td>
-                  <Td><MoreSettingsPopover /></Td>
+                  <Td>
+                    <MoreSettingsPopover />
+                  </Td>
                 </Tr>
                 <Tr>
                   <Td>Sussuros na floresta</Td>
@@ -109,7 +112,9 @@ const LibraryManager: NextPage = () => {
                   <Td>Maria Silveira</Td>
                   <Td>Suspense</Td>
                   <Td>04 de setembro, 2022</Td>
-                  <Td><MoreSettingsPopover /></Td>
+                  <Td>
+                    <MoreSettingsPopover />
+                  </Td>
                 </Tr>
                 <Tr>
                   <Td>Sussuros na floresta</Td>
@@ -117,11 +122,57 @@ const LibraryManager: NextPage = () => {
                   <Td>Maria Silveira</Td>
                   <Td>Suspense</Td>
                   <Td>04 de setembro, 2022</Td>
-                  <Td><MoreSettingsPopover /></Td>
+                  <Td>
+                    <MoreSettingsPopover />
+                  </Td>
+                </Tr>
+                <Tr>
+                  <Td>Sussuros na floresta</Td>
+                  <Td>Volume 1</Td>
+                  <Td>Maria Silveira</Td>
+                  <Td>Suspense</Td>
+                  <Td>04 de setembro, 2022</Td>
+                  <Td>
+                    <MoreSettingsPopover />
+                  </Td>
+                </Tr>
+                <Tr>
+                  <Td>Sussuros na floresta</Td>
+                  <Td>Volume 1</Td>
+                  <Td>Maria Silveira</Td>
+                  <Td>Suspense</Td>
+                  <Td>04 de setembro, 2022</Td>
+                  <Td>
+                    <MoreSettingsPopover />
+                  </Td>
                 </Tr>
               </Tbody>
             </Table>
           </TableContainer>
+          <Flex w="100%">
+            <Box ml="auto" mt="2">
+              <HStack>
+                <Text as="p">
+                  Visualização <Text as="b">1</Text> - <Text as="b">5</Text> de
+                  <Text as="b"> 28</Text>
+                </Text>
+                  <IconButton
+                    aria-label="select previous page"
+                    icon={<MdNavigateBefore />}
+                    variant="outline"
+                    colorScheme="blackAlpha"
+                    size="sm"
+                  />
+                  <IconButton
+                    aria-label="select next page"
+                    icon={<MdNavigateNext />}
+                    variant="outline"
+                    colorScheme="blackAlpha"
+                    size="sm"
+                  />
+              </HStack>
+            </Box>
+          </Flex>
         </Box>
       </Flex>
     </Flex>
