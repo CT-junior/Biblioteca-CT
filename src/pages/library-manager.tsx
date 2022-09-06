@@ -17,6 +17,7 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { Header } from "../components/Header";
@@ -24,13 +25,18 @@ import { Sidebar } from "../components/Sidebar";
 
 import { HiPlus, HiSearch, HiCloudDownload } from "react-icons/hi";
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
+
 import {
   colorSchemeOrangeCt,
   colorSchemeOrangeCtOutline,
 } from "../common/utils";
+
 import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
+import { AddBookModal } from "../components/AddBookModal";
 
 const LibraryManager: NextPage = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   return (
     <Flex direction="column" h="100vh">
       <Header />
@@ -50,10 +56,12 @@ const LibraryManager: NextPage = () => {
                 Gerenciador de biblioteca
               </Heading>
               <Button
+                onClick={onOpen}
                 size="sm"
                 leftIcon={<Icon as={HiPlus} color="white" />}
                 borderRadius="full"
                 {...colorSchemeOrangeCt}
+
               >
                 Adicionar Livro
               </Button>
@@ -173,6 +181,7 @@ const LibraryManager: NextPage = () => {
               </HStack>
             </Box>
           </Flex>
+          <AddBookModal isOpen={isOpen} onClose={onClose} children />
         </Box>
       </Flex>
     </Flex>

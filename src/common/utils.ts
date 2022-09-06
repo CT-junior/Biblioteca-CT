@@ -23,8 +23,12 @@ export const colorSchemeOrangeCt = {
     color: 'white',
     _hover: {
         bg:'orange.500',
-    }
+    },
+    _active:{
+        bg: 'orange.600'
+      }
 }
+
 export const colorSchemeOrangeCtOutline = {
     color: 'orange.ct',
     _placeholder: {
