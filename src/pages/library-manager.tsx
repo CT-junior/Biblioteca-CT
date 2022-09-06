@@ -9,6 +9,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Stack,
   Table,
   TableContainer,
   Tbody,
@@ -17,6 +18,7 @@ import {
   Th,
   Thead,
   Tr,
+  useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
@@ -35,50 +37,61 @@ import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
 import { AddBookModal } from "../components/AddBookModal";
 
 const LibraryManager: NextPage = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    sm: true,
+  });
 
   return (
     <Flex direction="column" h="100vh">
       <Header />
       <Flex w="100%" mx="auto">
         <Sidebar />
-        <Box w="100%" px="8" py="8">
+        <Box w="100%" px="8" py="8" >
           <Flex
-            align="center"
+            align={["flex-start", "flex-start", "center"]}
             justify="space-between"
             aria-label="second-header"
             pb="6"
             borderBottom="1px"
             borderColor="gray.200"
+            direction={["column", "column", "row"]}
           >
-            <HStack flex="2">
-              <Heading as="h1" fontSize="2xl">
-                Gerenciador de biblioteca
-              </Heading>
-              <Button
-                onClick={onOpen}
-                size="sm"
-                leftIcon={<Icon as={HiPlus} color="white" />}
-                borderRadius="full"
-                {...colorSchemeOrangeCt}
+            <Heading as="h1" fontSize="xl">
+              Gerenciador de biblioteca
+            </Heading>
 
-              >
-                Adicionar Livro
-              </Button>
-              <InputGroup w="32" size="sm">
-                <InputLeftElement
-                  children={<Icon as={HiSearch} color="orange.ct" />}
-                />
-                <Input
-                  placeholder="Pequisar"
-                  variant="outline"
+            <HStack
+              justify="space-between"
+              w={["100%", "100%", "auto"]}
+              mt={["2", "2", ""]}
+            >
+              <HStack>
+                <Button
+                  onClick={onOpen}
+                  size="sm"
+                  leftIcon={<Icon as={HiPlus} color="white" />}
                   borderRadius="full"
-                  {...colorSchemeOrangeCtOutline}
-                />
-              </InputGroup>
-            </HStack>
-
-            <HStack flex="1" justify="flex-end">
+                  {...colorSchemeOrangeCt}
+                >
+                  Adicionar Livro
+                </Button>
+                {isWideVersion && (
+                  <InputGroup w="32" size="sm">
+                    <InputLeftElement
+                      children={<Icon as={HiSearch} color="orange.ct" />}
+                    />
+                    <Input
+                      placeholder="Pequisar"
+                      variant="outline"
+                      borderRadius="full"
+                      {...colorSchemeOrangeCtOutline}
+                    />
+                  </InputGroup>
+                )}
+              </HStack>
               <Button
                 variant="outline"
                 size="sm"
@@ -95,65 +108,77 @@ const LibraryManager: NextPage = () => {
             <Table variant="simple">
               <Thead>
                 <Tr>
-                  <Th>Título</Th>
-                  <Th>Volume</Th>
-                  <Th>Autor</Th>
-                  <Th>Gênero</Th>
-                  <Th>Data de cadastro</Th>
+                  <Th display="revert">Título</Th>
+                  <Th display={["none", "none", "none", "revert"]}>Volume</Th>
+                  <Th display={["none", "none", "revert"]}>Autor</Th>
+                  <Th display={["none", "revert"]}>Gênero</Th>
+                  <Th display={["none", "none", "revert"]}>Data de cadastro</Th>
                   <Th></Th>
                 </Tr>
               </Thead>
               <Tbody>
                 <Tr>
-                  <Td>Sussuros na floresta</Td>
-                  <Td>Volume 1</Td>
-                  <Td>Maria Silveira</Td>
-                  <Td>Suspense</Td>
-                  <Td>04 de setembro, 2022</Td>
-                  <Td>
+                  <Td display="revert">Sussuros na floresta</Td>
+                  <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
+                  <Td display={["none","none" ,"revert"]}>Maria Silveira</Td>
+                  <Td display={["none", "revert"]}>Suspense</Td>
+                  <Td display={["none", "none", "revert"]}>
+                    04 de setembro, 2022
+                  </Td>
+                  <Td textAlign={["end","end","center"]}>
                     <MoreSettingsPopover />
                   </Td>
                 </Tr>
                 <Tr>
-                  <Td>Sussuros na floresta</Td>
-                  <Td>Volume 1</Td>
-                  <Td>Maria Silveira</Td>
-                  <Td>Suspense</Td>
-                  <Td>04 de setembro, 2022</Td>
-                  <Td>
+                  <Td display="revert">Sussuros na floresta</Td>
+                  <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
+                  <Td display={["none","none" ,"revert"]}>Maria Silveira</Td>
+                  <Td display={["none", "revert"]}>Suspense</Td>
+                  <Td display={["none", "none", "revert"]}>
+                    04 de setembro, 2022
+                  </Td>
+                  <Td textAlign={["end","end","center"]}>
                     <MoreSettingsPopover />
                   </Td>
                 </Tr>
                 <Tr>
-                  <Td>Sussuros na floresta</Td>
-                  <Td>Volume 1</Td>
-                  <Td>Maria Silveira</Td>
-                  <Td>Suspense</Td>
-                  <Td>04 de setembro, 2022</Td>
-                  <Td>
+                  <Td display="revert">Sussuros na floresta</Td>
+                  <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
+                  <Td display={["none","none" ,"revert"]}>Maria Silveira</Td>
+                  <Td display={["none", "revert"]}>Suspense</Td>
+                  <Td display={["none", "none", "revert"]}>
+                    04 de setembro, 2022
+                  </Td>
+                  <Td textAlign={["end","end","center"]}>
                     <MoreSettingsPopover />
                   </Td>
                 </Tr>
                 <Tr>
-                  <Td>Sussuros na floresta</Td>
-                  <Td>Volume 1</Td>
-                  <Td>Maria Silveira</Td>
-                  <Td>Suspense</Td>
-                  <Td>04 de setembro, 2022</Td>
-                  <Td>
+                  <Td display="revert">Sussuros na floresta</Td>
+                  <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
+                  <Td display={["none","none" ,"revert"]}>Maria Silveira</Td>
+                  <Td display={["none", "revert"]}>Suspense</Td>
+                  <Td display={["none", "none", "revert"]}>
+                    04 de setembro, 2022
+                  </Td>
+                  <Td textAlign={["end","end","center"]}>
                     <MoreSettingsPopover />
                   </Td>
                 </Tr>
                 <Tr>
-                  <Td>Sussuros na floresta</Td>
-                  <Td>Volume 1</Td>
-                  <Td>Maria Silveira</Td>
-                  <Td>Suspense</Td>
-                  <Td>04 de setembro, 2022</Td>
-                  <Td>
+                  <Td display="revert">Sussuros na floresta</Td>
+                  <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
+                  <Td display={["none","none" ,"revert"]}>Maria Silveira</Td>
+                  <Td display={["none", "revert"]}>Suspense</Td>
+                  <Td display={["none", "none", "revert"]}>
+                    04 de setembro, 2022
+                  </Td>
+                  <Td textAlign={["end","end","center"]}>
                     <MoreSettingsPopover />
                   </Td>
                 </Tr>
+                
+                
               </Tbody>
             </Table>
           </TableContainer>
@@ -164,20 +189,20 @@ const LibraryManager: NextPage = () => {
                   Visualização <Text as="b">1</Text> - <Text as="b">5</Text> de
                   <Text as="b"> 28</Text>
                 </Text>
-                  <IconButton
-                    aria-label="select previous page"
-                    icon={<MdNavigateBefore />}
-                    variant="outline"
-                    colorScheme="blackAlpha"
-                    size="sm"
-                  />
-                  <IconButton
-                    aria-label="select next page"
-                    icon={<MdNavigateNext />}
-                    variant="outline"
-                    colorScheme="blackAlpha"
-                    size="sm"
-                  />
+                <IconButton
+                  aria-label="select previous page"
+                  icon={<MdNavigateBefore />}
+                  variant="outline"
+                  colorScheme="blackAlpha"
+                  size="sm"
+                />
+                <IconButton
+                  aria-label="select next page"
+                  icon={<MdNavigateNext />}
+                  variant="outline"
+                  colorScheme="blackAlpha"
+                  size="sm"
+                />
               </HStack>
             </Box>
           </Flex>

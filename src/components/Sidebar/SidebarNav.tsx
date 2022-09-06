@@ -46,7 +46,7 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
       h="calc(100vh - var(--chakra-space-16))"
       borderRightColor="blackAlpha.200"
       borderRightStyle="solid"
-      borderRightWidth={["", "1px"]}
+      borderRightWidth={["", "","1px"]}
       direction="column"
       justify="space-between"
       overflow="clip"
