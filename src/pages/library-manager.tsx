@@ -8,17 +8,26 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+
+  Th,
+  Thead,
+  Tr,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 
 import { HiPlus, HiSearch, HiCloudDownload } from "react-icons/hi";
-
+import { FiMoreVertical } from "react-icons/fi"
 import {
   colorSchemeOrangeCt,
   colorSchemeOrangeCtOutline,
 } from "../common/utils";
+import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
 
 const LibraryManager: NextPage = () => {
   return (
@@ -73,6 +82,46 @@ const LibraryManager: NextPage = () => {
               </Button>
             </HStack>
           </Flex>
+          <TableContainer fontSize="sm">
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>Título</Th>
+                  <Th>Volume</Th>
+                  <Th>Autor</Th>
+                  <Th>Gênero</Th>
+                  <Th>Data de cadastro</Th>
+                  <Th></Th>
+                </Tr>
+              </Thead>
+              <Tbody >
+                <Tr>
+                  <Td>Sussuros na floresta</Td>
+                  <Td>Volume 1</Td>
+                  <Td>Maria Silveira</Td>
+                  <Td>Suspense</Td>
+                  <Td>04 de setembro, 2022</Td>
+                  <Td><MoreSettingsPopover /></Td>
+                </Tr>
+                <Tr>
+                  <Td>Sussuros na floresta</Td>
+                  <Td>Volume 1</Td>
+                  <Td>Maria Silveira</Td>
+                  <Td>Suspense</Td>
+                  <Td>04 de setembro, 2022</Td>
+                  <Td><MoreSettingsPopover /></Td>
+                </Tr>
+                <Tr>
+                  <Td>Sussuros na floresta</Td>
+                  <Td>Volume 1</Td>
+                  <Td>Maria Silveira</Td>
+                  <Td>Suspense</Td>
+                  <Td>04 de setembro, 2022</Td>
+                  <Td><MoreSettingsPopover /></Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </TableContainer>
         </Box>
       </Flex>
     </Flex>
