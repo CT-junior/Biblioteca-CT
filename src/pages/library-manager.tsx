@@ -23,15 +23,15 @@ import { Sidebar } from "../components/Sidebar";
 import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
 import { AddBookModal } from "../components/AddBookModal";
 import { TableLibraryManager } from "../components/TableLibraryManager";
+import { Pagination } from "../components/Pagination";
 
 import { HiPlus, HiSearch, HiCloudDownload } from "react-icons/hi";
-import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 
 import {
   colorSchemeOrangeCt,
   colorSchemeOrangeCtOutline,
 } from "../common/utils";
-import { Pagination } from "../components/Pagination";
+
 
 
 const LibraryManager: NextPage = () => {
