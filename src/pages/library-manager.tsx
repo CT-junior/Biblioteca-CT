@@ -9,21 +9,20 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Stack,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
   Tr,
   useBreakpointValue,
   useDisclosure,
+  Td,
 } from "@chakra-ui/react";
+
 import { NextPage } from "next";
+
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
+import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
+import { AddBookModal } from "../components/AddBookModal";
+import { TableLibraryManager } from "../components/TableLibraryManager";
 
 import { HiPlus, HiSearch, HiCloudDownload } from "react-icons/hi";
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
@@ -33,8 +32,6 @@ import {
   colorSchemeOrangeCtOutline,
 } from "../common/utils";
 
-import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
-import { AddBookModal } from "../components/AddBookModal";
 
 const LibraryManager: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -103,82 +100,58 @@ const LibraryManager: NextPage = () => {
               Exportar
             </Button>
           </Flex>
-          <TableContainer fontSize="sm">
-            <Table variant="simple">
-              <Thead>
-                <Tr>
-                  <Th display="revert">Título</Th>
-                  <Th display={["none", "none", "none", "revert"]}>Volume</Th>
-                  <Th display={["none", "none", "revert"]}>Autor</Th>
-                  <Th display={["none", "revert"]}>Gênero</Th>
-                  <Th display={["none", "none", "revert"]}>Data de cadastro</Th>
-                  <Th></Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                <Tr>
-                  <Td display="revert">Sussuros na floresta</Td>
-                  <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
-                  <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
-                  <Td display={["none", "revert"]}>Suspense</Td>
-                  <Td display={["none", "none", "revert"]}>
-                    04 de setembro, 2022
-                  </Td>
-                  <Td textAlign={["end", "end", "center"]}>
-                    <MoreSettingsPopover />
-                  </Td>
-                </Tr>
-                <Tr>
-                  <Td display="revert">Sussuros na floresta</Td>
-                  <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
-                  <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
-                  <Td display={["none", "revert"]}>Suspense</Td>
-                  <Td display={["none", "none", "revert"]}>
-                    04 de setembro, 2022
-                  </Td>
-                  <Td textAlign={["end", "end", "center"]}>
-                    <MoreSettingsPopover />
-                  </Td>
-                </Tr>
-                <Tr>
-                  <Td display="revert">Sussuros na floresta</Td>
-                  <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
-                  <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
-                  <Td display={["none", "revert"]}>Suspense</Td>
-                  <Td display={["none", "none", "revert"]}>
-                    04 de setembro, 2022
-                  </Td>
-                  <Td textAlign={["end", "end", "center"]}>
-                    <MoreSettingsPopover />
-                  </Td>
-                </Tr>
-                <Tr>
-                  <Td display="revert">Sussuros na floresta</Td>
-                  <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
-                  <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
-                  <Td display={["none", "revert"]}>Suspense</Td>
-                  <Td display={["none", "none", "revert"]}>
-                    04 de setembro, 2022
-                  </Td>
-                  <Td textAlign={["end", "end", "center"]}>
-                    <MoreSettingsPopover />
-                  </Td>
-                </Tr>
-                <Tr>
-                  <Td display="revert">Sussuros na floresta</Td>
-                  <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
-                  <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
-                  <Td display={["none", "revert"]}>Suspense</Td>
-                  <Td display={["none", "none", "revert"]}>
-                    04 de setembro, 2022
-                  </Td>
-                  <Td textAlign={["end", "end", "center"]}>
-                    <MoreSettingsPopover />
-                  </Td>
-                </Tr>
-              </Tbody>
-            </Table>
-          </TableContainer>
+          <TableLibraryManager>
+            <Tr>
+              <Td display="revert">Sussuros na floresta</Td>
+              <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
+              <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
+              <Td display={["none", "revert"]}>Suspense</Td>
+              <Td display={["none", "none", "revert"]}>04 de setembro, 2022</Td>
+              <Td textAlign={["end", "end", "center"]}>
+              <MoreSettingsPopover />
+              </Td>
+            </Tr>
+            <Tr>
+              <Td display="revert">Sussuros na floresta</Td>
+              <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
+              <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
+              <Td display={["none", "revert"]}>Suspense</Td>
+              <Td display={["none", "none", "revert"]}>04 de setembro, 2022</Td>
+              <Td textAlign={["end", "end", "center"]}>
+              <MoreSettingsPopover />
+              </Td>
+            </Tr>
+            <Tr>
+              <Td display="revert">Sussuros na floresta</Td>
+              <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
+              <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
+              <Td display={["none", "revert"]}>Suspense</Td>
+              <Td display={["none", "none", "revert"]}>04 de setembro, 2022</Td>
+              <Td textAlign={["end", "end", "center"]}>
+              <MoreSettingsPopover />
+              </Td>
+            </Tr>
+            <Tr>
+              <Td display="revert">Sussuros na floresta</Td>
+              <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
+              <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
+              <Td display={["none", "revert"]}>Suspense</Td>
+              <Td display={["none", "none", "revert"]}>04 de setembro, 2022</Td>
+              <Td textAlign={["end", "end", "center"]}>
+              <MoreSettingsPopover />
+              </Td>
+            </Tr>
+            <Tr>
+              <Td display="revert">Sussuros na floresta</Td>
+              <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
+              <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
+              <Td display={["none", "revert"]}>Suspense</Td>
+              <Td display={["none", "none", "revert"]}>04 de setembro, 2022</Td>
+              <Td textAlign={["end", "end", "center"]}>
+              <MoreSettingsPopover />
+              </Td>
+            </Tr>
+          </TableLibraryManager>
           <Flex w="100%">
             <Box ml="auto" mt="2">
               <HStack>
