@@ -23,11 +23,11 @@ export function NavLink({ icon, children, href, ...rest }: NavLinkProps) {
           display="flex"
           alignItems="center"
           px="1"
-          w="200px"
+          w="210px"
           {...rest}
         >
           <Icon as={icon} boxSize="6" />        
-            <Text fontWeight="medium" fontSize="sm" ml="8" overflow="clip"  w="300px" display="inline">
+            <Text fontWeight="medium" fontSize="sm" ml="8" overflow="clip" w="210px" display="inline">
               {children}
             </Text>
         </ChakraLink>

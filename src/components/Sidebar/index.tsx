@@ -17,7 +17,7 @@ export function Sidebar() {
 
   const isWideMobile = useBreakpointValue({
     base: true,
-    sm: false,
+    md: false,
   });
 
   if (!isWideMobile && isOpen) {

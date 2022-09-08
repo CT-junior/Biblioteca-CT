@@ -16,15 +16,9 @@ export function ActiveLink({
 
   let isActive = false;
 
-  if (shouldMatchExactHref && (asPath === rest.href || asPath === rest.as)) {
+  if (asPath === rest.href || asPath === rest.as) {
     isActive = true;
   }
-
-  if(!shouldMatchExactHref && 
-    (asPath.startsWith(String(rest.href)) || 
-    asPath.startsWith(String(rest.as)))){
-        isActive = true
-    }
 
   return (
     <Link {...rest} >

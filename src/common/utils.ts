@@ -17,3 +17,36 @@ export const fireErrorToast = (chackraToast: CreateToastFnReturn, options?: UseT
         ...options
     })
 }
+
+export const colorSchemeOrangeCt = {
+    bg: 'orange.ct',
+    color: 'white',
+    _hover: {
+        bg:'orange.500',
+    },
+    _active:{
+        bg: 'orange.600'
+      }
+}
+
+export const colorSchemeOrangeCtOutline = {
+    color: 'orange.ct',
+    _placeholder: {
+        color: 'orange.ct',
+    },
+    borderColor: 'orange.ct',
+
+    _focus: {
+        borderColor: 'orange.ct',
+        shadow: 'none',
+      },
+    
+      _hover:{
+        bg: 'orange.50'
+      },
+
+      _active:{
+        bg: 'orange.100'
+      }
+
+}

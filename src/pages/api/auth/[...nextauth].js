@@ -1,5 +1,7 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
+import { FirestoreAdapter } from "@next-auth/firebase-adapter"
+import { firebaseConfig } from "../../../services/firebase"
 
 export default NextAuth({
   providers: [
@@ -19,5 +21,6 @@ export default NextAuth({
   pages: {
     signIn: '/auth/signin',
     error: '/auth/signin'
-  }
+  },
+  adapter: FirestoreAdapter({...firebaseConfig}),
 })
