@@ -12,16 +12,16 @@ import {
   Input as InputChakra,
   FormControl,
   FormLabel,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
-import { collection, addDoc } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import { db, handleUploadImage } from "../../services/firebase";
 
-import { BookProps } from "../../interfaces/BookProps"
+import { BookProps } from "../../interfaces/BookProps";
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -34,11 +34,9 @@ import { Input } from "./input";
 
 interface AddBookModalProps extends ModalProps {}
 
-
 export function AddBookModal({ ...rest }: AddBookModalProps) {
-  
   const toast = useToast();
-  
+
   const [imageFile, setImageFile] = useState<File>();
   const [imageDisplay, setImageDisplay] = useState(addBookPhoto);
 
@@ -46,22 +44,25 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting, isSubmitSuccessful},
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm({
     resolver: yupResolver(bookSchema),
   });
 
-  const bookCollectionRef = collection(db, "books");
-
-  const handleAddBook: SubmitHandler<
-  BookProps
-  > = async (values) => {
-    
+  const handleAddBook: SubmitHandler<BookProps> = async (values) => {
     const imageUrl = await handleUploadImage(imageFile);
-    
-    const id = String(Math.floor(Math.random() * 100000));
 
-    const createdAt = (new Date(Date.now())).toISOString();  
+    const randonNumber = String(Math.floor(Math.random() * 100000));
+
+    const name = values.name.replace(/\s+/g, '-')
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .toLowerCase()
+
+    const id = `${name}.${randonNumber}`;
+
+    const createdAt = new Date(Date.now()).toISOString();
 
     const book: BookProps = {
       id,
@@ -70,33 +71,27 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
       ...values,
     };
 
-    
-    await addDoc(bookCollectionRef, book)
+    await setDoc(doc(db, "books", book.id), book);
 
     toast({
-      title: 'Livro adicionado com sucesso!',
-      status: 'success',
+      title: "Livro adicionado com sucesso!",
+      status: "success",
       duration: 9000,
       isClosable: true,
-    })
-    
-
+    });
   };
 
-  useEffect(()=>{
-    if(isSubmitSuccessful){
+  useEffect(() => {
+    if (isSubmitSuccessful) {
       reset({
         name: "",
         author: "",
         volume: "",
-        category: ""
-
-      })
+        category: "",
+      });
       setImageDisplay(addBookPhoto);
     }
-
-  
-  },[isSubmitting, isSubmitSuccessful])
+  }, [isSubmitting, isSubmitSuccessful]);
 
   function handleImageChange(event: React.FormEvent) {
     const image = (event.target as HTMLInputElement).files[0];
@@ -185,11 +180,15 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
                 error={errors.category?.message as string}
                 isDisabled={isSubmitting}
               />
-              <Button leftIcon={<HiPlus />} colorScheme="orange" type="submit" isLoading={isSubmitting}>
+              <Button
+                leftIcon={<HiPlus />}
+                colorScheme="orange"
+                type="submit"
+                isLoading={isSubmitting}
+              >
                 Adicionar
               </Button>
             </Stack>
-
           </Flex>
         </ModalBody>
       </ModalContent>

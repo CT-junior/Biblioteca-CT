@@ -15,7 +15,6 @@ import { FiLogOut } from "react-icons/fi";
 import biblioctecaLogo from "../../assets/images/bibliocteca-horizontal-logo.svg"
 import { SignOutModal } from "../SignOutModal";
 
-
 export function Header() {
   const { isFixed } = useSidebar();
   const { isOpen, onOpen, onClose } = useDisclosure()
