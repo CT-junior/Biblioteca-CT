@@ -18,7 +18,10 @@ import {
 import { useState } from "react";
 import Image from "next/image";
 
-import {  } from "../../services/firebase";
+import { collection, addDoc } from "firebase/firestore";
+import { db, handleUploadImage } from "../../services/firebase";
+
+import { BookProps } from "../../interfaces/BookProps"
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -31,13 +34,6 @@ import { Input } from "./input";
 
 interface AddBookModalProps extends ModalProps {}
 
-type BookFormData = {
-  id: string;
-  name: string;
-  author: string;
-  volume: string;
-  category: string;
-};
 
 export function AddBookModal({ ...rest }: AddBookModalProps) {
   
@@ -52,35 +48,29 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(bookSchema),
-    shouldUnregister: false,
   });
 
+  const bookCollectionRef = collection(db, "books");
 
   const handleAddBook: SubmitHandler<
-  BookFormData
+  BookProps
   > = async (values) => {
-    toast({
-      title: 'Aguarde o fim do cadastro!',
-      description: "Cadastrando...",
-      status: 'warning',
-      duration: 9000,
-      isClosable: true,
-    })
     
-    // const imageUrl = await handleUploadImage(imageFile);
+    const imageUrl = await handleUploadImage(imageFile);
+    
+    const id = String(Math.floor(Math.random() * 100000));
 
-    const randomNumber = Math.floor(Math.random() * 100000);
-    const id = `${randomNumber}`;
+    const createdAt = (new Date(Date.now())).toISOString();  
 
-    const book: BookFormData = {
+    const book: BookProps = {
       id,
+      createdAt,
+      imageUrl,
       ...values,
     };
 
-    // await fetch('/api/congressist', {
-    //   method: "POST",
-    //   body: JSON.stringify({"congressist":congressist})
-    // })
+    
+    await addDoc(bookCollectionRef, book)
 
     toast({
       title: 'Livro adicionado com sucesso!',
@@ -91,9 +81,6 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
 
   };
 
-  const onSubmit = async () => {
-    await handleAddBook;
-  };
 
   function handleImageChange(event: React.FormEvent) {
     const image = (event.target as HTMLInputElement).files[0];
@@ -114,7 +101,7 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
   }
 
   return (
-    <Modal {...rest} size="2xl" isCentered onOverlayClick={resetUseStates}>
+    <Modal {...rest} size="2xl" isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Adicionar livro</ModalHeader>
@@ -127,7 +114,7 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
             borderRadius={8}
             flexDir="row"
             gap="6"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(handleAddBook)}
           >
             <FormControl flex="1 ">
               <FormLabel
@@ -150,7 +137,6 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
                 type="file"
                 display="none"
                 onChange={(ev) => handleImageChange(ev)}
-                {...register("file")}
               />
             </FormControl>
 
@@ -183,7 +169,7 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
                 error={errors.category?.message as string}
                 isDisabled={isSubmitting}
               />
-              <Button leftIcon={<HiPlus />} colorScheme="orange" type="submit">
+              <Button leftIcon={<HiPlus />} colorScheme="orange" type="submit" isLoading={isSubmitting}>
                 Adicionar
               </Button>
             </Stack>

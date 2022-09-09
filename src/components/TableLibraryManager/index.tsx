@@ -2,6 +2,7 @@ import {
   Table as TableChakra,
   TableContainer,
   TableProps as TableChakraProps,
+  Tbody,
 } from "@chakra-ui/react";
 
 import { ReactNode } from "react";
@@ -17,7 +18,9 @@ export function TableLibraryManager({ children, ...rest }: TableProps) {
     <TableContainer fontSize="sm" {...rest}>
       <TableChakra variant="simple">
         <Thead />
+        <Tbody>
         {children}
+        </Tbody>
       </TableChakra>
     </TableContainer>
   );

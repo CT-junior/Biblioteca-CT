@@ -5,18 +5,24 @@ import {
   Heading,
   HStack,
   Icon,
-  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
-  Text,
   Tr,
   useBreakpointValue,
   useDisclosure,
   Td,
+  Text,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
 import { NextPage } from "next";
+import Image from "next/image";
+
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../services/firebase";
+
+import { BookProps } from "../interfaces/BookProps";
 
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
@@ -32,15 +38,43 @@ import {
   colorSchemeOrangeCtOutline,
 } from "../common/utils";
 
-
-
 const LibraryManager: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [books, setBooks] = useState<BookProps[]>([]);
 
   const isWideVersion = useBreakpointValue({
     base: false,
     sm: true,
   });
+
+  const bookCollectionRef = collection(db, "books");
+
+  useEffect(() => {
+    const getBooks = async () => {
+      const data = await getDocs(bookCollectionRef);
+
+      setBooks(
+        data.docs.map((doc) => ({
+          id: doc.id,
+          imageUrl: doc.data().imageUrl,
+          name: doc.data().name,
+          author: doc.data().author,
+          category: doc.data().category,
+          volume: doc.data().volume,
+          createdAt: new Date(doc.data().createdAt).toLocaleDateString(
+            "pt-BR",
+            {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            }
+          ),
+        }))
+      );
+    };
+
+    getBooks();
+  }, []);
 
   return (
     <Flex direction="column" h="100vh">
@@ -49,15 +83,15 @@ const LibraryManager: NextPage = () => {
         <Sidebar />
         <Box w="100%" px="8" py="8">
           <Flex
-            align={["flex-start","center"]}
+            align={["flex-start", "center"]}
             aria-label="second-header"
             pb="6"
             borderBottom="1px"
             borderColor="gray.200"
             gap="2"
-            direction={["column", "column","row"]}
+            direction={["column", "column", "row"]}
           >
-            <Heading as="h1" fontSize="xl" >
+            <Heading as="h1" fontSize="xl">
               Gerenciador de biblioteca
             </Heading>
             <HStack>
@@ -96,62 +130,40 @@ const LibraryManager: NextPage = () => {
               maxW="28"
               fontWeight="sm"
               px="8"
-              ml={["unset","unset","auto"]}
+              ml={["unset", "unset", "auto"]}
             >
               Exportar
             </Button>
           </Flex>
           <TableLibraryManager>
-            <Tr>
-              <Td display="revert">Sussuros na floresta</Td>
-              <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
-              <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
-              <Td display={["none", "revert"]}>Suspense</Td>
-              <Td display={["none", "none", "revert"]}>04 de setembro, 2022</Td>
-              <Td textAlign={["end", "end", "center"]}>
-              <MoreSettingsPopover />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td display="revert">Sussuros na floresta</Td>
-              <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
-              <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
-              <Td display={["none", "revert"]}>Suspense</Td>
-              <Td display={["none", "none", "revert"]}>04 de setembro, 2022</Td>
-              <Td textAlign={["end", "end", "center"]}>
-              <MoreSettingsPopover />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td display="revert">Sussuros na floresta</Td>
-              <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
-              <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
-              <Td display={["none", "revert"]}>Suspense</Td>
-              <Td display={["none", "none", "revert"]}>04 de setembro, 2022</Td>
-              <Td textAlign={["end", "end", "center"]}>
-              <MoreSettingsPopover />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td display="revert">Sussuros na floresta</Td>
-              <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
-              <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
-              <Td display={["none", "revert"]}>Suspense</Td>
-              <Td display={["none", "none", "revert"]}>04 de setembro, 2022</Td>
-              <Td textAlign={["end", "end", "center"]}>
-              <MoreSettingsPopover />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td display="revert">Sussuros na floresta</Td>
-              <Td display={["none", "none", "none", "revert"]}>Volume 1</Td>
-              <Td display={["none", "none", "revert"]}>Maria Silveira</Td>
-              <Td display={["none", "revert"]}>Suspense</Td>
-              <Td display={["none", "none", "revert"]}>04 de setembro, 2022</Td>
-              <Td textAlign={["end", "end", "center"]}>
-              <MoreSettingsPopover />
-              </Td>
-            </Tr>
+            {books.map((book) => {
+              return (
+                <Tr key={book.id}>
+                  <Td display="revert">
+                    <HStack>
+                      {book.imageUrl && (
+                        <Image
+                          src={book.imageUrl}
+                          alt={book.name}
+                          width="27px"
+                          height="40px"
+                        />
+                      )}
+                      <Text>{book.name}</Text>
+                    </HStack>
+                  </Td>
+                  <Td display={["none", "none", "none", "revert"]}>
+                    {book.volume}
+                  </Td>
+                  <Td display={["none", "none", "revert"]}>{book.author}</Td>
+                  <Td display={["none", "revert"]}>{book.category}</Td>
+                  <Td display={["none", "none", "revert"]}>{book.createdAt}</Td>
+                  <Td textAlign={["end", "end", "center"]}>
+                    <MoreSettingsPopover />
+                  </Td>
+                </Tr>
+              );
+            })}
           </TableLibraryManager>
           <Pagination />
           <AddBookModal isOpen={isOpen} onClose={onClose} children />
