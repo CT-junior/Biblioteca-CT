@@ -20,7 +20,7 @@ const storage = getStorage(app)
 
 async function handleUploadImage(imageFile: File) {
   if (!imageFile) {
-      return 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png';
+      return 'https://firebasestorage.googleapis.com/v0/b/library-ct.appspot.com/o/book-default-cover.jpg?alt=media&token=e15af89b-8e50-415d-b20c-bf8631c47f6a';
   }
   
   const imageRef = ref(storage, imageFile.name + Math.random());

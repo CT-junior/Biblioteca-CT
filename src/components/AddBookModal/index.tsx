@@ -15,7 +15,7 @@ import {
   useToast
 } from "@chakra-ui/react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 import { collection, addDoc } from "firebase/firestore";
@@ -45,7 +45,8 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    reset,
+    formState: { errors, isSubmitting, isSubmitSuccessful},
   } = useForm({
     resolver: yupResolver(bookSchema),
   });
@@ -78,9 +79,24 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
       duration: 9000,
       isClosable: true,
     })
+    
 
   };
 
+  useEffect(()=>{
+    if(isSubmitSuccessful){
+      reset({
+        name: "",
+        author: "",
+        volume: "",
+        category: ""
+
+      })
+      setImageDisplay(addBookPhoto);
+    }
+
+  
+  },[isSubmitting, isSubmitSuccessful])
 
   function handleImageChange(event: React.FormEvent) {
     const image = (event.target as HTMLInputElement).files[0];
