@@ -26,7 +26,7 @@ const Home: NextPage = () => {
     return (
         <Flex direction="column" h="100vh">
             <Header />
-            <Flex w="100%" mx="auto">
+            <Flex w="100%" mx="auto" mt="16">
                 <Sidebar />
             </Flex>
         </Flex>

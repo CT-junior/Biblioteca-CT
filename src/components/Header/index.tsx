@@ -35,11 +35,13 @@ export function Header() {
     return (
         <>
             <Flex
+                position="fixed"
                 as="header"
                 w="100%"
                 h="16"
                 mx="auto"
                 px="5"
+                py="2"
                 align="center"
                 justify="space-between"
                 borderBottomColor="blackAlpha.200"

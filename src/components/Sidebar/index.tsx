@@ -22,10 +22,10 @@ export function Sidebar() {
     });
 
     if (!isWideMobile && isOpen) {
-        return <SidebarNav size="64" isOpen key={1} />;
+        return <SidebarNav size="64" isOpen={isOpen} key={1} />;
     }
     if (!isWideMobile) {
-        return <SidebarNav size="20" isOpen={false} key={1} />;
+        return <SidebarNav size="20" isOpen={isOpen} key={1} />;
     }
 
     return (

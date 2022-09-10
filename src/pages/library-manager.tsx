@@ -34,6 +34,7 @@ import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
 import { Pagination } from "../components/Pagination";
 import { Sidebar } from "../components/Sidebar";
 import { TableLibraryManager } from "../components/TableLibraryManager";
+import { useSidebar } from "../hooks/sidebar";
 import { BookProps } from "../interfaces/BookProps";
 import { db } from "../services/firebase";
 
@@ -41,10 +42,26 @@ const LibraryManager: NextPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [books, setBooks] = useState<BookProps[]>([]);
 
+    const isOpenSidebar = useSidebar().isOpen;
     const isWideVersion = useBreakpointValue({
         base: false,
         sm: true,
     });
+
+    const isSideBarDrawer = useBreakpointValue({
+        base: true,
+        md: false,
+    });
+
+    const marginLeft = () => {
+        if (isSideBarDrawer) {
+            return "60px";
+        }
+        if (isOpenSidebar) {
+            return "256px";
+        }
+        return "80px";
+    };
 
     const bookCollectionRef = collection(db, "books");
 
@@ -77,9 +94,15 @@ const LibraryManager: NextPage = () => {
     return (
         <Flex direction="column" h="100vh">
             <Header />
-            <Flex w="100%" mx="auto">
+            <Flex w="100%" mx="auto" mt="16">
                 <Sidebar />
-                <Box w="100%" px="8" py="8">
+                <Box
+                    w="100%"
+                    px="8"
+                    py="8"
+                    ml={isSideBarDrawer ? "0" : isOpenSidebar ? "64" : "20"}
+                    transition="0.2s"
+                >
                     <Flex
                         align={["flex-start", "center"]}
                         aria-label="second-header"

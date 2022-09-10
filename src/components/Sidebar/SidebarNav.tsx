@@ -37,6 +37,7 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
 
     return (
         <Flex
+            position="fixed"
             as="aside"
             w={size}
             px={["0", "6"]}
