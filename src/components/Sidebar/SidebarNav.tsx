@@ -8,7 +8,7 @@ import {
     HiOutlineTerminal,
 } from "react-icons/hi";
 
-import { Flex, Stack } from "@chakra-ui/react";
+import { Flex, Stack, useBreakpointValue } from "@chakra-ui/react";
 import Image from "next/image";
 import { setTimeout } from "timers";
 
@@ -23,6 +23,11 @@ interface SidebarNavProps {
 }
 
 export function SidebarNav({ size, isOpen }: SidebarNavProps) {
+    const isWideMobile = useBreakpointValue({
+        base: true,
+        md: false,
+    });
+
     const onMouseLeave = () => {
         new Promise((res) => setTimeout(res, 400)).then(() => {
             toggleSidebar(false);
@@ -37,7 +42,7 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
 
     return (
         <Flex
-            position="fixed"
+            position={!isWideMobile ? "fixed" : "relative"}
             as="aside"
             w={size}
             px={["0", "6"]}
