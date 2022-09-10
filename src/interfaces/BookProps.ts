@@ -1,4 +1,4 @@
-export interface BookProps {
+export type BookProps = {
     id: string;
     name: string;
     author: string;
@@ -6,4 +6,4 @@ export interface BookProps {
     category: string;
     createdAt: string;
     imageUrl: string;
-}
+};

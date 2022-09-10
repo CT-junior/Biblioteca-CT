@@ -43,6 +43,7 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
     return (
         <Flex
             position={!isWideMobile ? "fixed" : "relative"}
+            zIndex="overlay"
             as="aside"
             w={size}
             px={["0", "6"]}
@@ -59,6 +60,7 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
             onMouseLeave={() => {
                 onMouseLeave();
             }}
+            bg="white"
         >
             <Stack spacing="4" align="flex-start">
                 <NavLink icon={HiOutlineHome} href="/">

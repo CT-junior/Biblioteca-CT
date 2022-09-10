@@ -36,6 +36,7 @@ export function Header() {
         <>
             <Flex
                 position="fixed"
+                zIndex="overlay"
                 as="header"
                 w="100%"
                 h="16"
@@ -48,6 +49,7 @@ export function Header() {
                 borderBottomWidth="1px"
                 borderBottomStyle="solid"
                 gap={["3", "6"]}
+                bg="white"
             >
                 <HStack gap={["2", "8"]}>
                     <IconButton

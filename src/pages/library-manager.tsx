@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-children-prop */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
@@ -53,16 +54,6 @@ const LibraryManager: NextPage = () => {
         md: false,
     });
 
-    const marginLeft = () => {
-        if (isSideBarDrawer) {
-            return "60px";
-        }
-        if (isOpenSidebar) {
-            return "256px";
-        }
-        return "80px";
-    };
-
     const bookCollectionRef = collection(db, "books");
 
     useEffect(() => {
@@ -89,7 +80,7 @@ const LibraryManager: NextPage = () => {
         };
 
         getBooks();
-    }, [bookCollectionRef]);
+    }, []);
 
     return (
         <Flex direction="column" h="100vh">
