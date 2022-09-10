@@ -1,5 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { Store } from 'pullstate';
+import { Store } from "pullstate";
 
 interface ISidebarState {
     isFixed: boolean;
@@ -9,8 +9,8 @@ interface ISidebarState {
 const defaultSidebarState: ISidebarState = {
     isFixed: false,
     isOpen: false,
-}
+};
 
 export const store = new Store<ISidebarState>(defaultSidebarState);
 
-export default { store, key: '@sidebar'}
+export default { store, key: "@sidebar" };
