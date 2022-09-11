@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 
@@ -16,9 +17,44 @@ import {
     PopoverTrigger,
     Stack,
     Button,
+    useToast,
 } from "@chakra-ui/react";
+import { deleteDoc, doc } from "firebase/firestore";
+import { ref, deleteObject } from "firebase/storage";
 
-export function MoreSettingsPopover() {
+import { db, storage } from "../../services/firebase";
+import { removeBook } from "../../store/books/actions";
+
+interface MoreSettingsPopoverProps {
+    bookId: string;
+}
+export function MoreSettingsPopover({ bookId }: MoreSettingsPopoverProps) {
+    const toast = useToast();
+    const books = useToast();
+
+    const handleRemoveBook = async () => {
+        // Create a reference to the file to delete
+        const desertRef = ref(storage, bookId);
+
+        // Delete the file
+        await deleteObject(desertRef)
+            .then(() => {
+                console.log("Imagem deletada");
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        await deleteDoc(doc(db, "books", bookId));
+
+        removeBook(bookId);
+
+        toast({
+            title: "Livro deletado com sucesso!",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+        });
+    };
     return (
         <Popover placement="bottom-start">
             <PopoverTrigger>
@@ -38,7 +74,11 @@ export function MoreSettingsPopover() {
                             <Text>Editar</Text>
                         </HStack>
                     </Button>
-                    <Button variant="unstyled" size="sm" fontWeight="normal">
+                    <Button
+                        size="sm"
+                        fontWeight="normal"
+                        onClick={handleRemoveBook}
+                    >
                         <HStack>
                             <Icon as={IoMdTrash} />
                             <Text>Excluir</Text>

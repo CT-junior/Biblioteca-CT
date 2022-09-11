@@ -26,9 +26,10 @@ import { setDoc, doc } from "firebase/firestore";
 import Image from "next/image";
 
 import addBookPhoto from "../../assets/images/add_a_photo.svg";
-import { BookProps } from "../../interfaces/BookProps";
+import { IBookState } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
 import { db, handleUploadImage } from "../../services/firebase";
+import { addBook } from "../../store/books/actions";
 import { Input } from "./input";
 
 interface AddBookModalProps extends ModalProps {}
@@ -48,9 +49,7 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
         resolver: yupResolver(bookSchema),
     });
 
-    const handleAddBook: SubmitHandler<BookProps> = async (values) => {
-        const imageUrl = await handleUploadImage(imageFile);
-
+    const handleAddBook: SubmitHandler<IBookState> = async (values) => {
         const randonNumber = String(Math.floor(Math.random() * 100000));
 
         const name = values.name
@@ -62,14 +61,29 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
 
         const id = `${name}.${randonNumber}`;
 
+        const imageUrl = await handleUploadImage(imageFile, id);
+
         const createdAt = new Date(Date.now()).toISOString();
 
-        const book: BookProps = {
+        const book: IBookState = {
             id,
             createdAt,
             imageUrl,
             ...values,
         };
+        addBook({
+            id: book.id,
+            imageUrl: book.imageUrl,
+            name: book.name,
+            author: book.author,
+            category: book.category,
+            volume: book.volume,
+            createdAt: new Date(book.createdAt).toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+            }),
+        });
 
         await setDoc(doc(db, "books", book.id), book);
 

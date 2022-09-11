@@ -35,13 +35,14 @@ import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
 import { Pagination } from "../components/Pagination";
 import { Sidebar } from "../components/Sidebar";
 import { TableLibraryManager } from "../components/TableLibraryManager";
+import { useBooks } from "../hooks/books";
 import { useSidebar } from "../hooks/sidebar";
-import { BookProps } from "../interfaces/BookProps";
 import { db } from "../services/firebase";
+import { addBook } from "../store/books/actions";
 
 const LibraryManager: NextPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [books, setBooks] = useState<BookProps[]>([]);
+    const books = useBooks();
 
     const isOpenSidebar = useSidebar().isOpen;
     const isWideVersion = useBreakpointValue({
@@ -60,8 +61,8 @@ const LibraryManager: NextPage = () => {
         const getBooks = async () => {
             const data = await getDocs(bookCollectionRef);
 
-            setBooks(
-                data.docs.map((doc) => ({
+            data.docs.map((doc) =>
+                addBook({
                     id: doc.id,
                     imageUrl: doc.data().imageUrl,
                     name: doc.data().name,
@@ -75,7 +76,7 @@ const LibraryManager: NextPage = () => {
                         month: "long",
                         year: "numeric",
                     }),
-                }))
+                })
             );
         };
 
@@ -191,7 +192,7 @@ const LibraryManager: NextPage = () => {
                                         {book.createdAt}
                                     </Td>
                                     <Td textAlign={["end", "end", "center"]}>
-                                        <MoreSettingsPopover />
+                                        <MoreSettingsPopover bookId={book.id} />
                                     </Td>
                                 </Tr>
                             );
