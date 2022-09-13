@@ -24,6 +24,7 @@ import {
 import { deleteDoc, doc } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
 
+import { useBooks } from "../../hooks/books";
 import { IBookState } from "../../interfaces/Book";
 import { db, storage } from "../../services/firebase";
 import { removeBook } from "../../store/books/actions";
@@ -35,20 +36,23 @@ interface MoreSettingsPopoverProps {
 export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const books = useBooks();
 
     const handleRemoveBook = async () => {
-        const desertRef = ref(storage, book.id);
-
-        await deleteObject(desertRef)
-            .then(() => {
-                console.log("Imagem deletada");
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        await deleteDoc(doc(db, "books", book.id));
-
+        // console.log(books);
         removeBook(book.id);
+        // console.log(books);
+
+        // const desertRef = ref(storage, book.id);
+
+        // await deleteObject(desertRef)
+        //     .then(() => {
+        //         console.log("Imagem deletada");
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     });
+        // await deleteDoc(doc(db, "books", book.id));
 
         toast({
             title: "Livro deletado com sucesso!",

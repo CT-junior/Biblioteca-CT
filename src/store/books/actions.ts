@@ -1,9 +1,11 @@
+/* eslint-disable no-sequences */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-console */
 /* eslint-disable eqeqeq */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-expressions */
 /* eslint no-param-reassign: "error" */
+
 import { store } from ".";
 import { IBookState } from "../../interfaces/Book";
 
@@ -13,12 +15,7 @@ export const addBook = (book: IBookState) => {
     });
 };
 
-export const removeBook = (id: String) => {
-    store.update((s) => {
-        s = s.filter((item) => item.id != id);
-    });
-};
-
+export const removeBook = (id: String) => {};
 export const editBook = (id: String, book: IBookState) => {
     store.update((s) => {
         s.map((s) => {
