@@ -72,13 +72,18 @@ export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
                     borderRadius="full"
                 />
             </PopoverTrigger>
-            <PopoverContent p={5} w="32">
+            <PopoverContent py="6" px="4" w="36">
                 <Stack align="center">
                     <Button
-                        variant="unstyled"
+                        bg="transparent"
                         size="sm"
+                        w="100%"
                         fontWeight="normal"
                         onClick={onOpen}
+                        _hover={{
+                            bg: "blackAlpha.50",
+                        }}
+                        borderRadius="full"
                     >
                         <HStack>
                             <Icon as={MdEdit} />
@@ -86,9 +91,15 @@ export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
                         </HStack>
                     </Button>
                     <Button
+                        bg="transparent"
                         size="sm"
+                        w="100%"
                         fontWeight="normal"
                         onClick={handleRemoveBook}
+                        _hover={{
+                            bg: "blackAlpha.50",
+                        }}
+                        borderRadius="full"
                     >
                         <HStack>
                             <Icon as={IoMdTrash} />
