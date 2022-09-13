@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
@@ -22,90 +23,93 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { setDoc, doc } from "firebase/firestore";
+import { updateDoc, doc } from "firebase/firestore";
+import { ref, deleteObject } from "firebase/storage";
 import Image from "next/image";
 
 import addBookPhoto from "../../assets/images/add_a_photo.svg";
 import { IBookState } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
-import { db, handleUploadImage } from "../../services/firebase";
-import { addBook } from "../../store/books/actions";
+import { db, handleUploadImage, storage } from "../../services/firebase";
+import { editBook } from "../../store/books/actions";
 import { Input } from "./input";
 
-interface AddBookModalProps extends ModalProps {}
+interface EditBookModalProps extends ModalProps {
+    book: IBookState;
+}
 
-export function AddBookModal({ ...rest }: AddBookModalProps) {
+export function EditBookModal({ book, ...rest }: EditBookModalProps) {
     const toast = useToast();
 
     const [imageFile, setImageFile] = useState<File>();
-    const [imageDisplay, setImageDisplay] = useState(addBookPhoto);
+    const [imageDisplay, setImageDisplay] = useState(book.imageUrl);
 
     const {
         register,
         handleSubmit,
-        reset,
-        formState: { errors, isSubmitting, isSubmitSuccessful },
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(bookSchema),
     });
 
-    const handleAddBook: SubmitHandler<IBookState> = async (values) => {
-        const randonNumber = String(Math.floor(Math.random() * 100000));
+    const handleEditBook: SubmitHandler<IBookState> = async (values) => {
+        let { imageUrl } = book;
+        // se imageFile for diferente de nula, a imagem antiga é excluida, e uma nova é enviado ao storage
+        if (imageFile != null) {
+            const desertRef = ref(storage, book.id);
 
-        const name = values.name
-            .replace(/\s+/g, "-")
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .trim()
-            .toLowerCase();
+            await deleteObject(desertRef)
+                .then(() => {
+                    console.log("Imagem deletada");
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
 
-        const id = `${name}.${randonNumber}`;
-
-        const imageUrl = await handleUploadImage(imageFile, id);
+            imageUrl = await handleUploadImage(imageFile, book.id);
+        }
 
         const createdAt = new Date(Date.now()).toISOString();
 
-        const book: IBookState = {
-            id,
+        const newBook: IBookState = {
+            id: book.id,
             createdAt,
             imageUrl,
             ...values,
         };
-        addBook({
+
+        editBook(book.id, {
             id: book.id,
-            imageUrl: book.imageUrl,
-            name: book.name,
-            author: book.author,
-            category: book.category,
-            volume: book.volume,
-            createdAt: new Date(book.createdAt).toLocaleDateString("pt-BR", {
+            imageUrl: newBook.imageUrl,
+            name: newBook.name,
+            author: newBook.author,
+            category: newBook.category,
+            volume: newBook.volume,
+            createdAt: new Date(newBook.createdAt).toLocaleDateString("pt-BR", {
                 day: "2-digit",
                 month: "long",
                 year: "numeric",
             }),
         });
 
-        await setDoc(doc(db, "books", book.id), book);
+        const bookDocRef = doc(db, "books", book.id);
+
+        await updateDoc(bookDocRef, {
+            imageUrl: newBook.imageUrl,
+            name: newBook.name,
+            author: newBook.author,
+            category: newBook.category,
+            volume: newBook.volume,
+            createdAt: newBook.createdAt,
+        });
 
         toast({
-            title: "Livro adicionado com sucesso!",
-            status: "success",
+            title: "Livro editado com sucesso!",
+            status: "info",
             duration: 9000,
             isClosable: true,
         });
     };
-
-    useEffect(() => {
-        if (isSubmitSuccessful) {
-            reset({
-                name: "",
-                author: "",
-                volume: "",
-                category: "",
-            });
-            setImageDisplay(addBookPhoto);
-        }
-    }, [isSubmitting, isSubmitSuccessful, reset]);
 
     function handleImageChange(event: FormEvent) {
         const image = (event.target as HTMLInputElement).files[0];
@@ -130,7 +134,7 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
         <Modal {...rest} size="2xl" isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Adicionar livro</ModalHeader>
+                <ModalHeader>Editar livro</ModalHeader>
                 <ModalCloseButton onClick={resetUseStates} />
                 <ModalBody>
                     <Flex
@@ -140,7 +144,7 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
                         borderRadius={8}
                         flexDir="row"
                         gap="6"
-                        onSubmit={handleSubmit(handleAddBook)}
+                        onSubmit={handleSubmit(handleEditBook)}
                     >
                         <FormControl flex="1 ">
                             <FormLabel
@@ -169,11 +173,11 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
                         <Stack spacing="4" flexDirection="column" flex="2">
                             <Input
                                 id="name"
-                                value="s"
                                 register={register}
                                 placeholder="Nome"
                                 error={errors.name?.message as string}
                                 isDisabled={isSubmitting}
+                                defaultValue={book.name}
                             />
                             <Input
                                 id="author"
@@ -181,6 +185,7 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
                                 placeholder="Autor"
                                 error={errors.author?.message as string}
                                 isDisabled={isSubmitting}
+                                defaultValue={book.author}
                             />
                             <Input
                                 id="volume"
@@ -188,6 +193,7 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
                                 placeholder="Volume"
                                 error={errors.volume?.message as string}
                                 isDisabled={isSubmitting}
+                                defaultValue={book.volume}
                             />
                             <Input
                                 id="category"
@@ -195,6 +201,7 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
                                 placeholder="Categoria"
                                 error={errors.category?.message as string}
                                 isDisabled={isSubmitting}
+                                defaultValue={book.category}
                             />
                             <Button
                                 leftIcon={<HiPlus />}
@@ -202,7 +209,7 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
                                 type="submit"
                                 isLoading={isSubmitting}
                             >
-                                Adicionar
+                                Editar
                             </Button>
                         </Stack>
                     </Flex>

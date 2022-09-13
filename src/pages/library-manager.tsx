@@ -192,7 +192,7 @@ const LibraryManager: NextPage = () => {
                                         {book.createdAt}
                                     </Td>
                                     <Td textAlign={["end", "end", "center"]}>
-                                        <MoreSettingsPopover bookId={book.id} />
+                                        <MoreSettingsPopover book={book} />
                                     </Td>
                                 </Tr>
                             );
