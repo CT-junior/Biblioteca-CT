@@ -15,7 +15,19 @@ export const addBook = (book: IBookState) => {
     });
 };
 
-export const removeBook = (id: String) => {};
+export const removeBook = (id: String) => {
+    store.update((s) => {
+        const auxVector = s.filter((item) => item.id != id);
+        const sLegth = s.length;
+        for (let i = 0; i < sLegth; i++) {
+            s.pop();
+        }
+        for (let j = 0; j < auxVector.length; j++) {
+            s.push(auxVector[j]);
+        }
+    });
+};
+
 export const editBook = (id: String, book: IBookState) => {
     store.update((s) => {
         s.map((s) => {

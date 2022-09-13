@@ -43,16 +43,16 @@ export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
         removeBook(book.id);
         // console.log(books);
 
-        // const desertRef = ref(storage, book.id);
+        const desertRef = ref(storage, book.id);
 
-        // await deleteObject(desertRef)
-        //     .then(() => {
-        //         console.log("Imagem deletada");
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
-        // await deleteDoc(doc(db, "books", book.id));
+        await deleteObject(desertRef)
+            .then(() => {
+                console.log("Imagem deletada");
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        await deleteDoc(doc(db, "books", book.id));
 
         toast({
             title: "Livro deletado com sucesso!",
