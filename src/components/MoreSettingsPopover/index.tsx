@@ -24,7 +24,6 @@ import {
 import { deleteDoc, doc } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
 
-import { useBooks } from "../../hooks/books";
 import { IBookState } from "../../interfaces/Book";
 import { db, storage } from "../../services/firebase";
 import { removeBook } from "../../store/books/actions";
@@ -36,7 +35,6 @@ interface MoreSettingsPopoverProps {
 export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const books = useBooks();
 
     const handleRemoveBook = async () => {
         // console.log(books);

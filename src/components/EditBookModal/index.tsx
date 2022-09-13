@@ -46,7 +46,7 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, isSubmitSuccessful },
     } = useForm({
         resolver: yupResolver(bookSchema),
     });
@@ -104,7 +104,7 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
 
         toast({
             title: "Livro editado com sucesso!",
-            status: "info",
+            status: "success",
             duration: 9000,
             isClosable: true,
         });
