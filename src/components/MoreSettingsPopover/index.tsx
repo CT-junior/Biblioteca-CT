@@ -37,19 +37,12 @@ export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const handleRemoveBook = async () => {
-        // console.log(books);
         removeBook(book.id);
-        // console.log(books);
 
-        const desertRef = ref(storage, book.id);
+        const imageRef = ref(storage, book.id);
 
-        await deleteObject(desertRef)
-            .then(() => {
-                console.log("Imagem deletada");
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        await deleteObject(imageRef);
+
         await deleteDoc(doc(db, "books", book.id));
 
         toast({
