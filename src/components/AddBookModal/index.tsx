@@ -127,7 +127,7 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
     }
 
     return (
-        <Modal {...rest} size="2xl" isCentered>
+        <Modal {...rest} size="3xl" isCentered>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Adicionar livro</ModalHeader>
@@ -142,7 +142,7 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
                         gap="6"
                         onSubmit={handleSubmit(handleAddBook)}
                     >
-                        <FormControl flex="1 ">
+                        <FormControl flex="2">
                             <FormLabel
                                 textAlign="center"
                                 htmlFor="file"
@@ -166,7 +166,7 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
                             />
                         </FormControl>
 
-                        <Stack spacing="4" flexDirection="column" flex="2">
+                        <Stack spacing="4" flexDirection="column" flex="3">
                             <Input
                                 id="name"
                                 value="s"

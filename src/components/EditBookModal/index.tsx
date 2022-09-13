@@ -2,9 +2,9 @@
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { useState, useEffect, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { HiPlus } from "react-icons/hi";
+import { MdEdit } from "react-icons/md";
 
 import {
     Modal,
@@ -27,7 +27,6 @@ import { updateDoc, doc } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
 import Image from "next/image";
 
-import addBookPhoto from "../../assets/images/add_a_photo.svg";
 import { IBookState } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
 import { db, handleUploadImage, storage } from "../../services/firebase";
@@ -125,17 +124,12 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
         }
     }
 
-    function resetUseStates() {
-        setImageDisplay(addBookPhoto);
-        setImageFile(null);
-    }
-
     return (
-        <Modal {...rest} size="2xl" isCentered>
+        <Modal {...rest} size="3xl" isCentered>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Editar livro</ModalHeader>
-                <ModalCloseButton onClick={resetUseStates} />
+                <ModalCloseButton />
                 <ModalBody>
                     <Flex
                         as="form"
@@ -146,18 +140,16 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
                         gap="6"
                         onSubmit={handleSubmit(handleEditBook)}
                     >
-                        <FormControl flex="1 ">
+                        <FormControl flex="2">
                             <FormLabel
                                 textAlign="center"
                                 htmlFor="file"
-                                h="100%"
-                                w="100%"
                                 borderRadius="15px"
                                 border="1px"
                                 borderColor="gray.200"
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="center"
+                                // display="flex"
+                                // alignItems="center"
+                                // justifyContent="center"
                             >
                                 <Image src={imageDisplay} layout="fill" />
                             </FormLabel>
@@ -170,7 +162,7 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
                             />
                         </FormControl>
 
-                        <Stack spacing="4" flexDirection="column" flex="2">
+                        <Stack spacing="4" flexDirection="column" flex="3">
                             <Input
                                 id="name"
                                 register={register}
@@ -204,7 +196,7 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
                                 defaultValue={book.category}
                             />
                             <Button
-                                leftIcon={<HiPlus />}
+                                leftIcon={<MdEdit />}
                                 colorScheme="orange"
                                 type="submit"
                                 isLoading={isSubmitting}
