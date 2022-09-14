@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-children-prop */
 /* eslint-disable react/jsx-indent-props */
@@ -29,29 +30,20 @@ import {
     colorSchemeOrangeCtOutline,
 } from "../common/utils";
 import { AddBookModal } from "../components/AddBookModal";
-import { EditBookModal } from "../components/EditBookModal";
 import { Header } from "../components/Header";
 import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
 import { Pagination } from "../components/Pagination";
 import { Sidebar } from "../components/Sidebar";
 import { TableLibraryManager } from "../components/TableLibraryManager";
-import { useBooks } from "../hooks/books";
-import { useEditBookModal } from "../hooks/editBookModal";
-import { useAddBookModal } from "../hooks/newBookModal";
-import { useSidebar } from "../hooks/sidebar";
+import { useBooks } from "../hooks/useBooks";
+import { useSidebar } from "../hooks/useSidebar";
 import { IBookState } from "../interfaces/Book";
 import { db } from "../services/firebase";
-import {
-    onCloseAddBookModal,
-    onOpenAddBookModal,
-} from "../store/addBookModal/actions";
+import { onOpenAddBookModal } from "../store/addBookModal/actions";
 import { addBook } from "../store/books/actions";
-import { onCloseEditBookModal } from "../store/editBookModal/actions";
 
 const LibraryManager: NextPage = () => {
-    const { isOpenEditBookModal } = useEditBookModal();
     const books = useBooks();
-
     const isOpenSidebar = useSidebar().isOpen;
     const isWideVersion = useBreakpointValue({
         base: false,
@@ -208,7 +200,6 @@ const LibraryManager: NextPage = () => {
                     </TableLibraryManager>
                     <Pagination />
                     <AddBookModal />
-                    <EditBookModal />
                 </Box>
             </Flex>
         </Flex>

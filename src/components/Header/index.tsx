@@ -16,7 +16,7 @@ import {
 import Image from "next/image";
 
 import biblioctecaLogo from "../../assets/images/bibliocteca-horizontal-logo.svg";
-import { useSidebar } from "../../hooks/sidebar";
+import { useSidebar } from "../../hooks/useSidebar";
 import { toggleFixedSidebar } from "../../store/sidebar/actions";
 import { SignOutModal } from "../SignOutModal";
 import { Profile } from "./Profile";

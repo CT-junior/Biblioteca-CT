@@ -12,7 +12,6 @@ import {
     ModalHeader,
     ModalBody,
     ModalCloseButton,
-    ModalProps,
     Button,
     Flex,
     Stack,
@@ -26,7 +25,7 @@ import { setDoc, doc } from "firebase/firestore";
 import Image from "next/image";
 
 import addBookPhoto from "../../assets/images/add_a_photo.svg";
-import { useAddBookModal } from "../../hooks/newBookModal";
+import { useAddBookModal } from "../../hooks/useAddBookModal";
 import { IBookState } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
 import { db, handleUploadImage } from "../../services/firebase";

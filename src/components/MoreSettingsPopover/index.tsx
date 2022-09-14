@@ -20,6 +20,7 @@ import {
     Stack,
     Button,
     useToast,
+    useDisclosure,
 } from "@chakra-ui/react";
 import { deleteDoc, doc } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
@@ -27,14 +28,14 @@ import { ref, deleteObject } from "firebase/storage";
 import { IBookState } from "../../interfaces/Book";
 import { db, storage } from "../../services/firebase";
 import { removeBook } from "../../store/books/actions";
-import { onOpenEditBookModal } from "../../store/editBookModal/actions";
+import { EditBookModal } from "../EditBookModal";
 
 interface MoreSettingsPopoverProps {
     book: IBookState;
 }
 export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
     const toast = useToast();
-
+    const { onOpen, onClose, isOpen } = useDisclosure();
     const handleRemoveBook = async () => {
         removeBook(book.id);
 
@@ -70,7 +71,7 @@ export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
                         size="sm"
                         w="100%"
                         fontWeight="normal"
-                        onClick={() => onOpenEditBookModal(book)}
+                        onClick={onOpen}
                         _hover={{
                             bg: "blackAlpha.50",
                         }}
@@ -100,6 +101,12 @@ export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
                 </Stack>
                 <PopoverArrow />
             </PopoverContent>
+            <EditBookModal
+                book={book}
+                isOpen={isOpen}
+                onClose={onClose}
+                children
+            />
         </Popover>
     );
 }

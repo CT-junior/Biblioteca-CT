@@ -1,8 +1,12 @@
-import { CreateToastFnReturn, UseToastOptions } from "@chakra-ui/react"
+import { CreateToastFnReturn, UseToastOptions } from "@chakra-ui/react";
 
-export const fireErrorToast = (chackraToast: CreateToastFnReturn, options?: UseToastOptions) => {
-    if (options?.id && chackraToast.isActive(options.id)) { // error is a valid toadId
-        return
+export const fireErrorToast = (
+    chackraToast: CreateToastFnReturn,
+    options?: UseToastOptions
+) => {
+    if (options?.id && chackraToast.isActive(options.id)) {
+        // error is a valid toadId
+        return;
     }
 
     chackraToast({
@@ -10,43 +14,42 @@ export const fireErrorToast = (chackraToast: CreateToastFnReturn, options?: UseT
         variant: "left-accent",
         containerStyle: {
             marginBottom: "180px",
-            marginTop: "-164px"
+            marginTop: "-164px",
         },
         duration: 9000,
         isClosable: true,
-        ...options
-    })
-}
+        ...options,
+    });
+};
 
 export const colorSchemeOrangeCt = {
-    bg: 'orange.ct',
-    color: 'white',
+    bg: "orange.ct",
+    color: "white",
     _hover: {
-        bg:'orange.500',
+        bg: "orange.500",
     },
-    _active:{
-        bg: 'orange.600'
-      }
-}
+    _active: {
+        bg: "orange.600",
+    },
+};
 
 export const colorSchemeOrangeCtOutline = {
-    color: 'orange.ct',
+    color: "orange.ct",
     _placeholder: {
-        color: 'orange.ct',
+        color: "orange.ct",
     },
-    borderColor: 'orange.ct',
+    borderColor: "orange.ct",
 
     _focus: {
-        borderColor: 'orange.ct',
-        shadow: 'none',
-      },
-    
-      _hover:{
-        bg: 'orange.50'
-      },
+        borderColor: "orange.ct",
+        shadow: "none",
+    },
 
-      _active:{
-        bg: 'orange.100'
-      }
+    _hover: {
+        bg: "orange.50",
+    },
 
-}
+    _active: {
+        bg: "orange.100",
+    },
+};
