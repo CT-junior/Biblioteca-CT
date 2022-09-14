@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint no-param-reassign: "error" */
 import { store } from ".";
 

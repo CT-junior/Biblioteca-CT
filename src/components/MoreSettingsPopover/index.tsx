@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable react/no-children-prop */
-/* eslint-disable no-console */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 
@@ -92,12 +89,7 @@ export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
                 </Stack>
                 <PopoverArrow />
             </PopoverContent>
-            <EditBookModal
-                book={book}
-                isOpen={isOpen}
-                onClose={onClose}
-                children
-            />
+            <EditBookModal book={book} isOpen={isOpen} onClose={onClose} />
         </Popover>
     );
 }

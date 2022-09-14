@@ -1,6 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable no-console */
-/* eslint-disable react/jsx-no-bind */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 import { useState, FormEvent } from "react";
@@ -31,11 +28,13 @@ import { bookSchema } from "../../schemas/book";
 import { editBook } from "../../store/books/actions";
 import { Input } from "./input";
 
-interface EditBookModalProps extends ModalProps {
+interface EditBookModalProps {
     book: BookProps;
+    isOpen: boolean;
+    onClose: () => void;
 }
 
-export function EditBookModal({ book, ...rest }: EditBookModalProps) {
+export function EditBookModal({ book, isOpen, onClose }: EditBookModalProps) {
     const toast = useToast();
 
     const [imageFile, setImageFile] = useState<File>();
@@ -74,7 +73,7 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
     }
 
     return (
-        <Modal {...rest} size="3xl" isCentered>
+        <Modal isOpen={isOpen} onClose={onClose} size="3xl" isCentered>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Editar livro</ModalHeader>

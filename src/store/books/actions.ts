@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import {
     setDoc,
     doc,
@@ -66,7 +67,7 @@ export const removeBook = async (id: String) => {
         await deleteDoc(doc(db, "books", String(id)));
 
         store.update((s) => {
-            const auxVector = s.books.filter((item) => item.id != id);
+            const auxVector = s.books.filter((item) => item.id !== id);
             const sLegth = s.books.length;
             for (let i = 0; i < sLegth; i++) {
                 s.books.pop();
@@ -125,14 +126,14 @@ export const editBook = async (
         });
 
         store.update((s) => {
-            s.books.map((s) => {
-                if (s.id === newBook.id) {
-                    s.imageUrl = newBook.imageUrl;
-                    s.name = newBook.name;
-                    s.author = newBook.author;
-                    s.volume = newBook.volume;
-                    s.category = newBook.category;
-                    s.createdAt = newBook.createdAt;
+            s.books.forEach((book) => {
+                if (book.id === newBook.id) {
+                    book.imageUrl = newBook.imageUrl;
+                    book.name = newBook.name;
+                    book.author = newBook.author;
+                    book.volume = newBook.volume;
+                    book.category = newBook.category;
+                    book.createdAt = newBook.createdAt;
                 }
             });
 

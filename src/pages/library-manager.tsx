@@ -1,6 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/no-children-prop */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 import { useEffect } from "react";
@@ -95,14 +92,9 @@ const LibraryManager: NextPage = () => {
                             </Button>
                             {isWideVersion && (
                                 <InputGroup w="32" size="sm">
-                                    <InputLeftElement
-                                        children={
-                                            <Icon
-                                                as={HiSearch}
-                                                color="orange.ct"
-                                            />
-                                        }
-                                    />
+                                    <InputLeftElement>
+                                        <Icon as={HiSearch} color="orange.ct" />
+                                    </InputLeftElement>
                                     <Input
                                         placeholder="Pequisar"
                                         variant="outline"

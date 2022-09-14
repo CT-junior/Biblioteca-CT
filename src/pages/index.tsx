@@ -1,4 +1,3 @@
-/* eslint-disable eqeqeq */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 import { useEffect } from "react";
@@ -16,8 +15,8 @@ const Home: NextPage = () => {
     const router = useRouter();
 
     useEffect(() => {
-        if (status != "loading") {
-            if (status == "unauthenticated") {
+        if (status !== "loading") {
+            if (status === "unauthenticated") {
                 router.push("/auth/signin");
             }
         }

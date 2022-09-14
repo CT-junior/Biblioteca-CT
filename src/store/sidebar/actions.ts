@@ -1,13 +1,18 @@
-/* eslint-disable no-unused-expressions */
-/* eslint no-param-reassign: "error" */
+/* eslint-disable no-param-reassign */
 import { store } from ".";
 
 export const toggleSidebar = (state?: boolean) => {
     store.update((s) => {
         if (state !== undefined) {
-            s.isFixed ? (s.isOpen = true) : (s.isOpen = state);
+            if (s.isFixed) {
+                s.isOpen = true;
+            } else {
+                s.isOpen = state;
+            }
+        } else if (s.isFixed) {
+            s.isOpen = true;
         } else {
-            s.isFixed ? (s.isOpen = true) : (s.isOpen = !s.isOpen);
+            s.isOpen = !s.isOpen;
         }
     });
 };
