@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import { Store } from "pullstate";
 
 interface ISidebarState {

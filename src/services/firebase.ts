@@ -15,12 +15,12 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-async function handleUploadImage(imageFile: File) {
+async function handleUploadImage(imageFile: File, id: String) {
     if (!imageFile) {
         return "https://firebasestorage.googleapis.com/v0/b/library-ct.appspot.com/o/book-default-cover.jpg?alt=media&token=e15af89b-8e50-415d-b20c-bf8631c47f6a";
     }
 
-    const imageRef = ref(storage, imageFile.name + Math.random());
+    const imageRef = ref(storage, String(id));
 
     const downloadUrl = uploadBytes(imageRef, imageFile).then(
         async (snapshot) => {

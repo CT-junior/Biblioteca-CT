@@ -1,9 +1,8 @@
-/* eslint-disable react/jsx-no-bind */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { useState, useEffect, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { HiPlus } from "react-icons/hi";
+import { MdEdit } from "react-icons/md";
 
 import {
     Modal,
@@ -19,56 +18,45 @@ import {
     FormControl,
     FormLabel,
     useToast,
+    ModalProps,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 
-import addBookPhoto from "../../assets/images/add_a_photo.svg";
-import { useAddBookModal } from "../../hooks/useAddBookModal";
 import { BookProps } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
-import { onCloseAddBookModal } from "../../store/addBookModal/actions";
-import { addBook } from "../../store/books/actions";
+import { editBook } from "../../store/books/actions";
 import { Input } from "./input";
 
-export function AddBookModal() {
+interface EditBookModalProps {
+    book: BookProps;
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+export function EditBookModal({ book, isOpen, onClose }: EditBookModalProps) {
     const toast = useToast();
-    const { isOpenAddBookModal } = useAddBookModal();
 
     const [imageFile, setImageFile] = useState<File>();
-    const [imageDisplay, setImageDisplay] = useState(addBookPhoto);
+    const [imageDisplay, setImageDisplay] = useState(book.imageUrl);
 
     const {
         register,
         handleSubmit,
-        reset,
-        formState: { errors, isSubmitting, isSubmitSuccessful },
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(bookSchema),
     });
 
-    const handleAddBook: SubmitHandler<BookProps> = async (values) => {
-        await addBook(values, imageFile);
-
+    const handleEditBook: SubmitHandler<BookProps> = async (newValues) => {
+        await editBook(book, newValues, imageFile);
         toast({
-            title: "Livro adicionado com sucesso!",
+            title: "Livro editado com sucesso!",
             status: "success",
             duration: 9000,
             isClosable: true,
         });
     };
-
-    useEffect(() => {
-        if (isSubmitSuccessful) {
-            reset({
-                name: "",
-                author: "",
-                volume: "",
-                category: "",
-            });
-            setImageDisplay(addBookPhoto);
-        }
-    }, [isSubmitting, isSubmitSuccessful, reset]);
 
     function handleImageChange(event: FormEvent) {
         const image = (event.target as HTMLInputElement).files[0];
@@ -84,22 +72,12 @@ export function AddBookModal() {
         }
     }
 
-    function resetUseStates() {
-        setImageDisplay(addBookPhoto);
-        setImageFile(null);
-    }
-
     return (
-        <Modal
-            isOpen={isOpenAddBookModal}
-            onClose={onCloseAddBookModal}
-            size="3xl"
-            isCentered
-        >
+        <Modal isOpen={isOpen} onClose={onClose} size="3xl" isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Adicionar livro</ModalHeader>
-                <ModalCloseButton onClick={resetUseStates} />
+                <ModalHeader>Editar livro</ModalHeader>
+                <ModalCloseButton />
                 <ModalBody>
                     <Flex
                         as="form"
@@ -108,20 +86,15 @@ export function AddBookModal() {
                         borderRadius={8}
                         flexDir="row"
                         gap="6"
-                        onSubmit={handleSubmit(handleAddBook)}
+                        onSubmit={handleSubmit(handleEditBook)}
                     >
                         <FormControl flex="2">
                             <FormLabel
                                 textAlign="center"
                                 htmlFor="file"
-                                h="100%"
-                                w="100%"
                                 borderRadius="15px"
                                 border="1px"
                                 borderColor="gray.200"
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="center"
                             >
                                 <Image src={imageDisplay} layout="fill" />
                             </FormLabel>
@@ -137,11 +110,11 @@ export function AddBookModal() {
                         <Stack spacing="4" flexDirection="column" flex="3">
                             <Input
                                 id="name"
-                                value="s"
                                 register={register}
                                 placeholder="Nome"
                                 error={errors.name?.message as string}
                                 isDisabled={isSubmitting}
+                                defaultValue={book.name}
                             />
                             <Input
                                 id="author"
@@ -149,6 +122,7 @@ export function AddBookModal() {
                                 placeholder="Autor"
                                 error={errors.author?.message as string}
                                 isDisabled={isSubmitting}
+                                defaultValue={book.author}
                             />
                             <Input
                                 id="volume"
@@ -156,6 +130,7 @@ export function AddBookModal() {
                                 placeholder="Volume"
                                 error={errors.volume?.message as string}
                                 isDisabled={isSubmitting}
+                                defaultValue={book.volume}
                             />
                             <Input
                                 id="category"
@@ -163,14 +138,15 @@ export function AddBookModal() {
                                 placeholder="Categoria"
                                 error={errors.category?.message as string}
                                 isDisabled={isSubmitting}
+                                defaultValue={book.category}
                             />
                             <Button
-                                leftIcon={<HiPlus />}
+                                leftIcon={<MdEdit />}
                                 colorScheme="orange"
                                 type="submit"
                                 isLoading={isSubmitting}
                             >
-                                Adicionar
+                                Editar
                             </Button>
                         </Stack>
                     </Flex>

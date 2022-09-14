@@ -16,9 +16,31 @@ import {
     PopoverTrigger,
     Stack,
     Button,
+    useToast,
+    useDisclosure,
 } from "@chakra-ui/react";
 
-export function MoreSettingsPopover() {
+import { BookProps } from "../../interfaces/Book";
+import { removeBook } from "../../store/books/actions";
+import { EditBookModal } from "../EditBookModal";
+
+interface MoreSettingsPopoverProps {
+    book: BookProps;
+}
+export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
+    const toast = useToast();
+    const { onOpen, onClose, isOpen } = useDisclosure();
+    const handleRemoveBook = async () => {
+        await removeBook(book.id);
+
+        toast({
+            title: "Livro deletado com sucesso!",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+        });
+    };
+
     return (
         <Popover placement="bottom-start">
             <PopoverTrigger>
@@ -30,15 +52,35 @@ export function MoreSettingsPopover() {
                     borderRadius="full"
                 />
             </PopoverTrigger>
-            <PopoverContent p={5} w="32">
+            <PopoverContent py="6" px="4" w="36">
                 <Stack align="center">
-                    <Button variant="unstyled" size="sm" fontWeight="normal">
+                    <Button
+                        bg="transparent"
+                        size="sm"
+                        w="100%"
+                        fontWeight="normal"
+                        onClick={onOpen}
+                        _hover={{
+                            bg: "blackAlpha.50",
+                        }}
+                        borderRadius="full"
+                    >
                         <HStack>
                             <Icon as={MdEdit} />
                             <Text>Editar</Text>
                         </HStack>
                     </Button>
-                    <Button variant="unstyled" size="sm" fontWeight="normal">
+                    <Button
+                        bg="transparent"
+                        size="sm"
+                        w="100%"
+                        fontWeight="normal"
+                        onClick={handleRemoveBook}
+                        _hover={{
+                            bg: "blackAlpha.50",
+                        }}
+                        borderRadius="full"
+                    >
                         <HStack>
                             <Icon as={IoMdTrash} />
                             <Text>Excluir</Text>
@@ -47,6 +89,7 @@ export function MoreSettingsPopover() {
                 </Stack>
                 <PopoverArrow />
             </PopoverContent>
+            <EditBookModal book={book} isOpen={isOpen} onClose={onClose} />
         </Popover>
     );
 }

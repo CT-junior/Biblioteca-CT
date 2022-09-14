@@ -1,8 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/no-children-prop */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { HiPlus, HiSearch, HiCloudDownload } from "react-icons/hi";
 
 import {
@@ -17,11 +15,9 @@ import {
     InputLeftElement,
     Tr,
     useBreakpointValue,
-    useDisclosure,
     Td,
     Text,
 } from "@chakra-ui/react";
-import { collection, getDocs } from "firebase/firestore";
 import { NextPage } from "next";
 import Image from "next/image";
 
@@ -35,14 +31,14 @@ import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
 import { Pagination } from "../components/Pagination";
 import { Sidebar } from "../components/Sidebar";
 import { TableLibraryManager } from "../components/TableLibraryManager";
-import { useSidebar } from "../hooks/sidebar";
-import { BookProps } from "../interfaces/BookProps";
-import { db } from "../services/firebase";
+import { useBooks } from "../hooks/useBooks";
+import { useSidebar } from "../hooks/useSidebar";
+import { BookProps } from "../interfaces/Book";
+import { onOpenAddBookModal } from "../store/addBookModal/actions";
+import { requestBooksFirebase } from "../store/books/actions";
 
 const LibraryManager: NextPage = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [books, setBooks] = useState<BookProps[]>([]);
-
+    const { books } = useBooks();
     const isOpenSidebar = useSidebar().isOpen;
     const isWideVersion = useBreakpointValue({
         base: false,
@@ -54,32 +50,8 @@ const LibraryManager: NextPage = () => {
         md: false,
     });
 
-    const bookCollectionRef = collection(db, "books");
-
     useEffect(() => {
-        const getBooks = async () => {
-            const data = await getDocs(bookCollectionRef);
-
-            setBooks(
-                data.docs.map((doc) => ({
-                    id: doc.id,
-                    imageUrl: doc.data().imageUrl,
-                    name: doc.data().name,
-                    author: doc.data().author,
-                    category: doc.data().category,
-                    volume: doc.data().volume,
-                    createdAt: new Date(
-                        doc.data().createdAt
-                    ).toLocaleDateString("pt-BR", {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                    }),
-                }))
-            );
-        };
-
-        getBooks();
+        requestBooksFirebase();
     }, []);
 
     return (
@@ -108,7 +80,7 @@ const LibraryManager: NextPage = () => {
                         </Heading>
                         <HStack>
                             <Button
-                                onClick={onOpen}
+                                onClick={onOpenAddBookModal}
                                 size="sm"
                                 width="100%"
                                 maxW="40"
@@ -120,14 +92,9 @@ const LibraryManager: NextPage = () => {
                             </Button>
                             {isWideVersion && (
                                 <InputGroup w="32" size="sm">
-                                    <InputLeftElement
-                                        children={
-                                            <Icon
-                                                as={HiSearch}
-                                                color="orange.ct"
-                                            />
-                                        }
-                                    />
+                                    <InputLeftElement>
+                                        <Icon as={HiSearch} color="orange.ct" />
+                                    </InputLeftElement>
                                     <Input
                                         placeholder="Pequisar"
                                         variant="outline"
@@ -155,7 +122,7 @@ const LibraryManager: NextPage = () => {
                         </Button>
                     </Flex>
                     <TableLibraryManager>
-                        {books.map((book) => {
+                        {books.map((book: BookProps) => {
                             return (
                                 <Tr key={book.id}>
                                     <Td display="revert">
@@ -188,17 +155,23 @@ const LibraryManager: NextPage = () => {
                                         {book.category}
                                     </Td>
                                     <Td display={["none", "none", "revert"]}>
-                                        {book.createdAt}
+                                        {new Date(
+                                            book.createdAt
+                                        ).toLocaleDateString("pt-BR", {
+                                            day: "2-digit",
+                                            month: "long",
+                                            year: "numeric",
+                                        })}
                                     </Td>
                                     <Td textAlign={["end", "end", "center"]}>
-                                        <MoreSettingsPopover />
+                                        <MoreSettingsPopover book={book} />
                                     </Td>
                                 </Tr>
                             );
                         })}
                     </TableLibraryManager>
                     <Pagination />
-                    <AddBookModal isOpen={isOpen} onClose={onClose} children />
+                    <AddBookModal />
                 </Box>
             </Flex>
         </Flex>
