@@ -21,7 +21,6 @@ import {
     Td,
     Text,
 } from "@chakra-ui/react";
-import { collection, getDocs } from "firebase/firestore";
 import { NextPage } from "next";
 import Image from "next/image";
 
@@ -38,9 +37,8 @@ import { TableLibraryManager } from "../components/TableLibraryManager";
 import { useBooks } from "../hooks/useBooks";
 import { useSidebar } from "../hooks/useSidebar";
 import { BookProps } from "../interfaces/Book";
-import { db } from "../services/firebase";
 import { onOpenAddBookModal } from "../store/addBookModal/actions";
-import { addBook } from "../store/books/actions";
+import { requestBooksFirebase } from "../store/books/actions";
 
 const LibraryManager: NextPage = () => {
     const { books } = useBooks();
@@ -55,26 +53,8 @@ const LibraryManager: NextPage = () => {
         md: false,
     });
 
-    const bookCollectionRef = collection(db, "books");
-
     useEffect(() => {
-        const getBooks = async () => {
-            const data = await getDocs(bookCollectionRef);
-
-            data.docs.map((doc) =>
-                addBook({
-                    id: doc.id,
-                    imageUrl: doc.data().imageUrl,
-                    name: doc.data().name,
-                    author: doc.data().author,
-                    category: doc.data().category,
-                    volume: doc.data().volume,
-                    createdAt: doc.data().createdAt,
-                })
-            );
-        };
-
-        getBooks();
+        requestBooksFirebase();
     }, []);
 
     return (

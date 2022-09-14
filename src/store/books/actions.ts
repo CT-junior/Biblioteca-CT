@@ -1,13 +1,11 @@
-/* eslint-disable prefer-const */
-/* eslint-disable no-sequences */
-/* eslint-disable array-callback-return */
-/* eslint-disable no-console */
-/* eslint-disable eqeqeq */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-unused-expressions */
-/* eslint no-param-reassign: "error" */
-
-import { setDoc, doc, deleteDoc, updateDoc } from "firebase/firestore";
+import {
+    setDoc,
+    doc,
+    deleteDoc,
+    updateDoc,
+    getDocs,
+    collection,
+} from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 
 import { store } from ".";
@@ -51,7 +49,6 @@ export const addBook = async (book: BookProps, imageFile?: File) => {
     } catch (err) {
         store.update((s) => {
             s.isLoading = false;
-            console.log(err);
         });
     }
 };
@@ -82,7 +79,6 @@ export const removeBook = async (id: String) => {
     } catch (err) {
         store.update((s) => {
             s.isLoading = false;
-            console.log(err);
         });
     }
 };
@@ -116,7 +112,6 @@ export const editBook = async (
             imageUrl,
             ...newValues,
         };
-        console.log(newBook);
 
         const bookDocRef = doc(db, "books", newBook.id);
 
@@ -146,7 +141,38 @@ export const editBook = async (
     } catch (err) {
         store.update((s) => {
             s.isLoading = false;
-            console.log(err);
+        });
+    }
+};
+
+export const requestBooksFirebase = async () => {
+    const bookCollectionRef = collection(db, "books");
+
+    const response = await getDocs(bookCollectionRef);
+    const books = response.docs.map((doc) => {
+        return {
+            id: doc.id,
+            imageUrl: doc.data().imageUrl,
+            name: doc.data().name,
+            author: doc.data().author,
+            category: doc.data().category,
+            volume: doc.data().volume,
+            createdAt: doc.data().createdAt,
+        };
+    });
+
+    try {
+        store.update((s) => {
+            s.isLoading = true;
+        });
+
+        store.update((s) => {
+            s.books = books;
+            s.isLoading = false;
+        });
+    } catch (err) {
+        store.update((s) => {
+            s.isLoading = false;
         });
     }
 };
