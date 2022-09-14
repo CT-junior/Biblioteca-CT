@@ -26,16 +26,17 @@ import { setDoc, doc } from "firebase/firestore";
 import Image from "next/image";
 
 import addBookPhoto from "../../assets/images/add_a_photo.svg";
+import { useAddBookModal } from "../../hooks/newBookModal";
 import { IBookState } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
 import { db, handleUploadImage } from "../../services/firebase";
+import { onCloseAddBookModal } from "../../store/addBookModal/actions";
 import { addBook } from "../../store/books/actions";
 import { Input } from "./input";
 
-interface AddBookModalProps extends ModalProps {}
-
-export function AddBookModal({ ...rest }: AddBookModalProps) {
+export function AddBookModal() {
     const toast = useToast();
+    const { isOpenAddBookModal } = useAddBookModal();
 
     const [imageFile, setImageFile] = useState<File>();
     const [imageDisplay, setImageDisplay] = useState(addBookPhoto);
@@ -127,7 +128,12 @@ export function AddBookModal({ ...rest }: AddBookModalProps) {
     }
 
     return (
-        <Modal {...rest} size="3xl" isCentered>
+        <Modal
+            isOpen={isOpenAddBookModal}
+            onClose={onCloseAddBookModal}
+            size="3xl"
+            isCentered
+        >
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Adicionar livro</ModalHeader>

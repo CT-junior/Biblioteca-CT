@@ -2,7 +2,7 @@
 /* eslint-disable react/no-children-prop */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { HiPlus, HiSearch, HiCloudDownload } from "react-icons/hi";
 
 import {
@@ -17,7 +17,6 @@ import {
     InputLeftElement,
     Tr,
     useBreakpointValue,
-    useDisclosure,
     Td,
     Text,
 } from "@chakra-ui/react";
@@ -30,18 +29,27 @@ import {
     colorSchemeOrangeCtOutline,
 } from "../common/utils";
 import { AddBookModal } from "../components/AddBookModal";
+import { EditBookModal } from "../components/EditBookModal";
 import { Header } from "../components/Header";
 import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
 import { Pagination } from "../components/Pagination";
 import { Sidebar } from "../components/Sidebar";
 import { TableLibraryManager } from "../components/TableLibraryManager";
 import { useBooks } from "../hooks/books";
+import { useEditBookModal } from "../hooks/editBookModal";
+import { useAddBookModal } from "../hooks/newBookModal";
 import { useSidebar } from "../hooks/sidebar";
+import { IBookState } from "../interfaces/Book";
 import { db } from "../services/firebase";
+import {
+    onCloseAddBookModal,
+    onOpenAddBookModal,
+} from "../store/addBookModal/actions";
 import { addBook } from "../store/books/actions";
+import { onCloseEditBookModal } from "../store/editBookModal/actions";
 
 const LibraryManager: NextPage = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpenEditBookModal } = useEditBookModal();
     const books = useBooks();
 
     const isOpenSidebar = useSidebar().isOpen;
@@ -109,7 +117,7 @@ const LibraryManager: NextPage = () => {
                         </Heading>
                         <HStack>
                             <Button
-                                onClick={onOpen}
+                                onClick={onOpenAddBookModal}
                                 size="sm"
                                 width="100%"
                                 maxW="40"
@@ -156,7 +164,7 @@ const LibraryManager: NextPage = () => {
                         </Button>
                     </Flex>
                     <TableLibraryManager>
-                        {books.map((book) => {
+                        {books.map((book: IBookState) => {
                             return (
                                 <Tr key={book.id}>
                                     <Td display="revert">
@@ -199,7 +207,8 @@ const LibraryManager: NextPage = () => {
                         })}
                     </TableLibraryManager>
                     <Pagination />
-                    <AddBookModal isOpen={isOpen} onClose={onClose} children />
+                    <AddBookModal />
+                    <EditBookModal />
                 </Box>
             </Flex>
         </Flex>

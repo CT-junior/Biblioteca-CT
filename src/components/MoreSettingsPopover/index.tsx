@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable react/no-children-prop */
 /* eslint-disable no-console */
 /* eslint-disable react/jsx-indent-props */
@@ -19,7 +20,6 @@ import {
     Stack,
     Button,
     useToast,
-    useDisclosure,
 } from "@chakra-ui/react";
 import { deleteDoc, doc } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
@@ -27,14 +27,13 @@ import { ref, deleteObject } from "firebase/storage";
 import { IBookState } from "../../interfaces/Book";
 import { db, storage } from "../../services/firebase";
 import { removeBook } from "../../store/books/actions";
-import { EditBookModal } from "../EditBookModal";
+import { onOpenEditBookModal } from "../../store/editBookModal/actions";
 
 interface MoreSettingsPopoverProps {
     book: IBookState;
 }
 export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
     const toast = useToast();
-    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const handleRemoveBook = async () => {
         removeBook(book.id);
@@ -52,6 +51,7 @@ export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
             isClosable: true,
         });
     };
+
     return (
         <Popover placement="bottom-start">
             <PopoverTrigger>
@@ -70,7 +70,7 @@ export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
                         size="sm"
                         w="100%"
                         fontWeight="normal"
-                        onClick={onOpen}
+                        onClick={() => onOpenEditBookModal(book)}
                         _hover={{
                             bg: "blackAlpha.50",
                         }}
@@ -100,12 +100,6 @@ export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
                 </Stack>
                 <PopoverArrow />
             </PopoverContent>
-            <EditBookModal
-                isOpen={isOpen}
-                onClose={onClose}
-                book={book}
-                children
-            />
         </Popover>
     );
 }

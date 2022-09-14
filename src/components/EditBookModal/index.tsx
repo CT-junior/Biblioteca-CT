@@ -13,7 +13,6 @@ import {
     ModalHeader,
     ModalBody,
     ModalCloseButton,
-    ModalProps,
     Button,
     Flex,
     Stack,
@@ -27,35 +26,34 @@ import { updateDoc, doc } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
 import Image from "next/image";
 
+import { useEditBookModal } from "../../hooks/editBookModal";
 import { IBookState } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
 import { db, handleUploadImage, storage } from "../../services/firebase";
 import { editBook } from "../../store/books/actions";
+import { onCloseEditBookModal } from "../../store/editBookModal/actions";
 import { Input } from "./input";
 
-interface EditBookModalProps extends ModalProps {
-    book: IBookState;
-}
-
-export function EditBookModal({ book, ...rest }: EditBookModalProps) {
+export function EditBookModal() {
     const toast = useToast();
+    const { selectedBook, isOpenEditBookModal } = useEditBookModal();
 
     const [imageFile, setImageFile] = useState<File>();
-    const [imageDisplay, setImageDisplay] = useState(book.imageUrl);
+    const [imageDisplay, setImageDisplay] = useState(selectedBook.imageUrl);
 
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting, isSubmitSuccessful },
+        formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(bookSchema),
     });
 
     const handleEditBook: SubmitHandler<IBookState> = async (values) => {
-        let { imageUrl } = book;
+        let { imageUrl } = selectedBook;
         // se imageFile for diferente de nula, a imagem antiga é excluida, e uma nova é enviado ao storage
         if (imageFile != null) {
-            const desertRef = ref(storage, book.id);
+            const desertRef = ref(storage, selectedBook.id);
 
             await deleteObject(desertRef)
                 .then(() => {
@@ -65,20 +63,20 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
                     console.log(error);
                 });
 
-            imageUrl = await handleUploadImage(imageFile, book.id);
+            imageUrl = await handleUploadImage(imageFile, selectedBook.id);
         }
 
         const createdAt = new Date(Date.now()).toISOString();
 
         const newBook: IBookState = {
-            id: book.id,
+            id: selectedBook.id,
             createdAt,
             imageUrl,
             ...values,
         };
 
-        editBook(book.id, {
-            id: book.id,
+        editBook(selectedBook.id, {
+            id: selectedBook.id,
             imageUrl: newBook.imageUrl,
             name: newBook.name,
             author: newBook.author,
@@ -91,7 +89,7 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
             }),
         });
 
-        const bookDocRef = doc(db, "books", book.id);
+        const bookDocRef = doc(db, "books", selectedBook.id);
 
         await updateDoc(bookDocRef, {
             imageUrl: newBook.imageUrl,
@@ -125,11 +123,17 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
     }
 
     return (
-        <Modal {...rest} size="3xl" isCentered>
+        <Modal
+            isOpen={isOpenEditBookModal}
+            onClose={onCloseEditBookModal}
+            size="3xl"
+            onOverlayClick={() => setImageDisplay("")}
+            isCentered
+        >
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Editar livro</ModalHeader>
-                <ModalCloseButton />
+                <ModalCloseButton onClick={() => setImageDisplay("")} />
                 <ModalBody>
                     <Flex
                         as="form"
@@ -151,7 +155,10 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
                                 // alignItems="center"
                                 // justifyContent="center"
                             >
-                                <Image src={imageDisplay} layout="fill" />
+                                <Image
+                                    src={imageDisplay || selectedBook.imageUrl}
+                                    layout="fill"
+                                />
                             </FormLabel>
                             <InputChakra
                                 name="file"
@@ -169,7 +176,7 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
                                 placeholder="Nome"
                                 error={errors.name?.message as string}
                                 isDisabled={isSubmitting}
-                                defaultValue={book.name}
+                                defaultValue={selectedBook.name}
                             />
                             <Input
                                 id="author"
@@ -177,7 +184,7 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
                                 placeholder="Autor"
                                 error={errors.author?.message as string}
                                 isDisabled={isSubmitting}
-                                defaultValue={book.author}
+                                defaultValue={selectedBook.author}
                             />
                             <Input
                                 id="volume"
@@ -185,7 +192,7 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
                                 placeholder="Volume"
                                 error={errors.volume?.message as string}
                                 isDisabled={isSubmitting}
-                                defaultValue={book.volume}
+                                defaultValue={selectedBook.volume}
                             />
                             <Input
                                 id="category"
@@ -193,7 +200,7 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
                                 placeholder="Categoria"
                                 error={errors.category?.message as string}
                                 isDisabled={isSubmitting}
-                                defaultValue={book.category}
+                                defaultValue={selectedBook.category}
                             />
                             <Button
                                 leftIcon={<MdEdit />}
