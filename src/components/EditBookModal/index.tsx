@@ -24,13 +24,11 @@ import {
     ModalProps,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { updateDoc, doc } from "firebase/firestore";
-import { ref, deleteObject } from "firebase/storage";
 import Image from "next/image";
 
+import { useBooks } from "../../hooks/useBooks";
 import { IBookState } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
-import { db, handleUploadImage, storage } from "../../services/firebase";
 import { editBook } from "../../store/books/actions";
 import { Input } from "./input";
 
@@ -52,57 +50,8 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
         resolver: yupResolver(bookSchema),
     });
 
-    const handleEditBook: SubmitHandler<IBookState> = async (values) => {
-        let { imageUrl } = book;
-        // se imageFile for diferente de nula, a imagem antiga é excluida, e uma nova é enviado ao storage
-        if (imageFile != null) {
-            const desertRef = ref(storage, book.id);
-
-            await deleteObject(desertRef)
-                .then(() => {
-                    console.log("Imagem deletada");
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-
-            imageUrl = await handleUploadImage(imageFile, book.id);
-        }
-
-        const createdAt = new Date(Date.now()).toISOString();
-
-        const newBook: IBookState = {
-            id: book.id,
-            createdAt,
-            imageUrl,
-            ...values,
-        };
-
-        editBook(book.id, {
-            id: book.id,
-            imageUrl: newBook.imageUrl,
-            name: newBook.name,
-            author: newBook.author,
-            category: newBook.category,
-            volume: newBook.volume,
-            createdAt: new Date(newBook.createdAt).toLocaleDateString("pt-BR", {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-            }),
-        });
-
-        const bookDocRef = doc(db, "books", newBook.id);
-
-        await updateDoc(bookDocRef, {
-            imageUrl: newBook.imageUrl,
-            name: newBook.name,
-            author: newBook.author,
-            category: newBook.category,
-            volume: newBook.volume,
-            createdAt: newBook.createdAt,
-        });
-
+    const handleEditBook: SubmitHandler<IBookState> = async (newValues) => {
+        await editBook(book, newValues, imageFile);
         toast({
             title: "Livro editado com sucesso!",
             status: "success",
@@ -124,18 +73,6 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
             alert("Arquivo de formato inválido!");
         }
     }
-
-    // function resetStates() {
-    //     reset({
-    //         name: "",
-    //         author: "",
-    //         volume: "",
-    //         category: "",
-    //     });
-    //     setImageDisplay("");
-    // }
-
-    console.log(book);
 
     return (
         <Modal {...rest} size="3xl" isCentered>

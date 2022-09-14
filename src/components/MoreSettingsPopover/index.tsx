@@ -37,13 +37,7 @@ export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
     const toast = useToast();
     const { onOpen, onClose, isOpen } = useDisclosure();
     const handleRemoveBook = async () => {
-        removeBook(book.id);
-
-        const imageRef = ref(storage, book.id);
-
-        await deleteObject(imageRef);
-
-        await deleteDoc(doc(db, "books", book.id));
+        await removeBook(book.id);
 
         toast({
             title: "Livro deletado com sucesso!",

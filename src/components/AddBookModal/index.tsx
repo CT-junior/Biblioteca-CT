@@ -50,42 +50,7 @@ export function AddBookModal() {
     });
 
     const handleAddBook: SubmitHandler<IBookState> = async (values) => {
-        const randonNumber = String(Math.floor(Math.random() * 100000));
-
-        const name = values.name
-            .replace(/\s+/g, "-")
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .trim()
-            .toLowerCase();
-
-        const id = `${name}.${randonNumber}`;
-
-        const imageUrl = await handleUploadImage(imageFile, id);
-
-        const createdAt = new Date(Date.now()).toISOString();
-
-        const book: IBookState = {
-            id,
-            createdAt,
-            imageUrl,
-            ...values,
-        };
-        addBook({
-            id: book.id,
-            imageUrl: book.imageUrl,
-            name: book.name,
-            author: book.author,
-            category: book.category,
-            volume: book.volume,
-            createdAt: new Date(book.createdAt).toLocaleDateString("pt-BR", {
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-            }),
-        });
-
-        await setDoc(doc(db, "books", book.id), book);
+        await addBook(values, imageFile);
 
         toast({
             title: "Livro adicionado com sucesso!",

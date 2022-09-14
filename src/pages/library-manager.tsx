@@ -43,7 +43,7 @@ import { onOpenAddBookModal } from "../store/addBookModal/actions";
 import { addBook } from "../store/books/actions";
 
 const LibraryManager: NextPage = () => {
-    const books = useBooks();
+    const { books } = useBooks();
     const isOpenSidebar = useSidebar().isOpen;
     const isWideVersion = useBreakpointValue({
         base: false,
@@ -69,13 +69,7 @@ const LibraryManager: NextPage = () => {
                     author: doc.data().author,
                     category: doc.data().category,
                     volume: doc.data().volume,
-                    createdAt: new Date(
-                        doc.data().createdAt
-                    ).toLocaleDateString("pt-BR", {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                    }),
+                    createdAt: doc.data().createdAt,
                 })
             );
         };
@@ -189,7 +183,13 @@ const LibraryManager: NextPage = () => {
                                         {book.category}
                                     </Td>
                                     <Td display={["none", "none", "revert"]}>
-                                        {book.createdAt}
+                                        {new Date(
+                                            book.createdAt
+                                        ).toLocaleDateString("pt-BR", {
+                                            day: "2-digit",
+                                            month: "long",
+                                            year: "numeric",
+                                        })}
                                     </Td>
                                     <Td textAlign={["end", "end", "center"]}>
                                         <MoreSettingsPopover book={book} />
