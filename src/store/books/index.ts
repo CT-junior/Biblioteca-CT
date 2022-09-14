@@ -1,10 +1,10 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { Store } from "pullstate";
 
-import { IBookState } from "../../interfaces/Book";
+import { BookProps } from "../../interfaces/Book";
 
 interface IBookListState {
-    books: IBookState[];
+    books: BookProps[];
     isLoading: boolean;
 }
 

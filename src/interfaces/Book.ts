@@ -1,4 +1,4 @@
-export interface IBookState {
+export interface BookProps {
     id: string;
     name: string;
     author: string;

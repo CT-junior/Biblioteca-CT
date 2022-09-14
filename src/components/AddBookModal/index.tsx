@@ -26,7 +26,7 @@ import Image from "next/image";
 
 import addBookPhoto from "../../assets/images/add_a_photo.svg";
 import { useAddBookModal } from "../../hooks/useAddBookModal";
-import { IBookState } from "../../interfaces/Book";
+import { BookProps } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
 import { db, handleUploadImage } from "../../services/firebase";
 import { onCloseAddBookModal } from "../../store/addBookModal/actions";
@@ -49,7 +49,7 @@ export function AddBookModal() {
         resolver: yupResolver(bookSchema),
     });
 
-    const handleAddBook: SubmitHandler<IBookState> = async (values) => {
+    const handleAddBook: SubmitHandler<BookProps> = async (values) => {
         await addBook(values, imageFile);
 
         toast({

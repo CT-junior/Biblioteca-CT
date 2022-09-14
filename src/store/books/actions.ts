@@ -11,10 +11,10 @@ import { setDoc, doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 
 import { store } from ".";
-import { IBookState } from "../../interfaces/Book";
+import { BookProps } from "../../interfaces/Book";
 import { db, handleUploadImage, storage } from "../../services/firebase";
 
-export const addBook = async (book: IBookState, imageFile?: File) => {
+export const addBook = async (book: BookProps, imageFile?: File) => {
     try {
         store.update((s) => {
             s.isLoading = true;
@@ -35,7 +35,7 @@ export const addBook = async (book: IBookState, imageFile?: File) => {
 
         const createdAt = new Date(Date.now()).toISOString();
 
-        const newBook: IBookState = {
+        const newBook: BookProps = {
             id,
             createdAt,
             imageUrl,
@@ -88,8 +88,8 @@ export const removeBook = async (id: String) => {
 };
 
 export const editBook = async (
-    book: IBookState,
-    newValues: IBookState,
+    book: BookProps,
+    newValues: BookProps,
     imageFile: File
 ) => {
     try {
@@ -110,7 +110,7 @@ export const editBook = async (
 
         const createdAt = new Date(Date.now()).toISOString();
 
-        const newBook: IBookState = {
+        const newBook: BookProps = {
             id: book.id,
             createdAt,
             imageUrl,

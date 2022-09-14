@@ -27,13 +27,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 
 import { useBooks } from "../../hooks/useBooks";
-import { IBookState } from "../../interfaces/Book";
+import { BookProps } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
 import { editBook } from "../../store/books/actions";
 import { Input } from "./input";
 
 interface EditBookModalProps extends ModalProps {
-    book: IBookState;
+    book: BookProps;
 }
 
 export function EditBookModal({ book, ...rest }: EditBookModalProps) {
@@ -50,7 +50,7 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
         resolver: yupResolver(bookSchema),
     });
 
-    const handleEditBook: SubmitHandler<IBookState> = async (newValues) => {
+    const handleEditBook: SubmitHandler<BookProps> = async (newValues) => {
         await editBook(book, newValues, imageFile);
         toast({
             title: "Livro editado com sucesso!",

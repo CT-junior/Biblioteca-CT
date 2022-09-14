@@ -37,7 +37,7 @@ import { Sidebar } from "../components/Sidebar";
 import { TableLibraryManager } from "../components/TableLibraryManager";
 import { useBooks } from "../hooks/useBooks";
 import { useSidebar } from "../hooks/useSidebar";
-import { IBookState } from "../interfaces/Book";
+import { BookProps } from "../interfaces/Book";
 import { db } from "../services/firebase";
 import { onOpenAddBookModal } from "../store/addBookModal/actions";
 import { addBook } from "../store/books/actions";
@@ -150,7 +150,7 @@ const LibraryManager: NextPage = () => {
                         </Button>
                     </Flex>
                     <TableLibraryManager>
-                        {books.map((book: IBookState) => {
+                        {books.map((book: BookProps) => {
                             return (
                                 <Tr key={book.id}>
                                     <Td display="revert">
