@@ -147,24 +147,24 @@ export const editBook = async (
 };
 
 export const requestBooksFirebase = async () => {
-    const bookCollectionRef = collection(db, "books");
-
-    const response = await getDocs(bookCollectionRef);
-    const books = response.docs.map((doc) => {
-        return {
-            id: doc.id,
-            imageUrl: doc.data().imageUrl,
-            name: doc.data().name,
-            author: doc.data().author,
-            category: doc.data().category,
-            volume: doc.data().volume,
-            createdAt: doc.data().createdAt,
-        };
-    });
-
     try {
         store.update((s) => {
             s.isLoading = true;
+        });
+
+        const bookCollectionRef = collection(db, "books");
+
+        const response = await getDocs(bookCollectionRef);
+        const books = response.docs.map((doc) => {
+            return {
+                id: doc.id,
+                imageUrl: doc.data().imageUrl,
+                name: doc.data().name,
+                author: doc.data().author,
+                category: doc.data().category,
+                volume: doc.data().volume,
+                createdAt: doc.data().createdAt,
+            };
         });
 
         store.update((s) => {
