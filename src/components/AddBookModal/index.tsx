@@ -21,14 +21,12 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { setDoc, doc } from "firebase/firestore";
 import Image from "next/image";
 
 import addBookPhoto from "../../assets/images/add_a_photo.svg";
 import { useAddBookModal } from "../../hooks/useAddBookModal";
 import { BookProps } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
-import { db, handleUploadImage } from "../../services/firebase";
 import { onCloseAddBookModal } from "../../store/addBookModal/actions";
 import { addBook } from "../../store/books/actions";
 import { Input } from "./input";

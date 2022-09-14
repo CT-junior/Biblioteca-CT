@@ -26,7 +26,6 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 
-import { useBooks } from "../../hooks/useBooks";
 import { BookProps } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
 import { editBook } from "../../store/books/actions";
@@ -97,9 +96,6 @@ export function EditBookModal({ book, ...rest }: EditBookModalProps) {
                                 borderRadius="15px"
                                 border="1px"
                                 borderColor="gray.200"
-                                // display="flex"
-                                // alignItems="center"
-                                // justifyContent="center"
                             >
                                 <Image src={imageDisplay} layout="fill" />
                             </FormLabel>

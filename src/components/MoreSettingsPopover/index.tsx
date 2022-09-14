@@ -22,16 +22,13 @@ import {
     useToast,
     useDisclosure,
 } from "@chakra-ui/react";
-import { deleteDoc, doc } from "firebase/firestore";
-import { ref, deleteObject } from "firebase/storage";
 
-import { IBookState } from "../../interfaces/Book";
-import { db, storage } from "../../services/firebase";
+import { BookProps } from "../../interfaces/Book";
 import { removeBook } from "../../store/books/actions";
 import { EditBookModal } from "../EditBookModal";
 
 interface MoreSettingsPopoverProps {
-    book: IBookState;
+    book: BookProps;
 }
 export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
     const toast = useToast();
