@@ -1,20 +1,22 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 
-import React, { FC } from "react";
+import { ReactNode } from "react";
 
-import { Box, useBreakpointValue } from "@chakra-ui/react";
+import { Box, useBreakpointValue, Flex } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 import { useSidebar } from "../../hooks/useSidebar";
 import { Header } from "../Header";
 import { Sidebar } from "../Sidebar";
-import styles from "./Body.module.css";
 
 interface Props {
-    children: any;
+    children?: ReactNode;
 }
 
-export const BodyContent: FC<Props> = ({ children }) => {
+export const BodyContent = ({ children }: Props) => {
+    const router = useRouter();
+
     const isOpenSidebar = useSidebar().isOpen;
     const isWideVersion = useBreakpointValue({
         base: false,
@@ -26,12 +28,16 @@ export const BodyContent: FC<Props> = ({ children }) => {
         md: false,
     });
 
+    if (router.pathname === "/auth/signin") {
+        return <Box>{children}</Box>;
+    }
+
     return (
-        <div className={styles.wrapper}>
-            <div className={styles.header}>
+        <Flex flexDirection="column">
+            <Box h="16">
                 <Header />
-            </div>
-            <div className={styles.container}>
+            </Box>
+            <Flex>
                 <Sidebar />
                 <Box
                     w="100%"
@@ -40,9 +46,9 @@ export const BodyContent: FC<Props> = ({ children }) => {
                     ml={isSideBarDrawer ? "0" : isOpenSidebar ? "64" : "20"}
                     transition="0.2s"
                 >
-                    <div className={styles.content}>{children}</div>
+                    <Box>{children}</Box>
                 </Box>
-            </div>
-        </div>
+            </Flex>
+        </Flex>
     );
 };
