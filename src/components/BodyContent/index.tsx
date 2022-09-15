@@ -1,15 +1,7 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-/*
 
-
-import { Box } from "@chakra-ui/react";
-import { useSidebar } from "../hooks/useSidebar";
-
-import { Header } from "../Header";
-import { Sidebar } from "../Sidebar";
-*/
-import React from "react";
+import React, { FC } from "react";
 
 import { Box, useBreakpointValue } from "@chakra-ui/react";
 
@@ -18,7 +10,11 @@ import { Header } from "../Header";
 import { Sidebar } from "../Sidebar";
 import styles from "./Body.module.css";
 
-export const BodyContent = ({ children }) => {
+interface Props {
+    children: any;
+}
+
+export const BodyContent: FC<Props> = ({ children }) => {
     const isOpenSidebar = useSidebar().isOpen;
     const isWideVersion = useBreakpointValue({
         base: false,

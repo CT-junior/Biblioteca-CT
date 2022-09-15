@@ -8,7 +8,7 @@ import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
-import { BodyContent } from "../components/BodyContent/index";
+import { HeadThead } from "../components/HomeThead";
 
 const Home: NextPage = () => {
     const { data: session } = useSession();
@@ -24,7 +24,7 @@ const Home: NextPage = () => {
     }, [router, status]);
 
     return (
-        <BodyContent>
+        <>
             <Box
                 display="flex"
                 flexDirection="column"
@@ -39,8 +39,9 @@ const Home: NextPage = () => {
             <Divider marginBlock="10" />
             <Box>
                 <Heading size="md">Seus livros</Heading>
+                <HeadThead />
             </Box>
-        </BodyContent>
+        </>
     );
 };
 
