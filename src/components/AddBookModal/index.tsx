@@ -36,22 +36,9 @@ import { Input } from "./input";
 export function AddBookModal() {
     const toast = useToast();
     const { isOpenAddBookModal } = useAddBookModal();
-    const [isHover, setIsHover] = useState(false);
 
     const [imageFile, setImageFile] = useState<File>();
     const [imageDisplay, setImageDisplay] = useState(addBookPhoto);
-
-    const handleMouseEnter = () => {
-        setIsHover(true);
-    };
-    const handleMouseLeave = () => {
-        setIsHover(false);
-    };
-
-    const hoverStyle = {
-        backgroundColor: isHover ? "rgba(214, 214, 214, 0.3)" : "transparent",
-        transition: "1s",
-    };
 
     const {
         register,
@@ -128,11 +115,9 @@ export function AddBookModal() {
                         <FormControl flex="2">
                             <FormLabel
                                 title="Adicone uma imagem"
-                                style={hoverStyle}
-                                onMouseEnter={handleMouseEnter}
-                                onMouseLeave={handleMouseLeave}
                                 textAlign="center"
                                 htmlFor="file"
+                                _hover={{ background: "blackAlpha.100" }}
                                 h="100%"
                                 w="100%"
                                 borderRadius="15px"

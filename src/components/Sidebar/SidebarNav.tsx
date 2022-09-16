@@ -28,7 +28,7 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
         md: false,
     });
 
-    let mouseOver: any = null;
+    let mouseOver = false;
 
     const onMouseLeave = () => {
         mouseOver = false;

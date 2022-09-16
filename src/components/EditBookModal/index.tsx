@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 import { useState, FormEvent } from "react";
-import { CircularProgress } from "react-cssfx-loading";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { MdEdit } from "react-icons/md";
 
@@ -20,6 +19,7 @@ import {
     FormLabel,
     useToast,
     Image,
+    CircularProgress,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -108,7 +108,14 @@ export function EditBookModal({ book, isOpen, onClose }: EditBookModalProps) {
                                     boxSize="100%"
                                     objectFit="cover"
                                     src={imageDisplay}
-                                    fallback={<CircularProgress />}
+                                    fallback={
+                                        <CircularProgress
+                                            isIndeterminate
+                                            capIsRound
+                                            trackColor="transparent"
+                                            color="orange.ct"
+                                        />
+                                    }
                                 />
                             </FormLabel>
                             <InputChakra
