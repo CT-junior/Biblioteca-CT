@@ -117,7 +117,10 @@ export function AddBookModal() {
                                 title="Adicone uma imagem"
                                 textAlign="center"
                                 htmlFor="file"
-                                _hover={{ background: "blackAlpha.100" }}
+                                _hover={{
+                                    background: "blackAlpha.100",
+                                    transition: "1s",
+                                }}
                                 h="100%"
                                 w="100%"
                                 borderRadius="15px"
