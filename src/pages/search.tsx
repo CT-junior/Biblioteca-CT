@@ -1,13 +1,19 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 
+import { useEffect } from "react";
+
 import { Box, Divider, Flex, Input } from "@chakra-ui/react";
 import { NextPage } from "next";
 
 import { BooksDisplay } from "../components/BooksDisplay";
-import { TableLibraryDisplay } from "../components/HomeThead";
+import { requestBooksFirebase } from "../store/books/actions";
 
 const Search: NextPage = () => {
+    useEffect(() => {
+        requestBooksFirebase();
+    }, []);
+
     return (
         <>
             <Flex

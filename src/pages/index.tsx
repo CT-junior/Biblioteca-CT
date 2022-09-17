@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import { BooksDisplay } from "../components/BooksDisplay";
+import { requestBooksFirebase } from "../store/books/actions";
 
 const Home: NextPage = () => {
     const { data: session } = useSession();
@@ -16,6 +17,7 @@ const Home: NextPage = () => {
     const router = useRouter();
 
     useEffect(() => {
+        requestBooksFirebase();
         if (status !== "loading") {
             if (status === "unauthenticated") {
                 router.push("/auth/signin");
