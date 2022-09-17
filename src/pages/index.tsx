@@ -8,7 +8,7 @@ import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
-import { HeadThead } from "../components/HomeThead";
+import { BooksDisplay } from "../components/BooksDisplay";
 
 const Home: NextPage = () => {
     const { data: session } = useSession();
@@ -39,7 +39,15 @@ const Home: NextPage = () => {
             <Divider marginBlock="10" />
             <Box>
                 <Heading size="md">Seus livros</Heading>
-                <HeadThead />
+                <BooksDisplay
+                    backgroundColor="white"
+                    border="1px"
+                    borderColor="gray.200"
+                    borderRadius="xl"
+                    padding="10"
+                    size="10rem"
+                    shadow="md"
+                />
             </Box>
         </>
     );
