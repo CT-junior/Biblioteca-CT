@@ -118,6 +118,7 @@ const LibraryManager: NextPage = () => {
                                             alt={book.name}
                                             width="27px"
                                             height="40px"
+                                            objectFit="cover"
                                         />
                                     )}
                                     <Text>{book.name}</Text>

@@ -86,13 +86,26 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
                 </NavLink>
             </Stack>
             <Stack
-                gap={["10", "6"]}
+                gap={["10", "0"]}
+                width="100%"
                 direction={["row", "column"]}
                 align="center"
                 justify="center"
             >
-                <Image src={biblioctecaLogo} alt="Logo da Bibliocteca" />
-                {isOpen && <Image src={vercelLogo} alt="Logo da Vercel" />}
+                <Image
+                    height="70%"
+                    width="70%"
+                    src={biblioctecaLogo}
+                    alt="Logo da Bibliocteca"
+                />
+                {isOpen && (
+                    <Image
+                        width="130%"
+                        height="50%"
+                        src={vercelLogo}
+                        alt="Logo da Vercel"
+                    />
+                )}
             </Stack>
         </Flex>
     );

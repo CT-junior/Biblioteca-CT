@@ -7,6 +7,7 @@ import { Box, Divider, Flex, Input } from "@chakra-ui/react";
 import { NextPage } from "next";
 
 import { BooksDisplay } from "../components/BooksDisplay";
+import ScrollButton from "../components/ScrollTopButton";
 import { requestBooksFirebase } from "../store/books/actions";
 
 const Search: NextPage = () => {
@@ -37,6 +38,7 @@ const Search: NextPage = () => {
                     shadow="md"
                 />
             </Box>
+            <ScrollButton />
         </>
     );
 };

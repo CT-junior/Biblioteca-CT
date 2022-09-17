@@ -80,6 +80,7 @@ export function BooksDisplay({
                                             alt={book.name}
                                             width="47,25px"
                                             height="70px"
+                                            objectFit="cover"
                                         />
                                     )}
                                     <Text overflow="clip" fontSize="sm">
