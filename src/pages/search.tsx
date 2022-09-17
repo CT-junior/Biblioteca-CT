@@ -10,13 +10,18 @@ import { TableLibraryDisplay } from "../components/HomeThead";
 const Search: NextPage = () => {
     return (
         <>
-            <Flex justifyContent="center" paddingTop="10">
+            <Flex
+                justifyContent="center"
+                alignItems="center"
+                paddingTop="10"
+                flexDirection="column"
+            >
                 <Input placeholder="O que deseja buscar" w="80%" />
+                <Divider marginBlock="20" />
             </Flex>
-            <Divider marginBlock="20" />
             <Box>
                 <BooksDisplay
-                    hasHead="false"
+                    hasHead={false}
                     backgroundColor="white"
                     border="1px"
                     borderColor="gray.200"
