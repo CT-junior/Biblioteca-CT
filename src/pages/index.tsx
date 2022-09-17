@@ -47,6 +47,7 @@ const Home: NextPage = () => {
                     padding="10"
                     size="10rem"
                     shadow="md"
+                    hasHead
                 />
             </Box>
         </>
