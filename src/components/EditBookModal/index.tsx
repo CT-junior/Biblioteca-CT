@@ -18,10 +18,10 @@ import {
     FormControl,
     FormLabel,
     useToast,
-    ModalProps,
+    Image,
+    CircularProgress,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Image from "next/image";
 
 import { BookProps } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
@@ -90,13 +90,33 @@ export function EditBookModal({ book, isOpen, onClose }: EditBookModalProps) {
                     >
                         <FormControl flex="2">
                             <FormLabel
+                                width="100%"
+                                height="100%"
                                 textAlign="center"
+                                alignItems="center"
+                                justifyContent="center"
+                                display="flex"
                                 htmlFor="file"
                                 borderRadius="15px"
                                 border="1px"
                                 borderColor="gray.200"
                             >
-                                <Image src={imageDisplay} layout="fill" />
+                                <Image
+                                    borderRadius="15px"
+                                    border="1px"
+                                    borderColor="gray.200"
+                                    boxSize="100%"
+                                    objectFit="cover"
+                                    src={imageDisplay}
+                                    fallback={
+                                        <CircularProgress
+                                            isIndeterminate
+                                            capIsRound
+                                            trackColor="transparent"
+                                            color="orange.ct"
+                                        />
+                                    }
+                                />
                             </FormLabel>
                             <InputChakra
                                 name="file"
@@ -107,39 +127,41 @@ export function EditBookModal({ book, isOpen, onClose }: EditBookModalProps) {
                             />
                         </FormControl>
 
-                        <Stack spacing="4" flexDirection="column" flex="3">
-                            <Input
-                                id="name"
-                                register={register}
-                                placeholder="Nome"
-                                error={errors.name?.message as string}
-                                isDisabled={isSubmitting}
-                                defaultValue={book.name}
-                            />
-                            <Input
-                                id="author"
-                                register={register}
-                                placeholder="Autor"
-                                error={errors.author?.message as string}
-                                isDisabled={isSubmitting}
-                                defaultValue={book.author}
-                            />
-                            <Input
-                                id="volume"
-                                register={register}
-                                placeholder="Volume"
-                                error={errors.volume?.message as string}
-                                isDisabled={isSubmitting}
-                                defaultValue={book.volume}
-                            />
-                            <Input
-                                id="category"
-                                register={register}
-                                placeholder="Categoria"
-                                error={errors.category?.message as string}
-                                isDisabled={isSubmitting}
-                                defaultValue={book.category}
-                            />
+                        <Stack spacing="10" flexDirection="column" flex="3">
+                            <Stack>
+                                <Input
+                                    id="name"
+                                    register={register}
+                                    placeholder="Nome"
+                                    error={errors.name?.message as string}
+                                    isDisabled={isSubmitting}
+                                    defaultValue={book.name}
+                                />
+                                <Input
+                                    id="author"
+                                    register={register}
+                                    placeholder="Autor"
+                                    error={errors.author?.message as string}
+                                    isDisabled={isSubmitting}
+                                    defaultValue={book.author}
+                                />
+                                <Input
+                                    id="volume"
+                                    register={register}
+                                    placeholder="Volume"
+                                    error={errors.volume?.message as string}
+                                    isDisabled={isSubmitting}
+                                    defaultValue={book.volume}
+                                />
+                                <Input
+                                    id="category"
+                                    register={register}
+                                    placeholder="Categoria"
+                                    error={errors.category?.message as string}
+                                    isDisabled={isSubmitting}
+                                    defaultValue={book.category}
+                                />
+                            </Stack>
                             <Button
                                 leftIcon={<MdEdit />}
                                 colorScheme="orange"

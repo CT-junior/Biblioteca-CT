@@ -3,6 +3,7 @@
 /* eslint-disable react/jsx-indent */
 import { useState, useEffect, FormEvent } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { BiImageAdd } from "react-icons/bi";
 import { HiPlus } from "react-icons/hi";
 
 import {
@@ -19,9 +20,10 @@ import {
     FormControl,
     FormLabel,
     useToast,
+    Icon,
+    Image,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Image from "next/image";
 
 import addBookPhoto from "../../assets/images/add_a_photo.svg";
 import { useAddBookModal } from "../../hooks/useAddBookModal";
@@ -112,8 +114,13 @@ export function AddBookModal() {
                     >
                         <FormControl flex="2">
                             <FormLabel
+                                title="Adicone uma imagem"
                                 textAlign="center"
                                 htmlFor="file"
+                                _hover={{
+                                    background: "blackAlpha.100",
+                                    transition: "1s",
+                                }}
                                 h="100%"
                                 w="100%"
                                 borderRadius="15px"
@@ -122,8 +129,20 @@ export function AddBookModal() {
                                 display="flex"
                                 alignItems="center"
                                 justifyContent="center"
+                                position="relative"
+                                cursor="pointer"
                             >
-                                <Image src={imageDisplay} layout="fill" />
+                                <Image
+                                    borderRadius="15px"
+                                    border="1px"
+                                    borderColor="gray.200"
+                                    boxSize="100%"
+                                    objectFit="cover"
+                                    src={imageDisplay}
+                                    fallback={
+                                        <Icon as={BiImageAdd} w="20" h="20" />
+                                    }
+                                />
                             </FormLabel>
                             <InputChakra
                                 name="file"
@@ -134,37 +153,40 @@ export function AddBookModal() {
                             />
                         </FormControl>
 
-                        <Stack spacing="4" flexDirection="column" flex="3">
-                            <Input
-                                id="name"
-                                value="s"
-                                register={register}
-                                placeholder="Nome"
-                                error={errors.name?.message as string}
-                                isDisabled={isSubmitting}
-                            />
-                            <Input
-                                id="author"
-                                register={register}
-                                placeholder="Autor"
-                                error={errors.author?.message as string}
-                                isDisabled={isSubmitting}
-                            />
-                            <Input
-                                id="volume"
-                                register={register}
-                                placeholder="Volume"
-                                error={errors.volume?.message as string}
-                                isDisabled={isSubmitting}
-                            />
-                            <Input
-                                id="category"
-                                register={register}
-                                placeholder="Categoria"
-                                error={errors.category?.message as string}
-                                isDisabled={isSubmitting}
-                            />
+                        <Stack spacing="10" flexDirection="column" flex="3">
+                            <Stack>
+                                <Input
+                                    id="name"
+                                    value="s"
+                                    register={register}
+                                    placeholder="Nome"
+                                    error={errors.name?.message as string}
+                                    isDisabled={isSubmitting}
+                                />
+                                <Input
+                                    id="author"
+                                    register={register}
+                                    placeholder="Autor"
+                                    error={errors.author?.message as string}
+                                    isDisabled={isSubmitting}
+                                />
+                                <Input
+                                    id="volume"
+                                    register={register}
+                                    placeholder="Volume"
+                                    error={errors.volume?.message as string}
+                                    isDisabled={isSubmitting}
+                                />
+                                <Input
+                                    id="category"
+                                    register={register}
+                                    placeholder="Categoria"
+                                    error={errors.category?.message as string}
+                                    isDisabled={isSubmitting}
+                                />
+                            </Stack>
                             <Button
+                                marginTop="20"
                                 leftIcon={<HiPlus />}
                                 colorScheme="orange"
                                 type="submit"

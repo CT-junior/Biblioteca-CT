@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { BiBookAlt } from "react-icons/bi";
 import {
     HiOutlineHome,
     HiSearch,
     HiOutlineUsers,
     HiOutlineTerminal,
 } from "react-icons/hi";
+import { TbBooks } from "react-icons/tb";
 
 import { Flex, Stack, useBreakpointValue } from "@chakra-ui/react";
 import Image from "next/image";
@@ -28,15 +28,21 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
         md: false,
     });
 
+    let mouseOver = false;
+
     const onMouseLeave = () => {
-        new Promise((res) => setTimeout(res, 400)).then(() => {
-            toggleSidebar(false);
-        });
+        mouseOver = false;
+        toggleSidebar(false);
     };
 
     const onMouseEnter = () => {
-        new Promise((res) => setTimeout(res, 300)).then(() => {
-            toggleSidebar(true);
+        mouseOver = true;
+        new Promise((res) => setTimeout(res, 1000)).then(() => {
+            if (mouseOver === true) {
+                toggleSidebar(true);
+            } else {
+                toggleSidebar(false);
+            }
         });
     };
 
@@ -69,7 +75,7 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
                 <NavLink icon={HiSearch} href="/search">
                     Buscar livro
                 </NavLink>
-                <NavLink icon={BiBookAlt} href="/library-manager">
+                <NavLink icon={TbBooks} href="/library-manager">
                     Gerenciar biblioteca
                 </NavLink>
                 <NavLink icon={HiOutlineTerminal} href="/backlog">
@@ -80,13 +86,26 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
                 </NavLink>
             </Stack>
             <Stack
-                gap={["10", "6"]}
+                gap={["10", "0"]}
+                width="100%"
                 direction={["row", "column"]}
                 align="center"
                 justify="center"
             >
-                <Image src={biblioctecaLogo} alt="Logo da Bibliocteca" />
-                {isOpen && <Image src={vercelLogo} alt="Logo da Vercel" />}
+                <Image
+                    height="70%"
+                    width="70%"
+                    src={biblioctecaLogo}
+                    alt="Logo da Bibliocteca"
+                />
+                {isOpen && (
+                    <Image
+                        width="130%"
+                        height="50%"
+                        src={vercelLogo}
+                        alt="Logo da Vercel"
+                    />
+                )}
             </Stack>
         </Flex>
     );

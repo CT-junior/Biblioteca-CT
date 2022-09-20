@@ -2,6 +2,7 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 import { useRef } from "react";
+import { render } from "react-dom";
 import { FiLogOut } from "react-icons/fi";
 import { HiOutlineMenu } from "react-icons/hi";
 
@@ -12,8 +13,10 @@ import {
     IconButton,
     useBreakpointValue,
     useDisclosure,
+    Box,
 } from "@chakra-ui/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 import biblioctecaLogo from "../../assets/images/bibliocteca-horizontal-logo.svg";
 import { useSidebar } from "../../hooks/useSidebar";
@@ -33,7 +36,7 @@ export function Header() {
     });
 
     return (
-        <>
+        <Box>
             <Flex
                 position="fixed"
                 zIndex="overlay"
@@ -90,6 +93,6 @@ export function Header() {
                 leastDestructiveRef={cancelRef}
                 children
             />
-        </>
+        </Box>
     );
 }
