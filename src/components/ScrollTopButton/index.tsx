@@ -2,10 +2,9 @@
 /* eslint-disable react/jsx-indent-props */
 
 import React, { useState } from "react";
-import { FaArrowCircleUp } from "react-icons/fa";
 
 import { ArrowUpIcon } from "@chakra-ui/icons";
-import { Button, transition } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 
 const ScrollButton = () => {
     const [visible, setVisible] = useState(false);
@@ -31,20 +30,21 @@ const ScrollButton = () => {
     return (
         <Button
             title="Voltar ao topo"
-            style={{
-                display: visible ? "flex" : "none",
-                alignItems: "center",
-                justifyContent: "center",
-                position: "fixed",
-                width: "50px",
-                left: "95%",
-                bottom: "40px",
-                fontSize: "2rem",
-                zIndex: "1",
-                cursor: "pointer",
-                // transition: "5s",
-                // padding: "10",
-                backgroundColor: "#FE6A01",
+            display={visible ? "flex" : "none"}
+            alignItems="center"
+            justifyContent="center"
+            position="fixed"
+            width={50}
+            left="95%"
+            bottom="40px"
+            fontSize="2rem"
+            zIndex="1"
+            cursor="pointer"
+            backgroundColor="orange.500"
+            _hover={{
+                filter: "auto",
+                brightness: "75%",
+                transition: ".5s",
             }}
         >
             <ArrowUpIcon onClick={scrollToTop} />

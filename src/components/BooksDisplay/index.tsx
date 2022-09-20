@@ -17,7 +17,7 @@ import Image from "next/image";
 
 import { useBooks } from "../../hooks/useBooks";
 import { BookProps } from "../../interfaces/Book";
-import { TableLibraryDisplay } from "../HomeThead/index";
+import { TableLibraryDisplay } from "../TableLibraryDisplay/index";
 
 export interface BooksDisplayProps {
     size: string;
