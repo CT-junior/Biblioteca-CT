@@ -24,10 +24,12 @@ import {
     Image,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useSession } from "next-auth/react";
 
 import addBookPhoto from "../../assets/images/add_a_photo.svg";
 import { useAddBookModal } from "../../hooks/useAddBookModal";
 import { BookProps } from "../../interfaces/Book";
+import { UserProps } from "../../interfaces/User";
 import { bookSchema } from "../../schemas/book";
 import { onCloseAddBookModal } from "../../store/addBookModal/actions";
 import { addBook } from "../../store/books/actions";
@@ -36,6 +38,7 @@ import { Input } from "./input";
 export function AddBookModal() {
     const toast = useToast();
     const { isOpenAddBookModal } = useAddBookModal();
+    const { data: session } = useSession();
 
     const [imageFile, setImageFile] = useState<File>();
     const [imageDisplay, setImageDisplay] = useState(addBookPhoto);
@@ -50,7 +53,12 @@ export function AddBookModal() {
     });
 
     const handleAddBook: SubmitHandler<BookProps> = async (values) => {
-        await addBook(values, imageFile);
+        const user: UserProps = {
+            name: String(session?.user?.name),
+            email: String(session?.user?.email),
+            image: String(session?.user?.image),
+        };
+        await addBook(values, imageFile, user);
 
         toast({
             title: "Livro adicionado com sucesso!",
@@ -88,7 +96,7 @@ export function AddBookModal() {
 
     function resetUseStates() {
         setImageDisplay(addBookPhoto);
-        setImageFile(null);
+        setImageFile(undefined);
     }
 
     return (

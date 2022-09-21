@@ -22,8 +22,10 @@ import {
     CircularProgress,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useSession } from "next-auth/react";
 
 import { BookProps } from "../../interfaces/Book";
+import { UserProps } from "../../interfaces/User";
 import { bookSchema } from "../../schemas/book";
 import { editBook } from "../../store/books/actions";
 import { Input } from "./input";
@@ -36,6 +38,7 @@ interface EditBookModalProps {
 
 export function EditBookModal({ book, isOpen, onClose }: EditBookModalProps) {
     const toast = useToast();
+    const { data: session } = useSession();
 
     const [imageFile, setImageFile] = useState<File>();
     const [imageDisplay, setImageDisplay] = useState(book.imageUrl);
@@ -49,7 +52,13 @@ export function EditBookModal({ book, isOpen, onClose }: EditBookModalProps) {
     });
 
     const handleEditBook: SubmitHandler<BookProps> = async (newValues) => {
-        await editBook(book, newValues, imageFile);
+        const user: UserProps = {
+            name: String(session?.user?.name),
+            email: String(session?.user?.email),
+            image: String(session?.user?.image),
+        };
+
+        await editBook(book, newValues, imageFile, user);
         toast({
             title: "Livro editado com sucesso!",
             status: "success",
