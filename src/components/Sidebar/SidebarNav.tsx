@@ -49,7 +49,7 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
     return (
         <Flex
             position={!isWideMobile ? "fixed" : "relative"}
-            zIndex="overlay"
+            zIndex={["hide", "hide", "overlay"]}
             as="aside"
             w={size}
             px={["0", "6"]}
