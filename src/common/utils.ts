@@ -1,6 +1,6 @@
 import { CreateToastFnReturn, UseToastOptions } from "@chakra-ui/react";
 
-export const fireErrorToast = (
+const fireErrorToast = (
     chackraToast: CreateToastFnReturn,
     options?: UseToastOptions
 ) => {
@@ -22,7 +22,7 @@ export const fireErrorToast = (
     });
 };
 
-export const colorSchemeOrangeCt = {
+const colorSchemeOrangeCt = {
     bg: "orange.ct",
     color: "white",
     _hover: {
@@ -33,7 +33,7 @@ export const colorSchemeOrangeCt = {
     },
 };
 
-export const colorSchemeOrangeCtOutline = {
+const colorSchemeOrangeCtOutline = {
     color: "orange.ct",
     _placeholder: {
         color: "orange.ct",
@@ -53,3 +53,5 @@ export const colorSchemeOrangeCtOutline = {
         bg: "orange.100",
     },
 };
+
+export { fireErrorToast, colorSchemeOrangeCt, colorSchemeOrangeCtOutline };

@@ -7,13 +7,17 @@ import { useEffect } from "react";
 import { Avatar, Box, Flex, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 
+import { sortLastDateFirst } from "../common/functions";
 import { HeadTitle } from "../components/HeadTitle";
 import { useRegistries } from "../hooks/useRegistries";
 import { RegistryProps } from "../interfaces/Registry";
 import { requestRegistriesFirebase } from "../store/registries/actions";
 
 const Logs: NextPage = () => {
-    const { registry } = useRegistries();
+    const { registries } = useRegistries();
+
+    const list = [...registries];
+    list.sort(sortLastDateFirst);
 
     useEffect(() => {
         requestRegistriesFirebase();
@@ -32,7 +36,7 @@ const Logs: NextPage = () => {
                 overflowX="hidden"
             >
                 <Flex gap="4" align="flex-start" direction="column">
-                    {registry.map((registry: RegistryProps) => {
+                    {list.map((registry: RegistryProps) => {
                         return (
                             <Text
                                 verticalAlign="center"

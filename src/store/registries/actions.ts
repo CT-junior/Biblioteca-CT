@@ -26,7 +26,7 @@ export const newRegistry = async ({
         });
 
         store.update((s) => {
-            s.registry.push({ id, action, book, date, user });
+            s.registries.push({ id, action, book, date, user });
             s.isLoading = false;
         });
     } catch (err) {
@@ -45,7 +45,7 @@ export const requestRegistriesFirebase = async () => {
         const registryCollectionRef = collection(db, "registries");
 
         const response = await getDocs(registryCollectionRef);
-        const registry = response.docs.map((doc) => {
+        const registries = response.docs.map((doc) => {
             return {
                 id: doc.id,
                 action: doc.data().action,
@@ -56,7 +56,7 @@ export const requestRegistriesFirebase = async () => {
         });
 
         store.update((s) => {
-            s.registry = registry;
+            s.registries = registries;
             s.isLoading = false;
         });
     } catch (err) {
