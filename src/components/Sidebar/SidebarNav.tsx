@@ -78,8 +78,8 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
                 <NavLink icon={TbBooks} href="/library-manager">
                     Gerenciar biblioteca
                 </NavLink>
-                <NavLink icon={HiOutlineTerminal} href="/backlog">
-                    Backlog
+                <NavLink icon={HiOutlineTerminal} href="/logs">
+                    Registros
                 </NavLink>
                 <NavLink icon={HiOutlineUsers} href="/user-control">
                     Controle de usuários
