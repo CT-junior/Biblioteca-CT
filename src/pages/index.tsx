@@ -12,8 +12,7 @@ import { BooksDisplay } from "../components/BooksDisplay";
 import { requestBooksFirebase } from "../store/books/actions";
 
 const Home: NextPage = () => {
-    const { data: session } = useSession();
-    const { status } = useSession();
+    const { data: session, status } = useSession();
     const router = useRouter();
 
     useEffect(() => {
