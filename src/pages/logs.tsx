@@ -3,12 +3,12 @@
 /* eslint-disable react/jsx-indent */
 
 import { useEffect } from "react";
+import { HiCloudDownload } from "react-icons/hi";
 
-import { Avatar, Box, Flex, Text } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 
 import { sortLastDateFirst } from "../common/functions";
-import { HeadTitle } from "../components/HeadTitle";
 import { useRegistries } from "../hooks/useRegistries";
 import { RegistryProps } from "../interfaces/Registry";
 import { requestRegistriesFirebase } from "../store/registries/actions";
@@ -25,7 +25,28 @@ const Logs: NextPage = () => {
 
     return (
         <>
-            <HeadTitle title="Registros" />
+            <Flex
+                align="center"
+                justify="space-between"
+                aria-label="second-header"
+                pb="6"
+                borderBottom="1px"
+                borderColor="gray.200"
+            >
+                <Heading as="h1" fontSize="xl">
+                    Registros
+                </Heading>
+                <Button
+                    colorScheme="orange"
+                    size="sm"
+                    borderRadius="full"
+                    fontWeight="sm"
+                    px="4"
+                    rightIcon={<HiCloudDownload />}
+                >
+                    Exportar como CSV
+                </Button>
+            </Flex>
             <Box
                 backgroundColor="blackAlpha.50"
                 padding="10"
@@ -33,9 +54,15 @@ const Logs: NextPage = () => {
                 borderRadius="lg"
                 h="70vh"
                 overflow="scroll"
-                overflowX="hidden"
+                mt="8"
             >
-                <Flex gap="4" align="flex-start" direction="column">
+                <Flex
+                    gap="4"
+                    align="flex-start"
+                    direction="column"
+                    overflow="clip"
+                    w="max-content"
+                >
                     {list.map((registry: RegistryProps) => {
                         return (
                             <Text
