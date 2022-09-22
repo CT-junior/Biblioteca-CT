@@ -10,6 +10,7 @@ import {
     LinkProps as ChakraLinkProps,
 } from "@chakra-ui/react";
 
+import { toggleFixedSidebar } from "../../store/sidebar/actions";
 import { ActiveLink } from "../ActiveLink";
 
 interface NavLinkProps extends ChakraLinkProps {
@@ -28,6 +29,7 @@ export function NavLink({ icon, children, href, ...rest }: NavLinkProps) {
                     px="1"
                     w="210px"
                     {...rest}
+                    onClick={toggleFixedSidebar}
                 >
                     <Icon as={icon} boxSize="6" />
                     <Text

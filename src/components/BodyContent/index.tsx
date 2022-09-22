@@ -19,8 +19,8 @@ export const BodyContent = ({ children }: Props) => {
 
     const isOpenSidebar = useSidebar().isOpen;
     const isWideVersion = useBreakpointValue({
-        base: false,
-        sm: true,
+        base: true,
+        sm: false,
     });
 
     const isSideBarDrawer = useBreakpointValue({
@@ -46,7 +46,7 @@ export const BodyContent = ({ children }: Props) => {
                     ml={isSideBarDrawer ? "0" : isOpenSidebar ? "64" : "20"}
                     transition="0.2s"
                 >
-                    <Box>{children}</Box>
+                    {children}
                 </Box>
             </Flex>
         </Flex>

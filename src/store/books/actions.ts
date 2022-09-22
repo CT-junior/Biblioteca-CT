@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-param-reassign */
 import {
     setDoc,
@@ -11,9 +12,16 @@ import { deleteObject, ref } from "firebase/storage";
 
 import { store } from ".";
 import { BookProps } from "../../interfaces/Book";
+import { RegistryProps } from "../../interfaces/Registry";
+import { UserProps } from "../../interfaces/User";
 import { db, handleUploadImage, storage } from "../../services/firebase";
+import { newRegistry } from "../registries/actions";
 
-export const addBook = async (book: BookProps, imageFile?: File) => {
+export const addBook = async (
+    book: BookProps,
+    imageFile: File | undefined | null,
+    user: UserProps
+) => {
     try {
         store.update((s) => {
             s.isLoading = true;
@@ -37,8 +45,11 @@ export const addBook = async (book: BookProps, imageFile?: File) => {
         const newBook: BookProps = {
             id,
             createdAt,
+            name: book.name,
+            author: book.author,
+            category: book.category,
+            volume: book.volume,
             imageUrl,
-            ...book,
         };
 
         await setDoc(doc(db, "books", newBook.id), newBook);
@@ -47,6 +58,15 @@ export const addBook = async (book: BookProps, imageFile?: File) => {
             s.books.push(newBook);
             s.isLoading = false;
         });
+        const registry: RegistryProps = {
+            id: createdAt,
+            action: "adicionado",
+            book: newBook,
+            date: createdAt,
+            user,
+        };
+
+        newRegistry(registry);
     } catch (err) {
         store.update((s) => {
             s.isLoading = false;
@@ -54,7 +74,11 @@ export const addBook = async (book: BookProps, imageFile?: File) => {
     }
 };
 
-export const removeBook = async (id: String) => {
+export const removeBook = async (
+    id: String,
+    book: BookProps,
+    user: UserProps
+) => {
     try {
         store.update((s) => {
             s.isLoading = true;
@@ -65,6 +89,17 @@ export const removeBook = async (id: String) => {
         await deleteObject(imageRef);
 
         await deleteDoc(doc(db, "books", String(id)));
+        const date = new Date(Date.now()).toISOString();
+
+        const registry: RegistryProps = {
+            id: date,
+            action: "removido",
+            book,
+            date,
+            user,
+        };
+
+        newRegistry(registry);
 
         store.update((s) => {
             const auxVector = s.books.filter((item) => item.id !== id);
@@ -87,7 +122,8 @@ export const removeBook = async (id: String) => {
 export const editBook = async (
     book: BookProps,
     newValues: BookProps,
-    imageFile: File
+    imageFile: File | undefined,
+    user: UserProps
 ) => {
     try {
         store.update((s) => {
@@ -108,13 +144,16 @@ export const editBook = async (
         const createdAt = new Date(Date.now()).toISOString();
 
         const newBook: BookProps = {
-            id: book.id,
+            id,
             createdAt,
+            name: newValues.name,
+            author: newValues.author,
+            category: newValues.category,
+            volume: newValues.volume,
             imageUrl,
-            ...newValues,
         };
 
-        const bookDocRef = doc(db, "books", newBook.id);
+        const bookDocRef = doc(db, "books", id);
 
         await updateDoc(bookDocRef, {
             imageUrl: newBook.imageUrl,
@@ -124,6 +163,16 @@ export const editBook = async (
             volume: newBook.volume,
             createdAt: newBook.createdAt,
         });
+
+        const registry: RegistryProps = {
+            id: createdAt,
+            action: "editado",
+            book: newBook,
+            date: createdAt,
+            user,
+        };
+
+        newRegistry(registry);
 
         store.update((s) => {
             s.books.forEach((book) => {

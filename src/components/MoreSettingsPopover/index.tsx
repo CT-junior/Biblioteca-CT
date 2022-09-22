@@ -19,8 +19,10 @@ import {
     useToast,
     useDisclosure,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 
 import { BookProps } from "../../interfaces/Book";
+import { UserProps } from "../../interfaces/User";
 import { removeBook } from "../../store/books/actions";
 import { EditBookModal } from "../EditBookModal";
 
@@ -29,9 +31,16 @@ interface MoreSettingsPopoverProps {
 }
 export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
     const toast = useToast();
+    const { data: session } = useSession();
+
     const { onOpen, onClose, isOpen } = useDisclosure();
     const handleRemoveBook = async () => {
-        await removeBook(book.id);
+        const user: UserProps = {
+            name: String(session?.user?.name),
+            email: String(session?.user?.email),
+            image: String(session?.user?.image),
+        };
+        await removeBook(book.id, book, user);
 
         toast({
             title: "Livro deletado com sucesso!",
