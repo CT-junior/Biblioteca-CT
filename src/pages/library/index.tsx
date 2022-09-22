@@ -6,10 +6,9 @@ import { useEffect } from "react";
 import { Grid, GridItem, Divider, Flex, Input } from "@chakra-ui/react";
 import { NextPage } from "next";
 
-import { BookCard } from "../components/BookCard";
-import ScrollButton from "../components/ScrollTopButton";
-import { useBooks } from "../hooks/useBooks";
-import { requestBooksFirebase } from "../store/books/actions";
+import { BookCard } from "../../components/BookCard";
+import { useBooks } from "../../hooks/useBooks";
+import { requestBooksFirebase } from "../../store/books/actions";
 
 const Library: NextPage = () => {
     const { books } = useBooks();
