@@ -1,10 +1,11 @@
+/* eslint-disable no-unneeded-ternary */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { Box, HStack, Tag, Text, Stack } from "@chakra-ui/react";
+import { Box, Tag, Text, Stack } from "@chakra-ui/react";
 import Image from "next/image";
 
-import { BookCardProps } from "../../interfaces/Book";
+import { BookProps } from "../../interfaces/Book";
 
 export function BookCard({
     imageUrl,
@@ -12,7 +13,8 @@ export function BookCard({
     volume,
     author,
     category,
-}: BookCardProps) {
+    status,
+}: BookProps) {
     return (
         <Box
             display="flex"
@@ -39,9 +41,8 @@ export function BookCard({
                 </Text>
                 <Text>{category}</Text>
             </Stack>
-
             <Tag mt="4" bg="green.400" color="white">
-                Disponível
+                {status ? status : "Disponível"}
             </Tag>
         </Box>
     );

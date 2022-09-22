@@ -6,12 +6,6 @@ export interface BookProps {
     category: string;
     createdAt: string;
     imageUrl: string;
-}
-
-export interface BookCardProps {
-    name: string;
-    author: string;
-    volume: string;
-    category: string;
-    imageUrl: string;
+    status: string;
+    borrowedTo?: string;
 }

@@ -37,13 +37,7 @@ const Library: NextPage = () => {
                 {books.map((book) => {
                     return (
                         <GridItem key={book.id}>
-                            <BookCard
-                                imageUrl={book.imageUrl}
-                                name={book.name}
-                                volume={book.volume}
-                                author={book.author}
-                                category={book.category}
-                            />
+                            <BookCard {...book} />
                         </GridItem>
                     );
                 })}

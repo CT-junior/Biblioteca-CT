@@ -11,6 +11,7 @@ import {
 import { deleteObject, ref } from "firebase/storage";
 
 import { store } from ".";
+import { generateId } from "../../common/functions";
 import { BookProps } from "../../interfaces/Book";
 import { RegistryProps } from "../../interfaces/Registry";
 import { UserProps } from "../../interfaces/User";
@@ -27,19 +28,8 @@ export const addBook = async (
             s.isLoading = true;
         });
 
-        const randonNumber = String(Math.floor(Math.random() * 100000));
-
-        const name = book.name
-            .replace(/\s+/g, "-")
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .trim()
-            .toLowerCase();
-
-        const id = `${name}.${randonNumber}`;
-
+        const id = generateId(book.name, "-", 1000);
         const imageUrl = await handleUploadImage(imageFile, id);
-
         const createdAt = new Date(Date.now()).toISOString();
 
         const newBook: BookProps = {
@@ -50,6 +40,8 @@ export const addBook = async (
             category: book.category,
             volume: book.volume,
             imageUrl,
+            status: "available",
+            borrowedTo: null,
         };
 
         await setDoc(doc(db, "books", newBook.id), newBook);
@@ -58,6 +50,7 @@ export const addBook = async (
             s.books.push(newBook);
             s.isLoading = false;
         });
+
         const registry: RegistryProps = {
             id: createdAt,
             action: "adicionado",
@@ -85,11 +78,10 @@ export const removeBook = async (
         });
 
         const imageRef = ref(storage, String(id));
+        const date = new Date(Date.now()).toISOString();
 
         await deleteObject(imageRef);
-
         await deleteDoc(doc(db, "books", String(id)));
-        const date = new Date(Date.now()).toISOString();
 
         const registry: RegistryProps = {
             id: date,
@@ -141,16 +133,17 @@ export const editBook = async (
             imageUrl = await handleUploadImage(imageFile, id);
         }
 
-        const createdAt = new Date(Date.now()).toISOString();
+        const editDateAt = new Date(Date.now()).toISOString();
 
         const newBook: BookProps = {
             id,
-            createdAt,
+            createdAt: book.createdAt,
             name: newValues.name,
             author: newValues.author,
             category: newValues.category,
             volume: newValues.volume,
             imageUrl,
+            status: book.status,
         };
 
         const bookDocRef = doc(db, "books", id);
@@ -161,14 +154,13 @@ export const editBook = async (
             author: newBook.author,
             category: newBook.category,
             volume: newBook.volume,
-            createdAt: newBook.createdAt,
         });
 
         const registry: RegistryProps = {
-            id: createdAt,
+            id: editDateAt,
             action: "editado",
             book: newBook,
-            date: createdAt,
+            date: editDateAt,
             user,
         };
 
@@ -182,7 +174,6 @@ export const editBook = async (
                     book.author = newBook.author;
                     book.volume = newBook.volume;
                     book.category = newBook.category;
-                    book.createdAt = newBook.createdAt;
                 }
             });
 
@@ -204,7 +195,8 @@ export const requestBooksFirebase = async () => {
         const bookCollectionRef = collection(db, "books");
 
         const response = await getDocs(bookCollectionRef);
-        const books = response.docs.map((doc) => {
+
+        const books: BookProps[] = response.docs.map((doc) => {
             return {
                 id: doc.id,
                 imageUrl: doc.data().imageUrl,
@@ -213,6 +205,8 @@ export const requestBooksFirebase = async () => {
                 category: doc.data().category,
                 volume: doc.data().volume,
                 createdAt: doc.data().createdAt,
+                status: doc.data().status,
+                borrowedTo: doc.data().borrowedTo,
             };
         });
 
