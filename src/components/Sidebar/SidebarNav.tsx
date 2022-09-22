@@ -72,7 +72,7 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
                 <NavLink icon={HiOutlineHome} href="/">
                     Página Inicial
                 </NavLink>
-                <NavLink icon={HiSearch} href="/search">
+                <NavLink icon={HiSearch} href="/library">
                     Buscar livro
                 </NavLink>
                 <NavLink icon={TbBooks} href="/library-manager">

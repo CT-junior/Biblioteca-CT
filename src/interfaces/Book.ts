@@ -7,3 +7,11 @@ export interface BookProps {
     createdAt: string;
     imageUrl: string;
 }
+
+export interface BookCardProps {
+    name: string;
+    author: string;
+    volume: string;
+    category: string;
+    imageUrl: string;
+}
