@@ -3,6 +3,7 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 import { Box, Tag, Text, Stack } from "@chakra-ui/react";
+import { stat } from "fs/promises";
 import Image from "next/image";
 
 import { BookProps } from "../../interfaces/Book";
@@ -41,9 +42,15 @@ export function BookCard({
                 </Text>
                 <Text>{category}</Text>
             </Stack>
-            <Tag mt="4" bg="green.400" color="white">
-                {status ? status : "Disponível"}
-            </Tag>
+            {status === "available" ? (
+                <Tag mt="4" bg="green.400" color="white">
+                    Disponível
+                </Tag>
+            ) : (
+                <Tag mt="4" bg="orange.400" color="white">
+                    Indisponível
+                </Tag>
+            )}
         </Box>
     );
 }

@@ -1,5 +1,3 @@
-import { number } from "yup";
-
 function sortLastDateFirst(a, b) {
     if (a.date > b.date) {
         return -1;
