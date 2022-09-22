@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 import { Box, Input, Heading, Divider } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import { BooksDisplay } from "../components/BooksDisplay";
@@ -13,6 +13,7 @@ import { requestBooksFirebase } from "../store/books/actions";
 
 const Home: NextPage = () => {
     const { data: session, status } = useSession();
+
     const router = useRouter();
 
     useEffect(() => {
