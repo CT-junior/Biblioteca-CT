@@ -36,9 +36,11 @@ export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
     const { onOpen, onClose, isOpen } = useDisclosure();
     const handleRemoveBook = async () => {
         const user: UserProps = {
+            id: String(session?.user?.id),
             name: String(session?.user?.name),
             email: String(session?.user?.email),
             image: String(session?.user?.image),
+            borrowedBooks: null,
         };
         await removeBook(book.id, book, user);
 

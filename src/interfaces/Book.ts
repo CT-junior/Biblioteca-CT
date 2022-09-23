@@ -1,3 +1,5 @@
+import { UserProps } from "./User";
+
 export interface BookProps {
     id: string;
     name: string;
@@ -7,5 +9,9 @@ export interface BookProps {
     createdAt: string;
     imageUrl: string;
     status: string;
-    borrowedTo?: string;
+    borrowedTo: {
+        user: UserProps;
+        startDate: string;
+        endDate: string;
+    } | null;
 }

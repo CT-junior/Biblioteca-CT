@@ -54,9 +54,11 @@ export function AddBookModal() {
 
     const handleAddBook: SubmitHandler<BookProps> = async (values) => {
         const user: UserProps = {
+            id: String(session?.user?.id),
             name: String(session?.user?.name),
             email: String(session?.user?.email),
             image: String(session?.user?.image),
+            borrowedBooks: null,
         };
         await addBook(values, imageFile, user);
 
