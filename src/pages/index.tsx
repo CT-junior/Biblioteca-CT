@@ -4,26 +4,28 @@
 import { useEffect } from "react";
 
 import { Box, Input, Heading, Divider } from "@chakra-ui/react";
-import type { NextPage } from "next";
-import { getSession, useSession } from "next-auth/react";
+import { NextPage } from "next";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import { BooksDisplay } from "../components/BooksDisplay";
-import { requestBooksFirebase } from "../store/books/actions";
+import { useBooks } from "../hooks/useBooks";
+import { requestBooksUserFirebase } from "../store/books/actions";
 
 const Home: NextPage = () => {
     const { data: session, status } = useSession();
-
+    const { booksUser } = useBooks();
     const router = useRouter();
 
     useEffect(() => {
-        requestBooksFirebase();
         if (status !== "loading") {
             if (status === "unauthenticated") {
                 router.push("/auth/signin");
+            } else {
+                requestBooksUserFirebase(session?.user?.id);
             }
         }
-    }, [router, status]);
+    }, [router, session?.user?.id, status]);
 
     return (
         <>
@@ -50,6 +52,7 @@ const Home: NextPage = () => {
                     size="10rem"
                     shadow="md"
                     hasHead
+                    books={booksUser}
                 />
             </Box>
         </>

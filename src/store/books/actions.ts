@@ -5,6 +5,7 @@ import {
     doc,
     deleteDoc,
     updateDoc,
+    getDoc,
     getDocs,
     collection,
     arrayUnion,
@@ -13,7 +14,7 @@ import { deleteObject, ref } from "firebase/storage";
 
 import { store } from ".";
 import { generateId } from "../../common/functions";
-import { BookProps } from "../../interfaces/Book";
+import { BooksUserProps, BookProps } from "../../interfaces/Book";
 import { RegistryProps } from "../../interfaces/Registry";
 import { UserProps } from "../../interfaces/User";
 import { db, handleUploadImage, storage } from "../../services/firebase";
@@ -223,6 +224,44 @@ export const requestBooksFirebase = async () => {
     }
 };
 
+export const requestBooksUserFirebase = async (userID: string) => {
+    try {
+        store.update((s) => {
+            s.isLoading = true;
+        });
+        const userDocRef = doc(db, "users", userID);
+        const userDocSnap = await getDoc(userDocRef);
+        const userData = userDocSnap.data();
+
+        const books: BooksUserProps[] = userData.borrowedBooks.map((doc) => {
+            return {
+                borrowedBook: {
+                    id: doc.borrowedBook.id,
+                    imageUrl: doc.borrowedBook.imageUrl,
+                    name: doc.borrowedBook.name,
+                    author: doc.borrowedBook.author,
+                    category: doc.borrowedBook.category,
+                    volume: doc.borrowedBook.volume,
+                    createdAt: doc.borrowedBook.createdAt,
+                    status: doc.borrowedBook.status,
+                },
+                startDate: doc.startDate,
+                endDate: doc.endDate,
+                status: doc.status,
+            };
+        });
+
+        store.update((s) => {
+            s.booksUser = books;
+            s.isLoading = false;
+        });
+    } catch (err) {
+        store.update((s) => {
+            s.isLoading = false;
+        });
+    }
+};
+
 export const borrowBook = async (borrowedBook: BookProps, user: UserProps) => {
     try {
         store.update((s) => {
@@ -252,7 +291,12 @@ export const borrowBook = async (borrowedBook: BookProps, user: UserProps) => {
         });
 
         await updateDoc(userDocRef, {
-            borrowedBooks: arrayUnion(borrowedBook),
+            borrowedBooks: arrayUnion({
+                borrowedBook,
+                status: "pendente",
+                startDate,
+                endDate,
+            }),
         });
 
         const registry: RegistryProps = {

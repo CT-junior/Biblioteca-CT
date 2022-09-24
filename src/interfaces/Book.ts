@@ -1,6 +1,6 @@
 import { UserProps } from "./User";
 
-export interface BookProps {
+interface BookProps {
     id: string;
     name: string;
     author: string;
@@ -15,3 +15,12 @@ export interface BookProps {
         endDate: string;
     } | null;
 }
+
+interface BooksUserProps {
+    borrowedBook: BookProps;
+    status: string;
+    startDate: string;
+    endDate: string;
+}
+
+export type { BookProps, BooksUserProps };

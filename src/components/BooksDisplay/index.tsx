@@ -13,10 +13,11 @@ import {
     TagLeftIcon,
     TagLabel,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { date } from "yup";
 
-import { useBooks } from "../../hooks/useBooks";
-import { BookProps } from "../../interfaces/Book";
+import { BooksUserProps } from "../../interfaces/Book";
 import { TableLibraryDisplay } from "../TableLibraryDisplay/index";
 
 export interface BooksDisplayProps {
@@ -28,6 +29,7 @@ export interface BooksDisplayProps {
     padding: string;
     borderColor: string;
     hasHead: boolean;
+    books: BooksUserProps[];
 }
 
 export function BooksDisplay({
@@ -39,14 +41,13 @@ export function BooksDisplay({
     border,
     padding,
     borderColor,
+    books = [],
 }: BooksDisplayProps) {
-    const { books } = useBooks();
-
     return (
         <TableLibraryDisplay hasHead={hasHead}>
-            {books.map((book: BookProps) => {
+            {books.map((book: BooksUserProps) => {
                 return (
-                    <Tr key={book.id} display="revert">
+                    <Tr key={book.borrowedBook.id} display="revert">
                         <Td display="revert" paddingLeft={0} paddingRight={0}>
                             <Box
                                 display="flex"
@@ -74,17 +75,17 @@ export function BooksDisplay({
                                 }}
                             >
                                 <HStack spacing={3}>
-                                    {book.imageUrl && (
+                                    {book.borrowedBook.imageUrl && (
                                         <Image
-                                            src={book.imageUrl}
-                                            alt={book.name}
+                                            src={book.borrowedBook.imageUrl}
+                                            alt={book.borrowedBook.name}
                                             width="47,25px"
                                             height="70px"
                                             objectFit="cover"
                                         />
                                     )}
                                     <Text overflow="clip" fontSize="sm">
-                                        {book.name}
+                                        {book.borrowedBook.name}
                                     </Text>
                                 </HStack>
                             </Box>
@@ -116,7 +117,7 @@ export function BooksDisplay({
                                     boxShadow: shadow,
                                 }}
                             >
-                                {new Date(book.createdAt).toLocaleDateString(
+                                {new Date(book.startDate).toLocaleDateString(
                                     "pt-BR",
                                     {
                                         day: "2-digit",
@@ -152,24 +153,18 @@ export function BooksDisplay({
                                     boxShadow: shadow,
                                 }}
                             >
-                                {new Date(
-                                    new Date().setDate(
-                                        // eslint-disable-next-line prettier/prettier
-                                        new Date(book.createdAt).getDate() + 7)
-                                ).toLocaleDateString("pt-BR", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                })}
+                                {new Date(book.endDate).toLocaleDateString(
+                                    "pt-BR",
+                                    {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    }
+                                )}
                             </Box>
                         </Td>
 
-                        <Td
-                            display="revert"
-                            textAlign="center"
-                            // paddingRight={10}
-                            paddingLeft={0}
-                        >
+                        <Td display="revert" textAlign="center" paddingLeft={0}>
                             <Box
                                 overflow="visible"
                                 display="flex"
@@ -196,10 +191,25 @@ export function BooksDisplay({
                                     borderRadius: "xl",
                                 }}
                             >
-                                <Tag size="lg">
-                                    <TagLeftIcon as={MdOutlinePending} />
-                                    <TagLabel>Aguardando devolução</TagLabel>
-                                </Tag>
+                                {book.status === "devolvido" ? (
+                                    <Tag size="lg" colorScheme="green">
+                                        <TagLeftIcon as={MdOutlinePending} />
+                                        <TagLabel>Devolvido</TagLabel>
+                                    </Tag>
+                                ) : book.endDate <
+                                  new Date(Date.now()).toISOString() ? (
+                                    <Tag size="lg" colorScheme="red">
+                                        <TagLeftIcon as={MdOutlinePending} />
+                                        <TagLabel>Em atraso</TagLabel>
+                                    </Tag>
+                                ) : (
+                                    <Tag size="lg" colorScheme="orange">
+                                        <TagLeftIcon as={MdOutlinePending} />
+                                        <TagLabel>
+                                            Aguardando devolução
+                                        </TagLabel>
+                                    </Tag>
+                                )}
                             </Box>
                         </Td>
                     </Tr>
