@@ -32,7 +32,12 @@ export function BookCard({
             justifyContent="space-between"
             shadow="md"
         >
-            <Image src={`${imageUrl}`} width="126px" height="200px" />
+            <Image
+                src={`${imageUrl}`}
+                width="126px"
+                height="200px"
+                objectFit="cover"
+            />
             <Text mt="6" fontSize="xl" textAlign="center">
                 {name}
             </Text>

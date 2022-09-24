@@ -49,7 +49,12 @@ const Book: NextPage = () => {
                     gap="10"
                     py="16"
                 >
-                    <Image src={BookImage} width="277px" height="443px" />
+                    <Image
+                        src={BookImage}
+                        width="277px"
+                        height="443px"
+                        objectFit="cover"
+                    />
                     <Stack align="flex-end" spacing="40">
                         <Stack fontSize="xl">
                             <Text as="h1" fontSize="5xl">
