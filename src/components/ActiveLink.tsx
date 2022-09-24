@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-indent */
 import { cloneElement, ReactElement } from "react";
 
-import { transition } from "@chakra-ui/react";
 import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/router";
 

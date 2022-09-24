@@ -7,6 +7,7 @@ import {
     updateDoc,
     getDocs,
     collection,
+    arrayUnion,
 } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 
@@ -144,6 +145,7 @@ export const editBook = async (
             volume: newValues.volume,
             imageUrl,
             status: book.status,
+            borrowedTo: book.borrowedTo,
         };
 
         const bookDocRef = doc(db, "books", id);
@@ -217,6 +219,67 @@ export const requestBooksFirebase = async () => {
     } catch (err) {
         store.update((s) => {
             s.isLoading = false;
+        });
+    }
+};
+
+export const borrowBook = async (borrowedBook: BookProps, user: UserProps) => {
+    try {
+        store.update((s) => {
+            s.isLoading = true;
+        });
+
+        const bookDocRef = doc(db, "books", borrowedBook.id);
+        const userDocRef = doc(db, "users", user.id);
+
+        const date = new Date(Date.now());
+        const startDate = date.toISOString();
+        const endDate = new Date(
+            date.setDate(date.getDay() + 30)
+        ).toISOString();
+
+        await updateDoc(bookDocRef, {
+            status: "unavailable",
+            borrowedTo: {
+                user: {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                },
+                startDate,
+                endDate,
+            },
+        });
+
+        await updateDoc(userDocRef, {
+            borrowedBooks: arrayUnion(borrowedBook),
+        });
+
+        const registry: RegistryProps = {
+            id: startDate,
+            action: "emprestado",
+            book: borrowedBook,
+            date: startDate,
+            user,
+        };
+
+        newRegistry(registry);
+
+        store.update((s) => {
+            s.books.forEach((book) => {
+                if (book.id === borrowedBook.id) {
+                    book.status = "unavailable";
+                    book.borrowedTo.user = user;
+                    book.borrowedTo.startDate = startDate;
+                    book.borrowedTo.endDate = endDate;
+                }
+            });
+            requestBooksFirebase();
+            s.isLoading = false;
+        });
+    } catch (err) {
+        store.update((s) => {
+            s.isLoading = true;
         });
     }
 };
