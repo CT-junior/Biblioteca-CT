@@ -80,6 +80,7 @@ export default function Library({ book }: Props) {
                         src={book.imageUrl}
                         width="277px"
                         height="443px"
+                        objectFit="cover"
                         priority
                     />
                     <Stack align="flex-end" spacing="40">
