@@ -295,8 +295,10 @@ export const requestBooksUserFirebase = async (userID: string) => {
         store.update((s) => {
             s.isLoading = true;
         });
-        // eslint-disable-next-line prettier/prettier
-        const borrowedBooksCollectionRef = collection(db, `users/${String(userID)}/borrowedBooks`);
+        const borrowedBooksCollectionRef = collection(
+            db,
+            `users/${String(userID)}/borrowedBooks`
+        );
         const response = await getDocs(borrowedBooksCollectionRef);
 
         const books: BooksUserProps[] = response.docs.map((doc) => {
@@ -328,8 +330,11 @@ export const returnBookUser = async (
             s.isLoading = true;
         });
 
-        // eslint-disable-next-line prettier/prettier
-        const borrowedBookDocRef = doc(db, `users/${user.id}/borrowedBooks`, borrowedBook.borrowedBook.id);
+        const borrowedBookDocRef = doc(
+            db,
+            `users/${user.id}/borrowedBooks`,
+            borrowedBook.borrowedBook.id
+        );
         const bookDocRef = doc(db, "books", borrowedBook.borrowedBook.id);
 
         await updateDoc(borrowedBookDocRef, {
@@ -404,7 +409,6 @@ export const reBorrowBook = async (
         });
 
         await updateDoc(userDocRef, {
-            borrowedBook,
             status: "pendente",
             startDate,
             endDate,

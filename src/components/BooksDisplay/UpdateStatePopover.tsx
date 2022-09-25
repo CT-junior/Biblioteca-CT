@@ -15,7 +15,6 @@ import {
     PopoverArrow,
     PopoverContent,
     PopoverTrigger,
-    Stack,
     Button,
     useToast,
     Tag,
@@ -93,6 +92,7 @@ export function UpdateStatePopover({
                             bg: "green.50",
                         }}
                         onClick={handleReBorrowedBook}
+                        disabled={!returned}
                     >
                         <HStack>
                             <Icon as={MdEdit} />

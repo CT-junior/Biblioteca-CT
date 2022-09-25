@@ -29,14 +29,12 @@ import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
 import { Pagination } from "../components/Pagination";
 import { TableLibraryManager } from "../components/TableLibraryManager";
 import { useBooks } from "../hooks/useBooks";
-import { useSidebar } from "../hooks/useSidebar";
 import { BookProps } from "../interfaces/Book";
 import { onOpenAddBookModal } from "../store/addBookModal/actions";
 import { requestBooksFirebase } from "../store/books/actions";
 
 const LibraryManager: NextPage = () => {
     const { books } = useBooks();
-    const isOpenSidebar = useSidebar().isOpen;
     const isWideVersion = useBreakpointValue({
         base: false,
         sm: true,
