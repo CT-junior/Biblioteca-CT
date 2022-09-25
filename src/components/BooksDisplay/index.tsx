@@ -13,12 +13,11 @@ import {
     TagLeftIcon,
     TagLabel,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { date } from "yup";
 
 import { BooksUserProps } from "../../interfaces/Book";
 import { TableLibraryDisplay } from "../TableLibraryDisplay/index";
+import { UpdateStatePopover } from "./UpdateStatePopover";
 
 export interface BooksDisplayProps {
     size: string;
@@ -192,23 +191,28 @@ export function BooksDisplay({
                                 }}
                             >
                                 {book.status === "devolvido" ? (
-                                    <Tag size="lg" colorScheme="green">
-                                        <TagLeftIcon as={MdOutlinePending} />
-                                        <TagLabel>Devolvido</TagLabel>
-                                    </Tag>
+                                    <UpdateStatePopover
+                                        colorScheme="green"
+                                        book={book}
+                                        returned
+                                    >
+                                        Devolvido
+                                    </UpdateStatePopover>
                                 ) : book.endDate <
                                   new Date(Date.now()).toISOString() ? (
-                                    <Tag size="lg" colorScheme="red">
-                                        <TagLeftIcon as={MdOutlinePending} />
-                                        <TagLabel>Em atraso</TagLabel>
-                                    </Tag>
+                                    <UpdateStatePopover
+                                        colorScheme="red"
+                                        book={book}
+                                    >
+                                        Em atraso
+                                    </UpdateStatePopover>
                                 ) : (
-                                    <Tag size="lg" colorScheme="orange">
-                                        <TagLeftIcon as={MdOutlinePending} />
-                                        <TagLabel>
-                                            Aguardando devolução
-                                        </TagLabel>
-                                    </Tag>
+                                    <UpdateStatePopover
+                                        colorScheme="orange"
+                                        book={book}
+                                    >
+                                        Pendente
+                                    </UpdateStatePopover>
                                 )}
                             </Box>
                         </Td>

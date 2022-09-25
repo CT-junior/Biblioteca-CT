@@ -5,10 +5,8 @@ import {
     doc,
     deleteDoc,
     updateDoc,
-    getDoc,
     getDocs,
     collection,
-    arrayUnion,
 } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 
@@ -195,9 +193,9 @@ export const requestBooksFirebase = async () => {
             s.isLoading = true;
         });
 
-        const bookCollectionRef = collection(db, "books");
+        const booksCollectionRef = collection(db, "books");
 
-        const response = await getDocs(bookCollectionRef);
+        const response = await getDocs(booksCollectionRef);
 
         const books: BookProps[] = response.docs.map((doc) => {
             return {
@@ -224,30 +222,89 @@ export const requestBooksFirebase = async () => {
     }
 };
 
+export const borrowBook = async (borrowedBook: BookProps, user: UserProps) => {
+    try {
+        store.update((s) => {
+            s.isLoading = true;
+        });
+
+        const bookDocRef = doc(db, "books", borrowedBook.id);
+        const userDocRef = doc(
+            db,
+            `users/${user.id}/borrowedBooks`,
+            borrowedBook.id
+        );
+
+        const date = new Date(Date.now());
+        const startDate = date.toISOString();
+        const endDate = new Date(
+            date.setDate(date.getDay() + 30)
+        ).toISOString();
+
+        await updateDoc(bookDocRef, {
+            status: "unavailable",
+            borrowedTo: {
+                user: {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                },
+                startDate,
+                endDate,
+            },
+        });
+
+        await setDoc(userDocRef, {
+            borrowedBook,
+            status: "pendente",
+            startDate,
+            endDate,
+        });
+
+        const registry: RegistryProps = {
+            id: startDate,
+            action: "emprestado",
+            book: borrowedBook,
+            date: startDate,
+            user,
+        };
+
+        newRegistry(registry);
+
+        store.update((s) => {
+            s.books.forEach((book) => {
+                if (book.id === borrowedBook.id) {
+                    book.status = "unavailable";
+                    book.borrowedTo.user = user;
+                    book.borrowedTo.startDate = startDate;
+                    book.borrowedTo.endDate = endDate;
+                }
+            });
+            requestBooksFirebase();
+            s.isLoading = false;
+        });
+    } catch (err) {
+        store.update((s) => {
+            s.isLoading = true;
+        });
+    }
+};
+
 export const requestBooksUserFirebase = async (userID: string) => {
     try {
         store.update((s) => {
             s.isLoading = true;
         });
-        const userDocRef = doc(db, "users", userID);
-        const userDocSnap = await getDoc(userDocRef);
-        const userData = userDocSnap.data();
+        // eslint-disable-next-line prettier/prettier
+        const borrowedBooksCollectionRef = collection(db, `users/${String(userID)}/borrowedBooks`);
+        const response = await getDocs(borrowedBooksCollectionRef);
 
-        const books: BooksUserProps[] = userData.borrowedBooks.map((doc) => {
+        const books: BooksUserProps[] = response.docs.map((doc) => {
             return {
-                borrowedBook: {
-                    id: doc.borrowedBook.id,
-                    imageUrl: doc.borrowedBook.imageUrl,
-                    name: doc.borrowedBook.name,
-                    author: doc.borrowedBook.author,
-                    category: doc.borrowedBook.category,
-                    volume: doc.borrowedBook.volume,
-                    createdAt: doc.borrowedBook.createdAt,
-                    status: doc.borrowedBook.status,
-                },
-                startDate: doc.startDate,
-                endDate: doc.endDate,
-                status: doc.status,
+                borrowedBook: doc.data().borrowedBook,
+                endDate: doc.data().endDate,
+                startDate: doc.data().startDate,
+                status: doc.data().status,
             };
         });
 
@@ -262,14 +319,70 @@ export const requestBooksUserFirebase = async (userID: string) => {
     }
 };
 
-export const borrowBook = async (borrowedBook: BookProps, user: UserProps) => {
+export const returnBookUser = async (
+    user: UserProps,
+    borrowedBook: BooksUserProps
+) => {
     try {
         store.update((s) => {
             s.isLoading = true;
         });
 
-        const bookDocRef = doc(db, "books", borrowedBook.id);
-        const userDocRef = doc(db, "users", user.id);
+        // eslint-disable-next-line prettier/prettier
+        const borrowedBookDocRef = doc(db, `users/${user.id}/borrowedBooks`, borrowedBook.borrowedBook.id);
+        const bookDocRef = doc(db, "books", borrowedBook.borrowedBook.id);
+
+        await updateDoc(borrowedBookDocRef, {
+            status: "devolvido",
+        });
+
+        await updateDoc(bookDocRef, {
+            borrowedTo: null,
+            status: "available",
+        });
+
+        const date = new Date(Date.now()).toISOString();
+        const registry: RegistryProps = {
+            id: date,
+            action: "devolvido",
+            book: borrowedBook.borrowedBook,
+            date,
+            user,
+        };
+
+        newRegistry(registry);
+
+        store.update((s) => {
+            s.books.forEach((book) => {
+                if (book.id === borrowedBook.borrowedBook.id) {
+                    book.borrowedTo = null;
+                    book.status = "available";
+                }
+            });
+            s.isLoading = false;
+        });
+    } catch (err) {
+        store.update((s) => {
+            s.isLoading = false;
+        });
+    }
+};
+
+export const reBorrowBook = async (
+    borrowedBook: BooksUserProps,
+    user: UserProps
+) => {
+    try {
+        store.update((s) => {
+            s.isLoading = true;
+        });
+
+        const bookDocRef = doc(db, "books", borrowedBook.borrowedBook.id);
+        const userDocRef = doc(
+            db,
+            `users/${user.id}/borrowedBooks`,
+            borrowedBook.borrowedBook.id
+        );
 
         const date = new Date(Date.now());
         const startDate = date.toISOString();
@@ -291,18 +404,16 @@ export const borrowBook = async (borrowedBook: BookProps, user: UserProps) => {
         });
 
         await updateDoc(userDocRef, {
-            borrowedBooks: arrayUnion({
-                borrowedBook,
-                status: "pendente",
-                startDate,
-                endDate,
-            }),
+            borrowedBook,
+            status: "pendente",
+            startDate,
+            endDate,
         });
 
         const registry: RegistryProps = {
             id: startDate,
             action: "emprestado",
-            book: borrowedBook,
+            book: borrowedBook.borrowedBook,
             date: startDate,
             user,
         };
@@ -311,7 +422,7 @@ export const borrowBook = async (borrowedBook: BookProps, user: UserProps) => {
 
         store.update((s) => {
             s.books.forEach((book) => {
-                if (book.id === borrowedBook.id) {
+                if (book.id === borrowedBook.borrowedBook.id) {
                     book.status = "unavailable";
                     book.borrowedTo.user = user;
                     book.borrowedTo.startDate = startDate;

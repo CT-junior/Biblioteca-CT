@@ -2,8 +2,8 @@ import { BooksUserProps } from "./Book";
 
 export interface UserProps {
     id: string;
-    email: string;
-    name: string;
-    image: string;
-    borrowedBooks: BooksUserProps[] | null;
+    email?: string;
+    name?: string;
+    image?: string;
+    borrowedBooks?: BooksUserProps[] | null;
 }

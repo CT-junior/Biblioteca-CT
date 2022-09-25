@@ -1,3 +1,5 @@
+import { BookProps, BooksUserProps } from "../interfaces/Book";
+
 function sortLastDateFirst(a, b) {
     if (a.date > b.date) {
         return -1;
