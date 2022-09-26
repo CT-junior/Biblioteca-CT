@@ -1,18 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { MdOutlinePending } from "react-icons/md";
-
-import {
-    Box,
-    Tr,
-    Td,
-    HStack,
-    Text,
-    Tag,
-    TagLeftIcon,
-    TagLabel,
-} from "@chakra-ui/react";
+import { Box, Tr, Td, HStack, Text } from "@chakra-ui/react";
 import Image from "next/image";
 
 import { BooksUserProps } from "../../interfaces/Book";
@@ -190,30 +179,7 @@ export function BooksDisplay({
                                     borderRadius: "xl",
                                 }}
                             >
-                                {book.status === "devolvido" ? (
-                                    <UpdateStatePopover
-                                        colorScheme="green"
-                                        book={book}
-                                        returned
-                                    >
-                                        Devolvido
-                                    </UpdateStatePopover>
-                                ) : book.endDate <
-                                  new Date(Date.now()).toISOString() ? (
-                                    <UpdateStatePopover
-                                        colorScheme="red"
-                                        book={book}
-                                    >
-                                        Em atraso
-                                    </UpdateStatePopover>
-                                ) : (
-                                    <UpdateStatePopover
-                                        colorScheme="orange"
-                                        book={book}
-                                    >
-                                        Pendente
-                                    </UpdateStatePopover>
-                                )}
+                                <UpdateStatePopover book={book} />
                             </Box>
                         </Td>
                     </Tr>

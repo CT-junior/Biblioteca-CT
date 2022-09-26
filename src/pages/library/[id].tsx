@@ -22,7 +22,6 @@ import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 
 import { BookProps } from "../../interfaces/Book";
-import { UserProps } from "../../interfaces/User";
 import { db } from "../../services/firebase";
 import { borrowBook } from "../../store/books/actions";
 
@@ -36,14 +35,7 @@ export default function Library({ book }: Props) {
     const toast = useToast();
 
     const handleBorrowBook = async () => {
-        const user: UserProps = {
-            id: String(session?.user?.id),
-            name: String(session?.user?.name),
-            email: String(session?.user?.email),
-            image: String(session?.user?.image),
-            borrowedBooks: null,
-        };
-        await borrowBook(book, user);
+        await borrowBook(book, session.user);
 
         toast({
             title: "Livro emprestado com sucesso!",
