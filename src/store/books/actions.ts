@@ -325,12 +325,29 @@ export const borrowBook = async (book: BookProps, user: UserProps) => {
                 }
             });
 
-            s.booksUser.push({
-                description: book,
-                status: "pendente",
-                startDate,
-                endDate,
+            let bookExists = false;
+
+            s.booksUser.forEach((sBook) => {
+                if (sBook.description.id === book.id) {
+                    bookExists = true;
+                }
             });
+
+            if (bookExists) {
+                s.booksUser.forEach((sBook) => {
+                    sBook.status = "pendente";
+                    sBook.startDate = startDate;
+                    sBook.endDate = endDate;
+                });
+            } else {
+                s.booksUser.push({
+                    description: book,
+                    status: "pendente",
+                    startDate,
+                    endDate,
+                });
+            }
+
             s.isLoading = false;
         });
 
@@ -359,10 +376,12 @@ export const requestBooksUserFirebase = async (userID: string) => {
         store.update((s) => {
             s.isLoading = true;
         });
+
         const booksCollectionRef = collection(
             db,
             `users/${String(userID)}/books`
         );
+
         const response = await getDocs(booksCollectionRef);
 
         const books: BooksUserProps[] = response.docs.map((doc) => {
@@ -387,6 +406,7 @@ export const requestBooksUserFirebase = async (userID: string) => {
             isClosable: true,
             position: "top-right",
         });
+
         store.update((s) => {
             s.isLoading = false;
         });
@@ -433,6 +453,7 @@ export const returnBookUser = async (user: UserProps, book: BooksUserProps) => {
                     sBook.status = "available";
                 }
             });
+
             s.booksUser.forEach((sBook) => {
                 if (sBook.description.id === book.description.id) {
                     sBook.status = "devolvido";

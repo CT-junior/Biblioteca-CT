@@ -25,7 +25,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useSession } from "next-auth/react";
 
 import { BookProps } from "../../interfaces/Book";
-import { UserProps } from "../../interfaces/User";
 import { bookSchema } from "../../schemas/book";
 import { editBook } from "../../store/books/actions";
 import { Input } from "./input";
@@ -52,13 +51,7 @@ export function EditBookModal({ book, isOpen, onClose }: EditBookModalProps) {
     });
 
     const handleEditBook: SubmitHandler<BookProps> = async (newValues) => {
-        const user: UserProps = {
-            name: String(session?.user?.name),
-            email: String(session?.user?.email),
-            image: String(session?.user?.image),
-        };
-
-        await editBook(book, newValues, imageFile, user);
+        await editBook(book, newValues, imageFile, session.user);
         toast({
             title: "Livro editado com sucesso!",
             status: "success",

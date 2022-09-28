@@ -28,15 +28,14 @@ import { useSession } from "next-auth/react";
 
 import addBookPhoto from "../../assets/images/add_a_photo.svg";
 import { useAddBookModal } from "../../hooks/useAddBookModal";
+import { useBooks } from "../../hooks/useBooks";
 import { BookProps } from "../../interfaces/Book";
-import { UserProps } from "../../interfaces/User";
 import { bookSchema } from "../../schemas/book";
 import { onCloseAddBookModal } from "../../store/addBookModal/actions";
 import { addBook } from "../../store/books/actions";
 import { Input } from "./input";
 
 export function AddBookModal() {
-    const toast = useToast();
     const { isOpenAddBookModal } = useAddBookModal();
     const { data: session } = useSession();
 
@@ -53,21 +52,7 @@ export function AddBookModal() {
     });
 
     const handleAddBook: SubmitHandler<BookProps> = async (values) => {
-        const user: UserProps = {
-            id: String(session?.user?.id),
-            name: String(session?.user?.name),
-            email: String(session?.user?.email),
-            image: String(session?.user?.image),
-            borrowedBooks: null,
-        };
-        await addBook(values, imageFile, user);
-
-        toast({
-            title: "Livro adicionado com sucesso!",
-            status: "success",
-            duration: 9000,
-            isClosable: true,
-        });
+        await addBook(values, imageFile, session.user);
     };
 
     useEffect(() => {

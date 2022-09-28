@@ -12,9 +12,9 @@ import { useSession } from "next-auth/react";
 
 import { BooksUserProps } from "../../../interfaces/Book";
 import { reBorrowBook, returnBookUser } from "../../../store/books/actions";
-import { Tag } from "../Tag";
 import { Button } from "./Button";
 import { PopoverTrigger } from "./PopoverTrigger";
+import { Tag } from "./Tag";
 
 interface UpdateStatePopoverProps {
     book: BooksUserProps;
@@ -38,8 +38,8 @@ export function Popover({ book }: UpdateStatePopoverProps) {
 
     return book.status === "devolvido" ? (
         <PopoverChakra placement="top">
-            <PopoverTrigger />
             <Tag variant="devolvido" />
+            <PopoverTrigger />
             <PopoverContent py="4" px="6" shadow="md" borderRadius="full">
                 <HStack align="center">
                     <Button
@@ -59,8 +59,8 @@ export function Popover({ book }: UpdateStatePopoverProps) {
         </PopoverChakra>
     ) : book.endDate < new Date(Date.now()).toISOString() ? (
         <PopoverChakra placement="top">
-            <PopoverTrigger />
             <Tag variant="em-atraso" />
+            <PopoverTrigger />
             <PopoverContent py="4" px="6" shadow="md" borderRadius="full">
                 <HStack align="center">
                     <Button
@@ -79,9 +79,8 @@ export function Popover({ book }: UpdateStatePopoverProps) {
         </PopoverChakra>
     ) : (
         <PopoverChakra placement="top">
-            <PopoverTrigger />
             <Tag variant="pendente" />
-
+            <PopoverTrigger />
             <PopoverContent py="4" px="6" shadow="md" borderRadius="full">
                 <HStack align="center">
                     <Button

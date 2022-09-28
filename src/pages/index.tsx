@@ -8,7 +8,8 @@ import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
-import { BooksDisplay } from "../components/BooksDisplay";
+import { BookRow } from "../components/BookRow";
+import { TableBooksUser } from "../components/TableBooksUser";
 import { useBooks } from "../hooks/useBooks";
 import { requestBooksUserFirebase } from "../store/books/actions";
 
@@ -43,17 +44,11 @@ const Home: NextPage = () => {
             <Divider marginBlock="10" />
             <Box>
                 <Heading size="md">Seus livros</Heading>
-                <BooksDisplay
-                    backgroundColor="white"
-                    border="1px"
-                    borderColor="gray.200"
-                    borderRadius="xl"
-                    padding="10"
-                    size="10rem"
-                    shadow="md"
-                    hasHead
-                    books={booksUser}
-                />
+                <TableBooksUser>
+                    {booksUser.map((book) => (
+                        <BookRow book={book} key={book.description.id} />
+                    ))}
+                </TableBooksUser>
             </Box>
         </>
     );

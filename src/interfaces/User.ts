@@ -5,5 +5,5 @@ export interface UserProps {
     email?: string;
     name?: string;
     image?: string;
-    borrowedBooks?: BooksUserProps[] | null;
+    borrowedBooks?: BooksUserProps[] | null | undefined;
 }

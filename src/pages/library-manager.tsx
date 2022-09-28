@@ -40,11 +40,6 @@ const LibraryManager: NextPage = () => {
         sm: true,
     });
 
-    const isSideBarDrawer = useBreakpointValue({
-        base: true,
-        md: false,
-    });
-
     useEffect(() => {
         requestBooksFirebase();
     }, []);
@@ -108,7 +103,7 @@ const LibraryManager: NextPage = () => {
                 {books.map((book: BookProps) => {
                     return (
                         <Tr key={book.id}>
-                            <Td display="revert">
+                            <Td>
                                 <HStack>
                                     {book.imageUrl && (
                                         <Image
@@ -122,16 +117,10 @@ const LibraryManager: NextPage = () => {
                                     <Text>{book.name}</Text>
                                 </HStack>
                             </Td>
-                            <Td display={["none", "none", "none", "revert"]}>
-                                {book.volume}
-                            </Td>
-                            <Td display={["none", "none", "revert"]}>
-                                {book.author}
-                            </Td>
-                            <Td display={["none", "revert"]}>
-                                {book.category}
-                            </Td>
-                            <Td display={["none", "none", "revert"]}>
+                            <Td>{book.volume}</Td>
+                            <Td>{book.author}</Td>
+                            <Td>{book.category}</Td>
+                            <Td>
                                 {new Date(book.createdAt).toLocaleDateString(
                                     "pt-BR",
                                     {
@@ -148,7 +137,7 @@ const LibraryManager: NextPage = () => {
                     );
                 })}
             </TableLibraryManager>
-            <Pagination />
+            {/* <Pagination /> */}
             <AddBookModal />
         </>
     );
