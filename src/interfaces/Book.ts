@@ -17,7 +17,7 @@ interface BookProps {
 }
 
 interface BooksUserProps {
-    borrowedBook: BookProps;
+    description: BookProps;
     status: string;
     startDate: string;
     endDate: string;

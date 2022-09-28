@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import { BooksUserProps } from "../../interfaces/Book";
 import { TableLibraryDisplay } from "../TableLibraryDisplay/index";
-import { UpdateStatePopover } from "./UpdateStatePopover";
+import { Popover } from "./Popover";
 
 export interface BooksDisplayProps {
     size: string;
@@ -35,7 +35,7 @@ export function BooksDisplay({
         <TableLibraryDisplay hasHead={hasHead}>
             {books.map((book: BooksUserProps) => {
                 return (
-                    <Tr key={book.borrowedBook.id} display="revert">
+                    <Tr key={book.description.id} display="revert">
                         <Td display="revert" paddingLeft={0} paddingRight={0}>
                             <Box
                                 display="flex"
@@ -63,17 +63,17 @@ export function BooksDisplay({
                                 }}
                             >
                                 <HStack spacing={3}>
-                                    {book.borrowedBook.imageUrl && (
+                                    {book.description.imageUrl && (
                                         <Image
-                                            src={book.borrowedBook.imageUrl}
-                                            alt={book.borrowedBook.name}
+                                            src={book.description.imageUrl}
+                                            alt={book.description.name}
                                             width="47,25px"
                                             height="70px"
                                             objectFit="cover"
                                         />
                                     )}
                                     <Text overflow="clip" fontSize="sm">
-                                        {book.borrowedBook.name}
+                                        {book.description.name}
                                     </Text>
                                 </HStack>
                             </Box>
@@ -179,7 +179,7 @@ export function BooksDisplay({
                                     borderRadius: "xl",
                                 }}
                             >
-                                <UpdateStatePopover book={book} />
+                                <Popover book={book} />
                             </Box>
                         </Td>
                     </Tr>

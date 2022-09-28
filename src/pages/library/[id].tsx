@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
+import { useState } from "react";
 import { IoMdArrowBack } from "react-icons/io";
 
 import {
@@ -12,7 +13,6 @@ import {
     Stack,
     Tag,
     Text,
-    useToast,
 } from "@chakra-ui/react";
 import { doc, getDoc } from "firebase/firestore";
 import { GetServerSideProps } from "next";
@@ -21,31 +21,23 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 
-import { BookProps } from "../../interfaces/Book";
 import { db } from "../../services/firebase";
 import { borrowBook } from "../../store/books/actions";
 
-interface Props {
-    book: BookProps;
-}
-
-export default function Library({ book }: Props) {
+export default function Library({ book }) {
     const { data: session } = useSession();
     const router = useRouter();
-    const toast = useToast();
-
+    const [loading, setLoading] = useState(false);
+    console.log(book);
     const handleBorrowBook = async () => {
+        setLoading(true);
         await borrowBook(book, session.user);
-
-        toast({
-            title: "Livro emprestado com sucesso!",
-            status: "success",
-            duration: 9000,
-            isClosable: true,
-        });
+        setLoading(false);
+        router.reload();
     };
+
     return (
-        <Box w="100%" maxW="1200" mx="auto">
+        <Box w="100%" maxW="1200" mx="auto" key={book.id}>
             <IconButton
                 aria-label="Back page"
                 icon={<IoMdArrowBack size="32px" />}
@@ -135,6 +127,7 @@ export default function Library({ book }: Props) {
                     colorScheme="teal"
                     disabled={book.status === "unavailable"}
                     onClick={handleBorrowBook}
+                    isLoading={loading}
                 >
                     Pegar emprestado
                 </Button>
