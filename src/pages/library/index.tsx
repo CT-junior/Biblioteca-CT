@@ -7,14 +7,14 @@ import { Grid, GridItem, Divider, Flex, Input } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Head from "next/head";
 
+import { filterListBookBySearchIndex } from "../../common/functions";
 import { BookCard } from "../../components/BookCard";
 import { useBooks } from "../../hooks/useBooks";
 
 const Library: NextPage = () => {
     const { books } = useBooks();
     const [search, setSearch] = useState("");
-    const regex = /[\s{2,}\s+!"#$%&'´()*+,-./:;<=>?@[\]^_`{|}~]/g;
-
+    const filteredBookList = filterListBookBySearchIndex(books, search);
     return (
         <>
             <Head>
@@ -39,36 +39,12 @@ const Library: NextPage = () => {
                 gap="8"
                 justifyContent={["center", "center", "space-between"]}
             >
-                {books.map((book) => {
-                    if (search !== "") {
-                        if (
-                            book.name
-                                .toLowerCase()
-                                .replace(regex, "")
-                                .normalize("NFD")
-                                .replace(/[\u0300-\u036f]/g, "")
-                                .includes(
-                                    search
-                                        .replace(regex, "")
-                                        .normalize("NFD")
-                                        .replace(/[\u0300-\u036f]/g, "")
-                                )
-                        ) {
-                            return (
-                                <GridItem key={book.id}>
-                                    <BookCard {...book} />
-                                </GridItem>
-                            );
-                        }
-                    } else {
-                        return (
-                            <GridItem key={book.id}>
-                                <BookCard {...book} />
-                            </GridItem>
-                        );
-                    }
-                    return null;
-                })}
+                {filteredBookList.map((book) => (
+                    <GridItem key={book.id}>
+                        <BookCard {...book} />
+                    </GridItem>
+                ))}
+                ;
             </Grid>
         </>
     );

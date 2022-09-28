@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
+import { useState } from "react";
 import { HiPlus, HiSearch, HiCloudDownload } from "react-icons/hi";
 
 import {
@@ -20,6 +21,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 
+import { filterListBookBySearchIndex } from "../common/functions";
 import {
     colorSchemeOrangeCt,
     colorSchemeOrangeCtOutline,
@@ -37,7 +39,8 @@ const LibraryManager: NextPage = () => {
         base: false,
         sm: true,
     });
-
+    const [search, setSearch] = useState("");
+    const filteredBookList = filterListBookBySearchIndex(books, search);
     return (
         <>
             <Head>
@@ -77,6 +80,7 @@ const LibraryManager: NextPage = () => {
                                 variant="outline"
                                 borderRadius="full"
                                 {...colorSchemeOrangeCtOutline}
+                                onChange={(e) => setSearch(e.target.value)}
                             />
                         </InputGroup>
                     )}
@@ -97,7 +101,7 @@ const LibraryManager: NextPage = () => {
                 </Button>
             </Flex>
             <TableLibraryManager>
-                {books.map((book: BookProps) => {
+                {filteredBookList.map((book: BookProps) => {
                     return (
                         <Tr key={book.id}>
                             <Td>
