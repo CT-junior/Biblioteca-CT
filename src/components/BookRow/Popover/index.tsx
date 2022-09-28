@@ -67,6 +67,7 @@ export function Popover({ book }: UpdateStatePopoverProps) {
                         variant="re-alugar"
                         onClick={handleReBorrowedBook}
                         isLoading={loading}
+                        disabled
                     />
                     <Button
                         variant="devolver"
@@ -87,6 +88,7 @@ export function Popover({ book }: UpdateStatePopoverProps) {
                         variant="re-alugar"
                         onClick={handleReBorrowedBook}
                         isLoading={loading}
+                        disabled
                     />
                     <Button
                         variant="devolver"

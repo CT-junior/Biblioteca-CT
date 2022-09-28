@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { useEffect } from "react";
 import { HiPlus, HiSearch, HiCloudDownload } from "react-icons/hi";
 
 import {
@@ -18,6 +17,7 @@ import {
     Text,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
+import Head from "next/head";
 import Image from "next/image";
 
 import {
@@ -26,12 +26,10 @@ import {
 } from "../common/utils";
 import { AddBookModal } from "../components/AddBookModal";
 import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
-import { Pagination } from "../components/Pagination";
 import { TableLibraryManager } from "../components/TableLibraryManager";
 import { useBooks } from "../hooks/useBooks";
 import { BookProps } from "../interfaces/Book";
 import { onOpenAddBookModal } from "../store/addBookModal/actions";
-import { requestBooksFirebase } from "../store/books/actions";
 
 const LibraryManager: NextPage = () => {
     const { books } = useBooks();
@@ -40,12 +38,11 @@ const LibraryManager: NextPage = () => {
         sm: true,
     });
 
-    useEffect(() => {
-        requestBooksFirebase();
-    }, []);
-
     return (
         <>
+            <Head>
+                <title>BiblioCTeca | Gerenciador de Biblioteca</title>
+            </Head>
             <Flex
                 align={["flex-start", "center"]}
                 aria-label="second-header"

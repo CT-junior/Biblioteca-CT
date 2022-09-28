@@ -1,17 +1,15 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-
-import { useEffect } from "react";
 import { HiCloudDownload } from "react-icons/hi";
 
 import { Avatar, Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
+import Head from "next/head";
 
 import { sortLastDateFirst } from "../common/functions";
 import { useRegistries } from "../hooks/useRegistries";
 import { RegistryProps } from "../interfaces/Registry";
-import { requestRegistriesFirebase } from "../store/registries/actions";
 
 const Logs: NextPage = () => {
     const { registries } = useRegistries();
@@ -19,12 +17,11 @@ const Logs: NextPage = () => {
     const list = [...registries];
     list.sort(sortLastDateFirst);
 
-    useEffect(() => {
-        requestRegistriesFirebase();
-    }, []);
-
     return (
         <>
+            <Head>
+                <title>BiblioCTeca | Registros</title>
+            </Head>
             <Flex
                 align="center"
                 justify="space-between"

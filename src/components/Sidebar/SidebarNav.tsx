@@ -81,7 +81,7 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
                 <NavLink icon={HiOutlineTerminal} href="/logs">
                     Registros
                 </NavLink>
-                <NavLink icon={HiOutlineUsers} href="/user-control">
+                <NavLink icon={HiOutlineUsers} href="/users">
                     Controle de usuários
                 </NavLink>
             </Stack>

@@ -21,18 +21,16 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 
+import { useBooks } from "../../hooks/useBooks";
 import { db } from "../../services/firebase";
 import { borrowBook } from "../../store/books/actions";
 
 export default function Library({ book }) {
     const { data: session } = useSession();
     const router = useRouter();
-    const [loading, setLoading] = useState(false);
-    console.log(book);
+    const { isLoading } = useBooks();
     const handleBorrowBook = async () => {
-        setLoading(true);
         await borrowBook(book, session.user);
-        setLoading(false);
         router.reload();
     };
 
@@ -127,7 +125,7 @@ export default function Library({ book }) {
                     colorScheme="teal"
                     disabled={book.status === "unavailable"}
                     onClick={handleBorrowBook}
-                    isLoading={loading}
+                    isLoading={isLoading}
                 >
                     Pegar emprestado
                 </Button>

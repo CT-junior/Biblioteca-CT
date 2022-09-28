@@ -1,26 +1,25 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Grid, GridItem, Divider, Flex, Input } from "@chakra-ui/react";
 import { NextPage } from "next";
+import Head from "next/head";
 
 import { BookCard } from "../../components/BookCard";
 import { useBooks } from "../../hooks/useBooks";
-import { requestBooksFirebase } from "../../store/books/actions";
 
 const Library: NextPage = () => {
     const { books } = useBooks();
     const [search, setSearch] = useState("");
     const regex = /[\s{2,}\s+!"#$%&'´()*+,-./:;<=>?@[\]^_`{|}~]/g;
 
-    useEffect(() => {
-        requestBooksFirebase();
-    }, []);
-
     return (
         <>
+            <Head>
+                <title>BiblioCTeca | Buscar livro</title>
+            </Head>
             <Flex
                 justifyContent="center"
                 alignItems="center"
@@ -35,7 +34,6 @@ const Library: NextPage = () => {
                 />
                 <Divider marginBlock="20" />
             </Flex>
-
             <Grid
                 templateColumns="repeat(auto-fill, 260px)"
                 gap="8"

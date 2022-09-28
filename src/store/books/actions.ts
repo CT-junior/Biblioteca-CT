@@ -419,16 +419,15 @@ export const returnBookUser = async (user: UserProps, book: BooksUserProps) => {
             s.isLoading = true;
         });
 
-        const borrowedBookDocRef = doc(
+        const bookDocRef = doc(db, "books", book.description.id);
+
+        const userBookDocRef = doc(
             db,
             `users/${user.id}/books`,
             book.description.id
         );
-        const bookDocRef = doc(db, "books", book.description.id);
 
-        await updateDoc(borrowedBookDocRef, {
-            status: "devolvido",
-        });
+        await deleteDoc(userBookDocRef);
 
         await updateDoc(bookDocRef, {
             borrowedTo: null,
@@ -454,11 +453,17 @@ export const returnBookUser = async (user: UserProps, book: BooksUserProps) => {
                 }
             });
 
-            s.booksUser.forEach((sBook) => {
-                if (sBook.description.id === book.description.id) {
-                    sBook.status = "devolvido";
-                }
-            });
+            const auxVector = s.booksUser.filter(
+                (item) => item.description.id !== book.description.id
+            );
+            const sLegth = s.booksUser.length;
+            for (let i = 0; i < sLegth; i++) {
+                s.booksUser.pop();
+            }
+            for (let j = 0; j < auxVector.length; j++) {
+                s.booksUser.push(auxVector[j]);
+            }
+
             s.isLoading = false;
         });
         toast({
@@ -485,7 +490,7 @@ export const reBorrowBook = async (book: BooksUserProps, user: UserProps) => {
         });
 
         const bookDocRef = doc(db, "books", book.description.id);
-        const userDocRef = doc(
+        const userBookDocRef = doc(
             db,
             `users/${user.id}/books`,
             book.description.id
@@ -510,7 +515,7 @@ export const reBorrowBook = async (book: BooksUserProps, user: UserProps) => {
             },
         });
 
-        await updateDoc(userDocRef, {
+        await updateDoc(userBookDocRef, {
             status: "pendente",
             startDate,
             endDate,

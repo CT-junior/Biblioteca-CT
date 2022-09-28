@@ -14,7 +14,7 @@ interface Props {
 
 export function BookRow({ book }: Props) {
     return (
-        <Tr shadow="md" borderRadius="xl" gap="5">
+        <Tr shadow="md" borderRadius="xl">
             <Td>
                 <Content>
                     <HStack spacing="4">

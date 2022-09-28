@@ -1,35 +1,24 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { useEffect } from "react";
-
 import { Box, Input, Heading, Divider } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import Head from "next/head";
 
 import { BookRow } from "../components/BookRow";
 import { TableBooksUser } from "../components/TableBooksUser";
 import { useBooks } from "../hooks/useBooks";
-import { requestBooksUserFirebase } from "../store/books/actions";
 
 const Home: NextPage = () => {
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
     const { booksUser } = useBooks();
-    const router = useRouter();
-
-    useEffect(() => {
-        if (status !== "loading") {
-            if (status === "unauthenticated") {
-                router.push("/auth/signin");
-            } else {
-                requestBooksUserFirebase(session?.user?.id);
-            }
-        }
-    }, [router, session?.user?.id, status]);
 
     return (
         <>
+            <Head>
+                <title>BiblioCTeca</title>
+            </Head>
             <Box
                 display="flex"
                 flexDirection="column"
