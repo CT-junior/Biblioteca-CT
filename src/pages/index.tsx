@@ -1,31 +1,28 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { useEffect } from "react";
+import { useState } from "react";
 
 import { Box, Input, Heading, Divider } from "@chakra-ui/react";
-import type { NextPage } from "next";
+import { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import Head from "next/head";
 
-import { BooksDisplay } from "../components/BooksDisplay";
-import { requestBooksFirebase } from "../store/books/actions";
+import { filterListBookUserBySearchIndex } from "../common/functions";
+import { BookRow } from "../components/BookRow";
+import { TableBooksUser } from "../components/TableBooksUser";
+import { useBooks } from "../hooks/useBooks";
 
 const Home: NextPage = () => {
-    const { data: session, status } = useSession();
-    const router = useRouter();
-
-    useEffect(() => {
-        requestBooksFirebase();
-        if (status !== "loading") {
-            if (status === "unauthenticated") {
-                router.push("/auth/signin");
-            }
-        }
-    }, [router, status]);
-
+    const { data: session } = useSession();
+    const { booksUser } = useBooks();
+    const [search, setSearch] = useState("");
+    const filteredBookList = filterListBookUserBySearchIndex(booksUser, search);
     return (
         <>
+            <Head>
+                <title>BiblioCTeca</title>
+            </Head>
             <Box
                 display="flex"
                 flexDirection="column"
@@ -35,21 +32,20 @@ const Home: NextPage = () => {
                 <Heading textAlign="center">
                     Bem vindo, {session?.user?.name}
                 </Heading>
-                <Input placeholder="O que deseja buscar?" w="sm" />
+                <Input
+                    placeholder="O que deseja buscar?"
+                    w="sm"
+                    onChange={(e) => setSearch(e.target.value)}
+                />
             </Box>
             <Divider marginBlock="10" />
             <Box>
                 <Heading size="md">Seus livros</Heading>
-                <BooksDisplay
-                    backgroundColor="white"
-                    border="1px"
-                    borderColor="gray.200"
-                    borderRadius="xl"
-                    padding="10"
-                    size="10rem"
-                    shadow="md"
-                    hasHead
-                />
+                <TableBooksUser>
+                    {filteredBookList.map((book) => (
+                        <BookRow book={book} key={book.description.id} />
+                    ))}
+                </TableBooksUser>
             </Box>
         </>
     );

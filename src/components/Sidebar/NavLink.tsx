@@ -8,6 +8,7 @@ import {
     Text,
     Link as ChakraLink,
     LinkProps as ChakraLinkProps,
+    useBreakpointValue,
 } from "@chakra-ui/react";
 
 import { toggleFixedSidebar } from "../../store/sidebar/actions";
@@ -20,6 +21,11 @@ interface NavLinkProps extends ChakraLinkProps {
 }
 
 export function NavLink({ icon, children, href, ...rest }: NavLinkProps) {
+    const isWideMobile = useBreakpointValue({
+        base: true,
+        md: false,
+    });
+
     return (
         <Flex h="10" w="100%">
             <ActiveLink href={href} passHref>
@@ -29,7 +35,7 @@ export function NavLink({ icon, children, href, ...rest }: NavLinkProps) {
                     px="1"
                     w="210px"
                     {...rest}
-                    onClick={toggleFixedSidebar}
+                    onClick={isWideMobile ? toggleFixedSidebar : () => {}}
                 >
                     <Icon as={icon} boxSize="6" />
                     <Text

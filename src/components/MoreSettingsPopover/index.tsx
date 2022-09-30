@@ -16,13 +16,12 @@ import {
     PopoverTrigger,
     Stack,
     Button,
-    useToast,
     useDisclosure,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 
+import { useBooks } from "../../hooks/useBooks";
 import { BookProps } from "../../interfaces/Book";
-import { UserProps } from "../../interfaces/User";
 import { removeBook } from "../../store/books/actions";
 import { EditBookModal } from "../EditBookModal";
 
@@ -30,24 +29,12 @@ interface MoreSettingsPopoverProps {
     book: BookProps;
 }
 export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
-    const toast = useToast();
+    const { isLoading } = useBooks();
     const { data: session } = useSession();
 
     const { onOpen, onClose, isOpen } = useDisclosure();
     const handleRemoveBook = async () => {
-        const user: UserProps = {
-            name: String(session?.user?.name),
-            email: String(session?.user?.email),
-            image: String(session?.user?.image),
-        };
-        await removeBook(book.id, book, user);
-
-        toast({
-            title: "Livro deletado com sucesso!",
-            status: "success",
-            duration: 9000,
-            isClosable: true,
-        });
+        await removeBook(book.id, book, session.user);
     };
 
     return (
@@ -85,10 +72,11 @@ export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
                         w="100%"
                         fontWeight="normal"
                         onClick={handleRemoveBook}
+                        isLoading={isLoading}
+                        borderRadius="full"
                         _hover={{
                             bg: "blackAlpha.50",
                         }}
-                        borderRadius="full"
                     >
                         <HStack>
                             <Icon as={IoMdTrash} />

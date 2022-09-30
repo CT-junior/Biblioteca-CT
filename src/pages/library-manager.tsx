@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { useEffect } from "react";
+import { useState } from "react";
 import { HiPlus, HiSearch, HiCloudDownload } from "react-icons/hi";
 
 import {
@@ -18,41 +18,34 @@ import {
     Text,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
+import Head from "next/head";
 import Image from "next/image";
 
+import { filterListBookBySearchIndex } from "../common/functions";
 import {
     colorSchemeOrangeCt,
     colorSchemeOrangeCtOutline,
 } from "../common/utils";
 import { AddBookModal } from "../components/AddBookModal";
 import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
-import { Pagination } from "../components/Pagination";
 import { TableLibraryManager } from "../components/TableLibraryManager";
 import { useBooks } from "../hooks/useBooks";
-import { useSidebar } from "../hooks/useSidebar";
 import { BookProps } from "../interfaces/Book";
 import { onOpenAddBookModal } from "../store/addBookModal/actions";
-import { requestBooksFirebase } from "../store/books/actions";
 
 const LibraryManager: NextPage = () => {
     const { books } = useBooks();
-    const isOpenSidebar = useSidebar().isOpen;
     const isWideVersion = useBreakpointValue({
         base: false,
         sm: true,
     });
-
-    const isSideBarDrawer = useBreakpointValue({
-        base: true,
-        md: false,
-    });
-
-    useEffect(() => {
-        requestBooksFirebase();
-    }, []);
-
+    const [search, setSearch] = useState("");
+    const filteredBookList = filterListBookBySearchIndex(books, search);
     return (
         <>
+            <Head>
+                <title>BiblioCTeca | Gerenciador de Biblioteca</title>
+            </Head>
             <Flex
                 align={["flex-start", "center"]}
                 aria-label="second-header"
@@ -87,6 +80,7 @@ const LibraryManager: NextPage = () => {
                                 variant="outline"
                                 borderRadius="full"
                                 {...colorSchemeOrangeCtOutline}
+                                onChange={(e) => setSearch(e.target.value)}
                             />
                         </InputGroup>
                     )}
@@ -107,10 +101,10 @@ const LibraryManager: NextPage = () => {
                 </Button>
             </Flex>
             <TableLibraryManager>
-                {books.map((book: BookProps) => {
+                {filteredBookList.map((book: BookProps) => {
                     return (
                         <Tr key={book.id}>
-                            <Td display="revert">
+                            <Td>
                                 <HStack>
                                     {book.imageUrl && (
                                         <Image
@@ -124,16 +118,10 @@ const LibraryManager: NextPage = () => {
                                     <Text>{book.name}</Text>
                                 </HStack>
                             </Td>
-                            <Td display={["none", "none", "none", "revert"]}>
-                                {book.volume}
-                            </Td>
-                            <Td display={["none", "none", "revert"]}>
-                                {book.author}
-                            </Td>
-                            <Td display={["none", "revert"]}>
-                                {book.category}
-                            </Td>
-                            <Td display={["none", "none", "revert"]}>
+                            <Td>{book.volume}</Td>
+                            <Td>{book.author}</Td>
+                            <Td>{book.category}</Td>
+                            <Td>
                                 {new Date(book.createdAt).toLocaleDateString(
                                     "pt-BR",
                                     {
@@ -150,7 +138,6 @@ const LibraryManager: NextPage = () => {
                     );
                 })}
             </TableLibraryManager>
-            <Pagination />
             <AddBookModal />
         </>
     );

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 import { FirestoreAdapter } from "@next-auth/firebase-adapter";
@@ -23,7 +24,17 @@ export default NextAuth({
             }
             return true; // if there is no specific handling for the provider, sign in is allowed
         },
+        session: async ({ session, token }) => {
+            if (session?.user) {
+                session.user.id = token.sub;
+            }
+            return session;
+        },
     },
+    session: {
+        strategy: "jwt",
+    },
+
     pages: {
         signIn: "/auth/signin",
         error: "/auth/signin",
