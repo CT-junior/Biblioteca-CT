@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 
+import { useBooks } from "../../../hooks/useBooks";
 import { BooksUserProps } from "../../../interfaces/Book";
 import { reBorrowBook, returnBookUser } from "../../../store/books/actions";
 import { Button } from "./Button";
@@ -21,19 +22,13 @@ interface UpdateStatePopoverProps {
 }
 export function Popover({ book }: UpdateStatePopoverProps) {
     const { data: session } = useSession();
-    const [loading, setLoading] = useState(false);
-    const [loading2, setLoading2] = useState(false);
-
+    const { isLoading } = useBooks();
     const handleReBorrowedBook = async () => {
-        setLoading(true);
         await reBorrowBook(book, session?.user);
-        setLoading(false);
     };
 
     const handleReturnBook = async () => {
-        setLoading2(true);
         await returnBookUser(session?.user, book);
-        setLoading2(false);
     };
 
     return book.status === "devolvido" ? (
@@ -45,13 +40,13 @@ export function Popover({ book }: UpdateStatePopoverProps) {
                     <Button
                         variant="re-alugar"
                         onClick={handleReBorrowedBook}
-                        isLoading={loading}
+                        isLoading={isLoading}
                     />
                     <Button
                         variant="devolver"
                         disabled
                         onClick={handleReturnBook}
-                        isLoading={loading2}
+                        isLoading={isLoading}
                     />
                 </HStack>
                 <PopoverArrow />
@@ -66,13 +61,13 @@ export function Popover({ book }: UpdateStatePopoverProps) {
                     <Button
                         variant="re-alugar"
                         onClick={handleReBorrowedBook}
-                        isLoading={loading}
+                        isLoading={isLoading}
                         disabled
                     />
                     <Button
                         variant="devolver"
                         onClick={handleReturnBook}
-                        isLoading={loading2}
+                        isLoading={isLoading}
                     />
                 </HStack>
                 <PopoverArrow />
@@ -87,13 +82,13 @@ export function Popover({ book }: UpdateStatePopoverProps) {
                     <Button
                         variant="re-alugar"
                         onClick={handleReBorrowedBook}
-                        isLoading={loading}
+                        isLoading={isLoading}
                         disabled
                     />
                     <Button
                         variant="devolver"
                         onClick={handleReturnBook}
-                        isLoading={loading2}
+                        isLoading={isLoading}
                     />
                 </HStack>
                 <PopoverArrow />

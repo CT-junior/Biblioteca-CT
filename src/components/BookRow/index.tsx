@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { Box, Tr, Td, HStack, Text } from "@chakra-ui/react";
+import { Tr, Td, HStack, Text } from "@chakra-ui/react";
 import Image from "next/image";
 
 import { BooksUserProps } from "../../interfaces/Book";

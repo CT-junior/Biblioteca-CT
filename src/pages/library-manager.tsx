@@ -138,7 +138,6 @@ const LibraryManager: NextPage = () => {
                     );
                 })}
             </TableLibraryManager>
-            {/* <Pagination /> */}
             <AddBookModal />
         </>
     );
