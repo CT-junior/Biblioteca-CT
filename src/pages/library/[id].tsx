@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { useState } from "react";
 import { IoMdArrowBack } from "react-icons/io";
 
 import {
@@ -16,21 +15,21 @@ import {
 } from "@chakra-ui/react";
 import { doc, getDoc } from "firebase/firestore";
 import { GetServerSideProps } from "next";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
 
 import { useBooks } from "../../hooks/useBooks";
+import { useUser } from "../../hooks/useUser";
 import { db } from "../../services/firebase";
 import { borrowBook } from "../../store/books/actions";
 
 export default function Library({ book }) {
-    const { data: session } = useSession();
+    const { user } = useUser();
     const router = useRouter();
     const { isLoading } = useBooks();
     const handleBorrowBook = async () => {
-        await borrowBook(book, session.user);
+        await borrowBook(book, user);
         router.reload();
     };
 
@@ -89,7 +88,7 @@ export default function Library({ book }) {
                     <Text as="span">
                         Este livro está na posse de
                         <Avatar
-                            src={`${session?.user?.image}`}
+                            src={`${book.borrowedTo.user.image}`}
                             size="sm"
                             ml="2"
                             my="auto"

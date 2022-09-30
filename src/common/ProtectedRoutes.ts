@@ -7,11 +7,14 @@ import { useRouter } from "next/router";
 
 import { useBooks } from "../hooks/useBooks";
 import { useRegistries } from "../hooks/useRegistries";
+import { useUsers } from "../hooks/useUsers";
 import {
     requestBooksFirebase,
     requestBooksUserFirebase,
 } from "../store/books/actions";
 import { requestRegistriesFirebase } from "../store/registries/actions";
+import { requestUserFirebase } from "../store/user/actions";
+import { requestUsersFirebase } from "../store/users/actions";
 
 const isBrowser = () => typeof window !== "undefined";
 
@@ -19,6 +22,7 @@ export const ProtectedRoutes = ({ router, children }) => {
     const { status, data: session } = useSession();
     const { books, booksUser } = useBooks();
     const { registries } = useRegistries();
+    const { users } = useUsers();
     const route = useRouter();
 
     useEffect(() => {
@@ -33,6 +37,8 @@ export const ProtectedRoutes = ({ router, children }) => {
             if (booksUser.length === 0)
                 requestBooksUserFirebase(session?.user?.id);
             if (registries.length === 0) requestRegistriesFirebase();
+            if (session) requestUserFirebase(session?.user?.id);
+            if (users.length === 0) requestUsersFirebase();
         }
     }, [
         books.length,
@@ -40,8 +46,10 @@ export const ProtectedRoutes = ({ router, children }) => {
         registries.length,
         route.asPath,
         router,
+        session,
         session?.user?.id,
         status,
+        users.length,
     ]);
 
     return children;

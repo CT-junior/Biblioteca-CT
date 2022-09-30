@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-
 import { ReactNode } from "react";
 
 import { Box, useBreakpointValue, Flex } from "@chakra-ui/react";
@@ -18,10 +17,6 @@ export const BodyContent = ({ children }: Props) => {
     const router = useRouter();
 
     const isOpenSidebar = useSidebar().isOpen;
-    const isWideVersion = useBreakpointValue({
-        base: true,
-        sm: false,
-    });
 
     const isSideBarDrawer = useBreakpointValue({
         base: true,

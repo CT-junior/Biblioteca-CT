@@ -1,16 +1,14 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-import { useState } from "react";
-
 import {
     HStack,
     Popover as PopoverChakra,
     PopoverArrow,
     PopoverContent,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 
 import { useBooks } from "../../../hooks/useBooks";
+import { useUser } from "../../../hooks/useUser";
 import { BooksUserProps } from "../../../interfaces/Book";
 import { reBorrowBook, returnBookUser } from "../../../store/books/actions";
 import { Button } from "./Button";
@@ -21,14 +19,14 @@ interface UpdateStatePopoverProps {
     book: BooksUserProps;
 }
 export function Popover({ book }: UpdateStatePopoverProps) {
-    const { data: session } = useSession();
+    const { user } = useUser();
     const { isLoading } = useBooks();
     const handleReBorrowedBook = async () => {
-        await reBorrowBook(book, session?.user);
+        await reBorrowBook(book, user);
     };
 
     const handleReturnBook = async () => {
-        await returnBookUser(session?.user, book);
+        await returnBookUser(user, book);
     };
 
     return book.status === "devolvido" ? (

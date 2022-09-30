@@ -5,16 +5,16 @@ import { useState } from "react";
 
 import { Box, Input, Heading, Divider } from "@chakra-ui/react";
 import { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import Head from "next/head";
 
 import { filterListBookUserBySearchIndex } from "../common/functions";
 import { BookRow } from "../components/BookRow";
 import { TableBooksUser } from "../components/TableBooksUser";
 import { useBooks } from "../hooks/useBooks";
+import { useUser } from "../hooks/useUser";
 
 const Home: NextPage = () => {
-    const { data: session } = useSession();
+    const { user } = useUser();
     const { booksUser } = useBooks();
     const [search, setSearch] = useState("");
     const filteredBookList = filterListBookUserBySearchIndex(booksUser, search);
@@ -29,9 +29,7 @@ const Home: NextPage = () => {
                 gap="30"
                 alignItems="center"
             >
-                <Heading textAlign="center">
-                    Bem vindo, {session?.user?.name}
-                </Heading>
+                <Heading textAlign="center">Bem vindo, {user.name}</Heading>
                 <Input
                     placeholder="O que deseja buscar?"
                     w="sm"
