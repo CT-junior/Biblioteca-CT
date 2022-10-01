@@ -18,9 +18,9 @@ import {
     Button,
     useDisclosure,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
 
 import { useBooks } from "../../hooks/useBooks";
+import { useUser } from "../../hooks/useUser";
 import { BookProps } from "../../interfaces/Book";
 import { removeBook } from "../../store/books/actions";
 import { EditBookModal } from "../EditBookModal";
@@ -30,11 +30,11 @@ interface MoreSettingsPopoverProps {
 }
 export function MoreSettingsPopover({ book }: MoreSettingsPopoverProps) {
     const { isLoading } = useBooks();
-    const { data: session } = useSession();
+    const { user } = useUser();
 
     const { onOpen, onClose, isOpen } = useDisclosure();
     const handleRemoveBook = async () => {
-        await removeBook(book.id, book, session.user);
+        await removeBook(book.id, book, user);
     };
 
     return (

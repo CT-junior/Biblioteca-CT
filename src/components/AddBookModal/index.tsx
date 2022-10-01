@@ -19,16 +19,14 @@ import {
     Input as InputChakra,
     FormControl,
     FormLabel,
-    useToast,
     Icon,
     Image,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSession } from "next-auth/react";
 
 import addBookPhoto from "../../assets/images/add_a_photo.svg";
 import { useAddBookModal } from "../../hooks/useAddBookModal";
-import { useBooks } from "../../hooks/useBooks";
+import { useUser } from "../../hooks/useUser";
 import { BookProps } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
 import { onCloseAddBookModal } from "../../store/addBookModal/actions";
@@ -37,7 +35,7 @@ import { Input } from "./input";
 
 export function AddBookModal() {
     const { isOpenAddBookModal } = useAddBookModal();
-    const { data: session } = useSession();
+    const { user } = useUser();
 
     const [imageFile, setImageFile] = useState<File>();
     const [imageDisplay, setImageDisplay] = useState(addBookPhoto);
@@ -52,7 +50,7 @@ export function AddBookModal() {
     });
 
     const handleAddBook: SubmitHandler<BookProps> = async (values) => {
-        await addBook(values, imageFile, session.user);
+        await addBook(values, imageFile, user);
     };
 
     useEffect(() => {

@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable react/jsx-indent-props */
-
 import React, { useState } from "react";
 
 import { ArrowUpIcon } from "@chakra-ui/icons";

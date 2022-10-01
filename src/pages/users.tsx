@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-
 import { NextPage } from "next";
 import Head from "next/head";
 

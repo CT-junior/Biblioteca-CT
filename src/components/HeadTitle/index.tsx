@@ -1,6 +1,6 @@
-import { Divider, Flex, Heading } from "@chakra-ui/react";
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
+import { Divider, Flex, Heading } from "@chakra-ui/react";
 
 interface TitleProps {
     title: string;

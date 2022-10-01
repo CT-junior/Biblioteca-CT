@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-
 import { useState } from "react";
 
 import { Grid, GridItem, Divider, Flex, Input } from "@chakra-ui/react";

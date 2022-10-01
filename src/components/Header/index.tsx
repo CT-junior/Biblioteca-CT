@@ -16,7 +16,6 @@ import {
     Box,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import { useRouter } from "next/router";
 
 import biblioctecaLogo from "../../assets/images/bibliocteca-horizontal-logo.svg";
 import { useSidebar } from "../../hooks/useSidebar";

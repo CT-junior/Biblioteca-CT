@@ -17,13 +17,12 @@ import {
     Input as InputChakra,
     FormControl,
     FormLabel,
-    useToast,
     Image,
     CircularProgress,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSession } from "next-auth/react";
 
+import { useUser } from "../../hooks/useUser";
 import { BookProps } from "../../interfaces/Book";
 import { bookSchema } from "../../schemas/book";
 import { editBook } from "../../store/books/actions";
@@ -36,8 +35,7 @@ interface EditBookModalProps {
 }
 
 export function EditBookModal({ book, isOpen, onClose }: EditBookModalProps) {
-    const toast = useToast();
-    const { data: session } = useSession();
+    const { user } = useUser();
 
     const [imageFile, setImageFile] = useState<File>();
     const [imageDisplay, setImageDisplay] = useState(book.imageUrl);
@@ -51,13 +49,7 @@ export function EditBookModal({ book, isOpen, onClose }: EditBookModalProps) {
     });
 
     const handleEditBook: SubmitHandler<BookProps> = async (newValues) => {
-        await editBook(book, newValues, imageFile, session.user);
-        toast({
-            title: "Livro editado com sucesso!",
-            status: "success",
-            duration: 9000,
-            isClosable: true,
-        });
+        await editBook(book, newValues, imageFile, user);
     };
 
     function handleImageChange(event: FormEvent) {
