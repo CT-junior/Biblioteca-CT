@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-indent-props */
-/* eslint-disable react/jsx-indent */
 import { FieldValues, UseFormRegister } from "react-hook-form";
 
 import {

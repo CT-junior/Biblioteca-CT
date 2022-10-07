@@ -4,13 +4,13 @@ import { Store } from "pullstate";
 import { RegistryProps } from "../../interfaces/Registry";
 
 interface IRegistryListState {
-    registries: RegistryProps[];
-    isLoading: boolean;
+	registries: RegistryProps[];
+	isLoading: boolean;
 }
 
 const defaultBookList: IRegistryListState = {
-    registries: [],
-    isLoading: false,
+	registries: [],
+	isLoading: false,
 };
 
 export const store = new Store<IRegistryListState>(defaultBookList);
