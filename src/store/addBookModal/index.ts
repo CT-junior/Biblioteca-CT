@@ -2,11 +2,11 @@
 import { Store } from "pullstate";
 
 interface IAddBookModalState {
-	isOpenAddBookModal: boolean;
+  isOpenAddBookModal: boolean;
 }
 
 const defaultAddBookModal: IAddBookModalState = {
-	isOpenAddBookModal: false,
+  isOpenAddBookModal: false,
 };
 
 export const store = new Store<IAddBookModalState>(defaultAddBookModal);

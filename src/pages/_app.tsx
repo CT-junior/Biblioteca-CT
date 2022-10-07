@@ -9,19 +9,19 @@ import { theme } from "../styles/theme";
 export const { ToastContainer, toast } = createStandaloneToast();
 
 export default function MyApp({
-	Component,
-	pageProps: { session, ...pageProps },
-	router,
+  Component,
+  pageProps: { session, ...pageProps },
+  router,
 }: AppProps) {
-	return (
-		<SessionProvider session={session}>
-			<ProtectedRoutes router={router}>
-				<ChakraProvider theme={theme}>
-					<BodyContent>
-						<Component {...pageProps} />
-					</BodyContent>
-				</ChakraProvider>
-			</ProtectedRoutes>
-		</SessionProvider>
-	);
+  return (
+    <SessionProvider session={session}>
+      <ProtectedRoutes router={router}>
+        <ChakraProvider theme={theme}>
+          <BodyContent>
+            <Component {...pageProps} />
+          </BodyContent>
+        </ChakraProvider>
+      </ProtectedRoutes>
+    </SessionProvider>
+  );
 }

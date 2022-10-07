@@ -9,7 +9,7 @@ import { requestUserFirebase } from "../store/user/actions";
 
 const isBrowser = () => typeof window !== "undefined";
 
-export const ProtectedRoutes = ({ router, children }) => {
+export const ProtectedRoutes = ({ router, children }: any) => {
   const { status, data: session } = useSession();
   const { booksUser } = useBooks();
 

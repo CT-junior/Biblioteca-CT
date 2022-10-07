@@ -1,7 +1,7 @@
 import { BookProps, BooksUserProps } from "../interfaces/Book";
 import { regex } from "./constants";
 
-function sortLastDateFirst(a, b) {
+function sortLastDateFirst(a: any, b: any) {
   if (a.date > b.date) {
     return -1;
   }
