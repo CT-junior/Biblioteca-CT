@@ -1,12 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-param-reassign */
 import {
-    setDoc,
-    doc,
-    deleteDoc,
-    updateDoc,
-    getDocs,
-    collection,
+  setDoc,
+  doc,
+  deleteDoc,
+  updateDoc,
+  getDocs,
+  collection,
+  increment,
+  deleteField,
 } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 
@@ -20,556 +22,545 @@ import { db, handleUploadImage, storage } from "../../services/firebase";
 import { newRegistry } from "../registries/actions";
 
 export const addBook = async (
-    book: BookProps,
-    imageFile: File | undefined | null,
-    user: UserProps
+  book: BookProps,
+  imageFile: File | undefined | null,
+  user: UserProps
 ) => {
-    try {
-        store.update((s) => {
-            s.isLoading = true;
-        });
+  try {
+    store.update((s) => {
+      s.isLoading = true;
+    });
 
-        const id = generateId(book.name, "-", 1000);
-        const imageUrl = await handleUploadImage(imageFile, id);
-        const createdAt = new Date(Date.now()).toISOString();
+    const id = generateId(book.name, "-", 1000);
+    const imageUrl = await handleUploadImage(imageFile, id);
+    const createdAt = new Date(Date.now()).toISOString();
 
-        const newBook: BookProps = {
-            id,
-            createdAt,
-            name: book.name,
-            author: book.author,
-            category: book.category,
-            volume: book.volume,
-            imageUrl,
-            status: "available",
-            borrowedTo: null,
-        };
+    const newBook: BookProps = {
+      id,
+      createdAt,
+      name: book.name,
+      author: book.author,
+      category: book.category,
+      volume: book.volume,
+      imageUrl,
+      status: "available",
+      borrowedTo: {
+        user: null,
+        startDate: null,
+        endDate: null,
+      },
+    };
 
-        await setDoc(doc(db, "books", newBook.id), newBook);
+    await setDoc(doc(db, "books", newBook.id), newBook);
 
-        store.update((s) => {
-            s.books.push(newBook);
-            s.isLoading = false;
-        });
+    store.update((s) => {
+      s.books.push(newBook);
+      s.isLoading = false;
+    });
 
-        const registry: RegistryProps = {
-            id: createdAt,
-            action: "adicionado",
-            book: newBook,
-            date: createdAt,
-            user,
-        };
+    const registry: RegistryProps = {
+      id: createdAt,
+      action: "adicionado",
+      book: newBook,
+      date: createdAt,
+      user,
+    };
 
-        newRegistry(registry);
-        toast({
-            title: "Livro adicionado com sucesso!",
-            status: "success",
-            duration: 4000,
-            isClosable: true,
-        });
-    } catch (error) {
-        toast({
-            title: "Ocorreu um erro ao adicionar um livro!",
-            status: "error",
-            description: error,
-            duration: 4000,
-            isClosable: true,
-        });
-        store.update((s) => {
-            s.isLoading = false;
-        });
-    }
+    newRegistry(registry);
+    toast({
+      title: "Livro adicionado com sucesso!",
+      status: "success",
+      duration: 4000,
+      isClosable: true,
+    });
+  } catch (error) {
+    toast({
+      title: "Ocorreu um erro ao adicionar um livro!",
+      status: "error",
+      description: String(error),
+      duration: 4000,
+      isClosable: true,
+    });
+    store.update((s) => {
+      s.isLoading = false;
+    });
+  }
 };
 
 export const removeBook = async (
-    id: String,
-    book: BookProps,
-    user: UserProps
+  id: String,
+  book: BookProps,
+  user: UserProps
 ) => {
-    try {
-        store.update((s) => {
-            s.isLoading = true;
-        });
+  try {
+    store.update((s) => {
+      s.isLoading = true;
+    });
 
-        const imageRef = ref(storage, String(id));
-        const date = new Date(Date.now()).toISOString();
+    const imageRef = ref(storage, String(id));
+    const date = new Date(Date.now()).toISOString();
 
-        await deleteObject(imageRef);
-        await deleteDoc(doc(db, "books", String(id)));
+    await deleteObject(imageRef);
+    await deleteDoc(doc(db, "books", String(id)));
 
-        const registry: RegistryProps = {
-            id: date,
-            action: "removido",
-            book,
-            date,
-            user,
-        };
+    const registry: RegistryProps = {
+      id: date,
+      action: "removido",
+      book,
+      date,
+      user,
+    };
 
-        newRegistry(registry);
+    newRegistry(registry);
 
-        store.update((s) => {
-            const auxVector = s.books.filter((item) => item.id !== id);
-            const sLegth = s.books.length;
-            for (let i = 0; i < sLegth; i++) {
-                s.books.pop();
-            }
-            for (let j = 0; j < auxVector.length; j++) {
-                s.books.push(auxVector[j]);
-            }
-            s.isLoading = false;
-        });
-        toast({
-            title: "Livro removido com sucesso!!",
-            status: "success",
-            duration: 4000,
-            isClosable: true,
-        });
-    } catch (error) {
-        toast({
-            title: "Ocorreu um erro ao remover um livro!",
-            status: "error",
-            description: error,
-            duration: 4000,
-            isClosable: true,
-        });
-        store.update((s) => {
-            s.isLoading = false;
-        });
-    }
+    store.update((s) => {
+      const auxVector = s.books.filter((item) => item.id !== id);
+      const sLegth = s.books.length;
+      for (let i = 0; i < sLegth; i++) {
+        s.books.pop();
+      }
+      for (let j = 0; j < auxVector.length; j++) {
+        s.books.push(auxVector[j]);
+      }
+      s.isLoading = false;
+    });
+    toast({
+      title: "Livro removido com sucesso!!",
+      status: "success",
+      duration: 4000,
+      isClosable: true,
+    });
+  } catch (error) {
+    toast({
+      title: "Ocorreu um erro ao remover um livro!",
+      status: "error",
+      description: String(error),
+      duration: 4000,
+      isClosable: true,
+    });
+    store.update((s) => {
+      s.isLoading = false;
+    });
+  }
 };
 
 export const editBook = async (
-    book: BookProps,
-    newValues: BookProps,
-    imageFile: File | undefined,
-    user: UserProps
+  book: BookProps,
+  newValues: BookProps,
+  imageFile: File | undefined,
+  user: UserProps
 ) => {
-    try {
-        store.update((s) => {
-            s.isLoading = true;
-        });
+  try {
+    store.update((s) => {
+      s.isLoading = true;
+    });
 
-        let { imageUrl } = book;
-        const { id } = book;
-        // se imageFile for diferente de nula, a imagem antiga é excluida, e uma nova é enviado ao storage
-        if (imageFile != null) {
-            const imageRef = ref(storage, id);
+    let { imageUrl } = book;
+    const { id } = book;
+    // se imageFile for diferente de nula, a imagem antiga é excluida, e uma nova é enviado ao storage
+    if (imageFile != null) {
+      const imageRef = ref(storage, id);
 
-            await deleteObject(imageRef);
+      await deleteObject(imageRef);
 
-            imageUrl = await handleUploadImage(imageFile, id);
-        }
-
-        const editDateAt = new Date(Date.now()).toISOString();
-
-        const newBook: BookProps = {
-            id,
-            createdAt: book.createdAt,
-            name: newValues.name,
-            author: newValues.author,
-            category: newValues.category,
-            volume: newValues.volume,
-            imageUrl,
-            status: book.status,
-            borrowedTo: book.borrowedTo,
-        };
-
-        const bookDocRef = doc(db, "books", id);
-
-        await updateDoc(bookDocRef, {
-            imageUrl: newBook.imageUrl,
-            name: newBook.name,
-            author: newBook.author,
-            category: newBook.category,
-            volume: newBook.volume,
-        });
-
-        const registry: RegistryProps = {
-            id: editDateAt,
-            action: "editado",
-            book: newBook,
-            date: editDateAt,
-            user,
-        };
-
-        newRegistry(registry);
-
-        store.update((s) => {
-            s.books.forEach((book) => {
-                if (book.id === newBook.id) {
-                    book.imageUrl = newBook.imageUrl;
-                    book.name = newBook.name;
-                    book.author = newBook.author;
-                    book.volume = newBook.volume;
-                    book.category = newBook.category;
-                }
-            });
-
-            s.isLoading = false;
-        });
-        toast({
-            title: "Livro editado com sucesso!!",
-            status: "success",
-            duration: 4000,
-            isClosable: true,
-        });
-    } catch (error) {
-        toast({
-            title: "Falha na edição do livro!",
-            status: "error",
-            description: error,
-            duration: 4000,
-            isClosable: true,
-        });
-        store.update((s) => {
-            s.isLoading = false;
-        });
+      imageUrl = await handleUploadImage(imageFile, id);
     }
+
+    const editDateAt = new Date(Date.now()).toISOString();
+
+    const newBook: BookProps = {
+      id,
+      createdAt: book.createdAt,
+      name: newValues.name,
+      author: newValues.author,
+      category: newValues.category,
+      volume: newValues.volume,
+      imageUrl,
+      status: book.status,
+      borrowedTo: book.borrowedTo,
+    };
+
+    const bookDocRef = doc(db, "books", id);
+
+    await updateDoc(bookDocRef, {
+      imageUrl: newBook.imageUrl,
+      name: newBook.name,
+      author: newBook.author,
+      category: newBook.category,
+      volume: newBook.volume,
+    });
+
+    const registry: RegistryProps = {
+      id: editDateAt,
+      action: "editado",
+      book: newBook,
+      date: editDateAt,
+      user,
+    };
+
+    newRegistry(registry);
+
+    store.update((s) => {
+      s.books.forEach((book) => {
+        if (book.id === newBook.id) {
+          book.imageUrl = newBook.imageUrl;
+          book.name = newBook.name;
+          book.author = newBook.author;
+          book.volume = newBook.volume;
+          book.category = newBook.category;
+        }
+      });
+
+      s.isLoading = false;
+    });
+    toast({
+      title: "Livro editado com sucesso!!",
+      status: "success",
+      duration: 4000,
+      isClosable: true,
+    });
+  } catch (error) {
+    toast({
+      title: "Falha na edição do livro!",
+      status: "error",
+      description: String(error),
+      duration: 4000,
+      isClosable: true,
+    });
+    store.update((s) => {
+      s.isLoading = false;
+    });
+  }
 };
 
 export const requestBooksFirebase = async () => {
-    try {
-        store.update((s) => {
-            s.isLoading = true;
-        });
+  try {
+    store.update((s) => {
+      s.isLoading = true;
+    });
 
-        const booksCollectionRef = collection(db, "books");
+    const booksCollectionRef = collection(db, "books");
 
-        const response = await getDocs(booksCollectionRef);
+    const response = await getDocs(booksCollectionRef);
 
-        const books: BookProps[] = response.docs.map((doc) => {
-            return {
-                id: doc.id,
-                imageUrl: doc.data().imageUrl,
-                name: doc.data().name,
-                author: doc.data().author,
-                category: doc.data().category,
-                volume: doc.data().volume,
-                createdAt: doc.data().createdAt,
-                status: doc.data().status,
-                borrowedTo: doc.data().borrowedTo,
-            };
-        });
+    const books: BookProps[] = response.docs.map((doc) => {
+      return {
+        id: doc.id,
+        imageUrl: doc.data().imageUrl,
+        name: doc.data().name,
+        author: doc.data().author,
+        category: doc.data().category,
+        volume: doc.data().volume,
+        createdAt: doc.data().createdAt,
+        status: doc.data().status,
+        borrowedTo: doc.data().borrowedTo || {
+          user: null,
+          startDate: null,
+          endDate: null,
+        },
+      };
+    });
 
-        store.update((s) => {
-            s.books = books;
-            s.isLoading = false;
-        });
-    } catch (error) {
-        toast({
-            title: "Falha na comunicação com o banco de dados!",
-            status: "error",
-            description: error,
-            duration: 4000,
-            isClosable: true,
-            position: "top-right",
-        });
-        store.update((s) => {
-            s.isLoading = false;
-        });
-    }
+    store.update((s) => {
+      s.books = books;
+      s.isLoading = false;
+    });
+  } catch (error) {
+    toast({
+      title: "Falha na comunicação com o banco de dados!",
+      status: "error",
+      description: String(error),
+      duration: 4000,
+      isClosable: true,
+      position: "top-right",
+    });
+    store.update((s) => {
+      s.isLoading = false;
+    });
+  }
 };
 
 export const borrowBook = async (book: BookProps, user: UserProps) => {
-    try {
-        store.update((s) => {
-            s.isLoading = true;
-        });
+  try {
+    store.update((s) => {
+      s.isLoading = true;
+    });
 
-        const bookDocRef = doc(db, "books", book.id);
-        const userDocRef = doc(db, `users/${user.id}/books`, book.id);
+    const bookDocRef = doc(db, "books", book.id);
+    const bookUserDocRef = doc(db, `users/${user.id}/books`, book.id);
+    const userDocRef = doc(db, "users", user.id);
 
-        const date = new Date(Date.now());
-        const startDate = date.toISOString();
-        const endDate = new Date(
-            date.setDate(date.getDay() + 30)
-        ).toISOString();
+    const date = new Date(Date.now());
+    const startDate = date.toISOString();
+    const endDate = new Date(date.setDate(date.getDay() + 30)).toISOString();
 
-        await updateDoc(bookDocRef, {
-            status: "unavailable",
-            borrowedTo: {
-                user: {
-                    id: user.id,
-                    name: user.name,
-                    email: user.email,
-                    image: user.image,
-                },
-                startDate,
-                endDate,
-            },
-        });
+    await updateDoc(bookDocRef, {
+      status: "unavailable",
+      borrowedTo: {
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+        },
+        startDate,
+        endDate,
+      },
+    });
 
-        await setDoc(userDocRef, {
-            description: book,
-            status: "pendente",
-            startDate,
-            endDate,
-        });
+    await setDoc(bookUserDocRef, {
+      description: book,
+      status: "pendente",
+      startDate,
+      endDate,
+    });
 
-        const registry: RegistryProps = {
-            id: startDate,
-            action: "emprestado",
-            book,
-            date: startDate,
-            user,
-        };
+    await updateDoc(userDocRef, {
+      books: increment(+1),
+    });
 
-        newRegistry(registry);
+    const registry: RegistryProps = {
+      id: startDate,
+      action: "emprestado",
+      book,
+      date: startDate,
+      user,
+    };
 
-        store.update((s) => {
-            s.books.forEach((sBook) => {
-                if (sBook.id === book.id) {
-                    sBook.status = "unavailable";
-                    sBook.borrowedTo.user = user;
-                    sBook.borrowedTo.startDate = startDate;
-                    sBook.borrowedTo.endDate = endDate;
-                }
-            });
+    newRegistry(registry);
 
-            let bookExists = false;
+    store.update((s) => {
+      s.books.forEach((sBook) => {
+        if (sBook.id === book.id) {
+          sBook.borrowedTo.user = user;
+          sBook.borrowedTo.startDate = startDate;
+          sBook.borrowedTo.endDate = endDate;
+        }
+      });
 
-            s.booksUser.forEach((sBook) => {
-                if (sBook.description.id === book.id) {
-                    bookExists = true;
-                }
-            });
+      s.isLoading = false;
+    });
 
-            if (bookExists) {
-                s.booksUser.forEach((sBook) => {
-                    sBook.status = "pendente";
-                    sBook.startDate = startDate;
-                    sBook.endDate = endDate;
-                });
-            } else {
-                s.booksUser.push({
-                    description: book,
-                    status: "pendente",
-                    startDate,
-                    endDate,
-                });
-            }
-
-            s.isLoading = false;
-        });
-
-        toast({
-            title: "Livro emprestado com sucesso!",
-            status: "success",
-            duration: 4000,
-            isClosable: true,
-        });
-    } catch (error) {
-        toast({
-            title: "Error no empréstimo de livro.",
-            status: "error",
-            description: error,
-            duration: 4000,
-            isClosable: true,
-        });
-        store.update((s) => {
-            s.isLoading = false;
-        });
-    }
+    toast({
+      title: "Livro emprestado com sucesso!",
+      status: "success",
+      duration: 4000,
+      isClosable: true,
+    });
+  } catch (error) {
+    toast({
+      title: "Error no empréstimo de livro.",
+      status: "error",
+      description: String(error),
+      duration: 4000,
+      isClosable: true,
+    });
+    store.update((s) => {
+      s.isLoading = false;
+    });
+  }
 };
 
 export const requestBooksUserFirebase = async (userID: string) => {
-    try {
-        store.update((s) => {
-            s.isLoading = true;
-        });
+  try {
+    store.update((s) => {
+      s.isLoading = true;
+    });
 
-        const booksCollectionRef = collection(
-            db,
-            `users/${String(userID)}/books`
-        );
+    const booksCollectionRef = collection(db, `users/${String(userID)}/books`);
 
-        const response = await getDocs(booksCollectionRef);
+    const response = await getDocs(booksCollectionRef);
 
-        const books: BooksUserProps[] = response.docs.map((doc) => {
-            return {
-                description: doc.data().description,
-                endDate: doc.data().endDate,
-                startDate: doc.data().startDate,
-                status: doc.data().status,
-            };
-        });
+    const books: BooksUserProps[] = response.docs.map((doc) => {
+      return {
+        description: doc.data().description,
+        endDate: doc.data().endDate,
+        startDate: doc.data().startDate,
+        status: doc.data().status,
+      };
+    });
 
-        store.update((s) => {
-            s.booksUser = books;
-            s.isLoading = false;
-        });
-    } catch (error) {
-        toast({
-            title: "Falha na comunicação com o banco de dados!",
-            status: "error",
-            description: error,
-            duration: 4000,
-            isClosable: true,
-            position: "top-right",
-        });
+    store.update((s) => {
+      s.booksUser = books;
+      s.isLoading = false;
+    });
+  } catch (error) {
+    toast({
+      title: "Falha na comunicação com o banco de dados!",
+      status: "error",
+      description: String(error),
+      duration: 4000,
+      isClosable: true,
+      position: "top-right",
+    });
 
-        store.update((s) => {
-            s.isLoading = false;
-        });
-    }
+    store.update((s) => {
+      s.isLoading = false;
+    });
+  }
 };
 
 export const returnBookUser = async (user: UserProps, book: BooksUserProps) => {
-    try {
-        store.update((s) => {
-            s.isLoading = true;
-        });
+  try {
+    store.update((s) => {
+      s.isLoading = true;
+    });
 
-        const bookDocRef = doc(db, "books", book.description.id);
+    const bookDocRef = doc(db, "books", book.description.id);
+    const userDocRef = doc(db, "users", user.id);
 
-        const userBookDocRef = doc(
-            db,
-            `users/${user.id}/books`,
-            book.description.id
-        );
+    const userBookDocRef = doc(
+      db,
+      `users/${user.id}/books`,
+      book.description.id
+    );
 
-        await deleteDoc(userBookDocRef);
+    await deleteDoc(userBookDocRef);
 
-        await updateDoc(bookDocRef, {
-            borrowedTo: null,
-            status: "available",
-        });
+    await updateDoc(bookDocRef, {
+      borrowedTo: deleteField(),
+      status: "available",
+    });
 
-        const date = new Date(Date.now()).toISOString();
-        const registry: RegistryProps = {
-            id: date,
-            action: "devolvido",
-            book: book.description,
-            date,
-            user,
-        };
+    await updateDoc(userDocRef, {
+      books: increment(-1),
+    });
 
-        newRegistry(registry);
+    const date = new Date(Date.now()).toISOString();
+    const registry: RegistryProps = {
+      id: date,
+      action: "devolvido",
+      book: book.description,
+      date,
+      user,
+    };
 
-        store.update((s) => {
-            s.books.forEach((sBook) => {
-                if (sBook.id === book.description.id) {
-                    sBook.borrowedTo = null;
-                    sBook.status = "available";
-                }
-            });
+    newRegistry(registry);
 
-            const auxVector = s.booksUser.filter(
-                (item) => item.description.id !== book.description.id
-            );
-            const sLegth = s.booksUser.length;
-            for (let i = 0; i < sLegth; i++) {
-                s.booksUser.pop();
-            }
-            for (let j = 0; j < auxVector.length; j++) {
-                s.booksUser.push(auxVector[j]);
-            }
+    store.update((s) => {
+      s.books.forEach((sBook) => {
+        if (sBook.id === book.description.id) {
+          sBook.borrowedTo.user = null;
+          sBook.borrowedTo.startDate = null;
+          sBook.borrowedTo.endDate = null;
+          sBook.status = "available";
+        }
+      });
 
-            s.isLoading = false;
-        });
-        toast({
-            title: "Livro devolvido com sucesso!",
-            status: "success",
-            duration: 4000,
-            isClosable: true,
-        });
-    } catch (error) {
-        toast({
-            title: "Falha na devolução do livro!",
-            status: "error",
-            description: error,
-            duration: 4000,
-            isClosable: true,
-        });
-    }
+      const auxVector = s.booksUser.filter(
+        (item) => item.description.id !== book.description.id
+      );
+      const sLegth = s.booksUser.length;
+      for (let i = 0; i < sLegth; i++) {
+        s.booksUser.pop();
+      }
+      for (let j = 0; j < auxVector.length; j++) {
+        s.booksUser.push(auxVector[j]);
+      }
+
+      s.isLoading = false;
+    });
+    toast({
+      title: "Livro devolvido com sucesso!",
+      status: "success",
+      duration: 4000,
+      isClosable: true,
+    });
+  } catch (error) {
+    toast({
+      title: "Falha na devolução do livro!",
+      status: "error",
+      description: String(error),
+      duration: 4000,
+      isClosable: true,
+    });
+  }
 };
 
 export const reBorrowBook = async (book: BooksUserProps, user: UserProps) => {
-    try {
-        store.update((s) => {
-            s.isLoading = true;
-        });
+  try {
+    store.update((s) => {
+      s.isLoading = true;
+    });
 
-        const bookDocRef = doc(db, "books", book.description.id);
-        const userBookDocRef = doc(
-            db,
-            `users/${user.id}/books`,
-            book.description.id
-        );
+    const bookDocRef = doc(db, "books", book.description.id);
+    const userBookDocRef = doc(
+      db,
+      `users/${user.id}/books`,
+      book.description.id
+    );
 
-        const date = new Date(Date.now());
-        const startDate = date.toISOString();
-        const endDate = new Date(
-            date.setDate(date.getDay() + 30)
-        ).toISOString();
+    const date = new Date(Date.now());
+    const startDate = date.toISOString();
+    const endDate = new Date(date.setDate(date.getDay() + 30)).toISOString();
 
-        await updateDoc(bookDocRef, {
-            status: "unavailable",
-            borrowedTo: {
-                user: {
-                    id: user.id,
-                    name: user.name,
-                    email: user.email,
-                    image: user.image,
-                },
-                startDate,
-                endDate,
-            },
-        });
+    await updateDoc(bookDocRef, {
+      status: "unavailable",
+      borrowedTo: {
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+        },
+        startDate,
+        endDate,
+      },
+    });
 
-        await updateDoc(userBookDocRef, {
-            status: "pendente",
-            startDate,
-            endDate,
-        });
+    await updateDoc(userBookDocRef, {
+      status: "pendente",
+      startDate,
+      endDate,
+    });
 
-        const registry: RegistryProps = {
-            id: startDate,
-            action: "emprestado",
-            book: book.description,
-            date: startDate,
-            user,
-        };
+    const registry: RegistryProps = {
+      id: startDate,
+      action: "emprestado",
+      book: book.description,
+      date: startDate,
+      user,
+    };
 
-        newRegistry(registry);
+    newRegistry(registry);
 
-        store.update((s) => {
-            s.books.forEach((sBook) => {
-                if (sBook.id === book.description.id) {
-                    sBook.status = "unavailable";
-                    sBook.borrowedTo.user = user;
-                    sBook.borrowedTo.startDate = startDate;
-                    sBook.borrowedTo.endDate = endDate;
-                }
-            });
+    store.update((s) => {
+      s.books.forEach((sBook) => {
+        if (sBook.id === book.description.id) {
+          sBook.status = "unavailable";
+          sBook.borrowedTo.user = user;
+          sBook.borrowedTo.startDate = startDate;
+          sBook.borrowedTo.endDate = endDate;
+        }
+      });
 
-            s.booksUser.forEach((sBook) => {
-                if (sBook.description.id === book.description.id) {
-                    sBook.status = "pendente";
-                    sBook.startDate = startDate;
-                    sBook.endDate = endDate;
-                }
-            });
+      s.booksUser.forEach((sBook) => {
+        if (sBook.description.id === book.description.id) {
+          sBook.status = "pendente";
+          sBook.startDate = startDate;
+          sBook.endDate = endDate;
+        }
+      });
 
-            s.isLoading = false;
-        });
+      s.isLoading = false;
+    });
 
-        toast({
-            title: "Livro re-emprestado com sucesso!",
-            status: "success",
-            duration: 4000,
-            isClosable: true,
-        });
-    } catch (error) {
-        toast({
-            title: "Falha na devolução do livro!",
-            status: "error",
-            description: error,
-            duration: 4000,
-            isClosable: true,
-        });
-        store.update((s) => {
-            s.isLoading = false;
-        });
-    }
+    toast({
+      title: "Livro re-emprestado com sucesso!",
+      status: "success",
+      duration: 4000,
+      isClosable: true,
+    });
+  } catch (error) {
+    toast({
+      title: "Falha na devolução do livro!",
+      status: "error",
+      description: String(error),
+      duration: 4000,
+      isClosable: true,
+    });
+    store.update((s) => {
+      s.isLoading = false;
+    });
+  }
 };

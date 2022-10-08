@@ -1,13 +1,13 @@
 import { Store } from "pullstate";
 
 interface ISidebarState {
-    isFixed: boolean;
-    isOpen: boolean;
+  isFixed: boolean;
+  isOpen: boolean;
 }
 
 const defaultSidebarState: ISidebarState = {
-    isFixed: false,
-    isOpen: false,
+  isFixed: false,
+  isOpen: false,
 };
 
 export const store = new Store<ISidebarState>(defaultSidebarState);

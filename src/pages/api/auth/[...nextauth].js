@@ -1,6 +1,3 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable react/jsx-indent-props */
-/* eslint-disable react/jsx-indent */
 import { FirestoreAdapter } from "@next-auth/firebase-adapter";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
