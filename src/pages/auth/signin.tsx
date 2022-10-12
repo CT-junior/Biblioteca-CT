@@ -35,7 +35,7 @@ const SignIn: NextPage<Props> = ({ error }) => {
         toastOptions.description = (
           <Text>
             O email não é do domínio da
-            <Text as="strong">CT Junior</Text>
+            <Text as="strong"> CT Junior</Text>
           </Text>
         );
       } else {
