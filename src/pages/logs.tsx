@@ -4,6 +4,7 @@ import { HiCloudDownload } from "react-icons/hi";
 import { Avatar, Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 
 import { sortLastDateFirst } from "../common/functions";
 import { useRegistries } from "../hooks/useRegistries";
@@ -74,7 +75,11 @@ const Logs: NextPage = () => {
                   timeStyle: "short",
                 })}
                 | O livro
-                <Text as="b">{` ${registry.book.name}↗ `}</Text>
+                <Text display="inline" fontWeight="bold">
+                  <Link href={`/library/${registry.book.id}`}>
+                    {` ${registry.book.name} ↗ `}
+                  </Link>
+                </Text>
                 {`foi ${registry.action} por`}
                 <Avatar
                   src={`${registry.user.image}`}
