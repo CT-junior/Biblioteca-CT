@@ -74,7 +74,7 @@ const Logs: NextPage = () => {
                 {new Date(registry.date).toLocaleTimeString("pt-BR", {
                   timeStyle: "short",
                 })}
-                | O livro
+                {" | O livro"}
                 <Text display="inline" fontWeight="bold">
                   <Link href={`/library/${registry.book.id}`}>
                     {` ${registry.book.name} ↗ `}
