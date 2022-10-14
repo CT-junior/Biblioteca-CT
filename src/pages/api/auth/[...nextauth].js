@@ -12,15 +12,15 @@ export default NextAuth({
         }),
     ],
     callbacks: {
-        // async signIn({ account, profile }) {
-        //     if (account.provider === "google") {
-        //         return (
-        //             profile.email_verified &&
-        //             profile.email.endsWith("@ctjunior.com.br")
-        //         );
-        //     }
-        //     return true; // if there is no specific handling for the provider, sign in is allowed
-        // },
+        async signIn({ account, profile }) {
+            if (account.provider === "google") {
+                return (
+                    profile.email_verified &&
+                    profile.email.endsWith("@ctjunior.com.br")
+                );
+            }
+            return true; // if there is no specific handling for the provider, sign in is allowed
+        },
         session: async ({ session, token }) => {
             if (session?.user) {
                 session.user.id = token.sub;
