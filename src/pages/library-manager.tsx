@@ -40,6 +40,7 @@ const LibraryManager: NextPage = () => {
   useEffect(() => {
     requestBooksFirebase();
     handleCSVBooks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCSVBooks = useCallback(() => {
