@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { HiPlus, HiSearch, HiCloudDownload } from "react-icons/hi";
+import CsvDownload from "react-json-to-csv";
 
 import {
   Button,
@@ -28,16 +29,33 @@ import { AddBookModal } from "../components/AddBookModal";
 import { MoreSettingsPopover } from "../components/MoreSettingsPopover";
 import { TableLibraryManager } from "../components/TableLibraryManager";
 import { useBooks } from "../hooks/useBooks";
-import { BookProps } from "../interfaces/Book";
+import { BookProps, BooksCSVProps } from "../interfaces/Book";
 import { onOpenAddBookModal } from "../store/addBookModal/actions";
 import { requestBooksFirebase } from "../store/books/actions";
 
 const LibraryManager: NextPage = () => {
   const { books } = useBooks();
+  const [dataCSV, setDataCSV] = useState<BooksCSVProps[]>([]);
 
   useEffect(() => {
     requestBooksFirebase();
+    handleCSVBooks();
   }, []);
+
+  const handleCSVBooks = useCallback(() => {
+    const dataCSV: BooksCSVProps[] = books.map((book) => {
+      return {
+        Nome: book.name,
+        Categoria: book.category,
+        Autor: book.author,
+        Volume: book.volume,
+        Status: book.status,
+        ImagemLink: book.imageUrl,
+      };
+    });
+
+    setDataCSV(dataCSV);
+  }, [books]);
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -96,12 +114,21 @@ const LibraryManager: NextPage = () => {
           {...colorSchemeOrangeCtOutline}
           borderRadius="full"
           width="100%"
-          maxW="28"
+          maxW="40"
           fontWeight="sm"
           px="8"
           ml={["unset", "unset", "auto"]}
         >
-          Exportar
+          <CsvDownload
+            data={dataCSV}
+            filename="books.csv"
+            style={{
+              fontStyle: "unset",
+              fontWeight: "unset",
+            }}
+          >
+            Exportar dados
+          </CsvDownload>
         </Button>
       </Flex>
       <TableLibraryManager>

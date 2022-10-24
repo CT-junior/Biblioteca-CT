@@ -46,7 +46,7 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
 
   return (
     <Flex
-      position={!isWideMobile ? "fixed" : "relative"}
+      position={!isWideMobile ? "fixed" : "unset"}
       zIndex="overlay"
       as="aside"
       w={size}
@@ -57,7 +57,6 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
       borderRightStyle="solid"
       borderRightWidth={["", "", "1px"]}
       direction="column"
-      justify="space-between"
       overflow="clip"
       transition="0.3s"
       onMouseEnter={onMouseEnter}
