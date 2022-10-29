@@ -30,7 +30,13 @@ export function Sidebar() {
     <Drawer isOpen={isOpen} placement="left" onClose={toggleFixedSidebar}>
       <DrawerOverlay>
         <DrawerContent p="4">
-          <DrawerCloseButton mt="6" zIndex="overlay" />
+          <DrawerCloseButton
+            mt="4"
+            mr="4"
+            alignContent="end"
+            zIndex="popover"
+            size="lg"
+          />
           <DrawerBody px="2">
             <SidebarNav size="100%" isOpen key={2} />
           </DrawerBody>
