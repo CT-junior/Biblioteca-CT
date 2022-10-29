@@ -33,6 +33,8 @@ const Logs: NextPage = () => {
         pb="6"
         borderBottom="1px"
         borderColor="gray.200"
+        flexWrap="wrap"
+        rowGap="3"
       >
         <Heading as="h1" fontSize="xl">
           Registros
