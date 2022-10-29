@@ -38,8 +38,8 @@ export function BookRow({ book }: Props) {
                 <Image
                   src={book.description.imageUrl}
                   alt={book.description.name}
-                  width="47,25px"
-                  height="70px"
+                  width="47"
+                  height="70"
                   objectFit="cover"
                   priority
                 />

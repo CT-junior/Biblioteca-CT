@@ -66,33 +66,30 @@ const Home: NextPage = () => {
     );
   }
 
-  if (!isMobileView) {
-    return (
-      <>
-        <Head>
-          <title>BiblioCTeca</title>
-        </Head>
-        <Box display="flex" flexDirection="column" gap="30" alignItems="center">
-          <Heading textAlign="center">{`Bem vindo, ${user.name}`}</Heading>
-          <Input
-            placeholder="O que deseja buscar?"
-            w="sm"
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </Box>
-        <Divider marginBlock="10" />
-        <Box>
-          <Heading size="md">Seus livros</Heading>
-
-          <TableBooksUser>
-            {filteredBookList.map((book) => (
-              <BookRow book={book} key={book.description.id} />
-            ))}
-          </TableBooksUser>
-        </Box>
-      </>
-    );
-  }
+  return (
+    <>
+      <Head>
+        <title>BiblioCTeca</title>
+      </Head>
+      <Box display="flex" flexDirection="column" gap="30" alignItems="center">
+        <Heading textAlign="center">{`Bem vindo, ${user.name}`}</Heading>
+        <Input
+          placeholder="O que deseja buscar?"
+          w="sm"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </Box>
+      <Divider marginBlock="10" />
+      <Box>
+        <Heading size="md">Seus livros</Heading>
+        <TableBooksUser>
+          {filteredBookList.map((book) => (
+            <BookRow book={book} key={book.description.id} />
+          ))}
+        </TableBooksUser>
+      </Box>
+    </>
+  );
 };
 
 export default Home;
