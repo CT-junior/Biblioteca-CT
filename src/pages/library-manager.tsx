@@ -55,6 +55,7 @@ const LibraryManager: NextPage = () => {
         justify="space-between"
         aria-label="second-header"
         pb="6"
+        w=" 100%"
         borderBottom="1px"
         borderColor="gray.200"
         gap="2"
