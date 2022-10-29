@@ -28,7 +28,7 @@ const Library: NextPage = () => {
       <Flex
         justifyContent="center"
         alignItems="center"
-        paddingTop="10"
+        paddingTop="5"
         flexDirection="column"
       >
         <Input
@@ -37,12 +37,14 @@ const Library: NextPage = () => {
           w="80%"
           onChange={(e) => setSearch(e.target.value)}
         />
-        <Divider marginBlock="20" />
+        <Divider marginBlock="10" />
       </Flex>
       <Grid
         templateColumns="repeat(auto-fill, 260px)"
         gap="8"
         justifyContent={["center", "center", "space-between"]}
+        overflowY="scroll"
+        h="65vh"
       >
         {filteredBookList.map((book) => (
           <GridItem key={book.id}>

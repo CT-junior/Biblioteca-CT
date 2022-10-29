@@ -111,7 +111,7 @@ const LibraryManager: NextPage = () => {
           Exportar
         </Button>
       </Flex>
-      <TableLibraryManager>
+      <TableLibraryManager overflowY="scroll" h="75vh">
         {filteredBookList.map((book: BookProps) => {
           return (
             <Tr key={book.id}>

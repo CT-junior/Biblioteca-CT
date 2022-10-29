@@ -8,15 +8,14 @@ export function HeadTitle({ title }: TitleProps) {
   return (
     <Flex
       align="flex-start"
+      justify="center"
       aria-label="second-header"
-      pb="6"
-      gap="2"
       direction="column"
     >
-      <Heading as="h1" fontSize="xl">
+      <Heading as="h1" fontSize="xl" pb="6">
         {title}
       </Heading>
-      <Divider marginBlock="5" />
+      <Divider />
     </Flex>
   );
 }

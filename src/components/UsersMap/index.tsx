@@ -10,14 +10,12 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 
-import { useBooks } from "../../hooks/useBooks";
 import { useUsers } from "../../hooks/useUsers";
 import { UserProps } from "../../interfaces/User";
 import { requestUsersFirebase } from "../../store/users/actions";
 
 export function UsersMap() {
   const { users } = useUsers();
-  const { books } = useBooks();
 
   const isMobileView = useBreakpointValue({
     base: true,

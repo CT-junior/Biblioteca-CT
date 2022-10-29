@@ -23,7 +23,7 @@ const Users: NextPage = () => {
                     <title>BiblioCTeca | Usuários</title>
                 </Head>
                 <HeadTitle title="Membros" />
-                <Flex flexWrap="wrap" justifyContent="space-around">
+                <Flex flexWrap="wrap" justifyContent="space-around" overflowY="scroll" height="75vh">
                     <UsersMap />
                 </Flex>
 
@@ -43,7 +43,9 @@ const Users: NextPage = () => {
                     <Td p='0' w="15vw" border="none">Livros em posse</Td>
                 </Th>
             </Table>
-            <UsersMap />
+            <Flex flexDirection="column" overflowY="scroll" height="75vh">
+                <UsersMap />
+            </Flex>
 
         </>
     );

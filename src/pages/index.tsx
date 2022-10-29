@@ -43,9 +43,9 @@ const Home: NextPage = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </Box>
-        <Divider marginBlock="10" />
+        <Divider marginBlock="5" />
         <Box>
-          <Heading size="md" textAlign="center">
+          <Heading pb="5" size="md" textAlign="center">
             Seus livros
           </Heading>
           <Flex
@@ -79,10 +79,12 @@ const Home: NextPage = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
       </Box>
-      <Divider marginBlock="10" />
+      <Divider marginBlock="5" />
       <Box>
-        <Heading size="md">Seus livros</Heading>
-        <TableBooksUser>
+        <Heading pb="5" size="md">
+          Seus livros
+        </Heading>
+        <TableBooksUser overflowY="scroll" h="60vh">
           {filteredBookList.map((book) => (
             <BookRow book={book} key={book.description.id} />
           ))}
