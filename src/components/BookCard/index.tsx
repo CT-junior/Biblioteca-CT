@@ -35,7 +35,7 @@ export function BookCard({
         shadow="md"
         cursor="pointer"
       >
-        <Image src={`${imageUrl}`} width="126" height="200" objectFit="cover" />
+        <Image src={imageUrl} width="126px" height="200px" objectFit="cover" />
         <Text mt="6" fontSize="xl" textAlign="center">
           {name}
         </Text>
