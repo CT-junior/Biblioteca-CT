@@ -28,54 +28,6 @@ export function BookRow({ book }: Props) {
   const height = 150;
   const width = height * 0.675;
 
-  if (!isMobileView) {
-    return (
-      <Tr shadow="md" borderRadius="xl">
-        <Td>
-          <Content>
-            <HStack spacing="4">
-              {book.description.imageUrl && (
-                <Image
-                  src={book.description.imageUrl}
-                  alt={book.description.name}
-                  width="47"
-                  height="70"
-                  objectFit="cover"
-                  priority
-                />
-              )}
-              <Text fontSize="sm">{book.description.name}</Text>
-            </HStack>
-          </Content>
-        </Td>
-        <Td>
-          <Content justify="center">
-            {new Date(book.startDate).toLocaleDateString("pt-BR", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            })}
-          </Content>
-        </Td>
-        <Td>
-          <Content justify="center">
-            {new Date(book.endDate).toLocaleDateString("pt-BR", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            })}
-          </Content>
-        </Td>
-
-        <Td>
-          <Content justify="flex-end">
-            <Popover book={book} />
-          </Content>
-        </Td>
-      </Tr>
-    );
-  }
-
   if (isMobileView) {
     return (
       <Flex flexDir="column" rowGap="2" alignItems="center">
@@ -133,4 +85,50 @@ export function BookRow({ book }: Props) {
       </Flex>
     );
   }
+
+  return (
+    <Tr shadow="md" borderRadius="xl">
+      <Td>
+        <Content>
+          <HStack spacing="4">
+            {book.description.imageUrl && (
+              <Image
+                src={book.description.imageUrl}
+                alt={book.description.name}
+                width="47"
+                height="70"
+                objectFit="cover"
+                priority
+              />
+            )}
+            <Text fontSize="sm">{book.description.name}</Text>
+          </HStack>
+        </Content>
+      </Td>
+      <Td>
+        <Content justify="center">
+          {new Date(book.startDate).toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })}
+        </Content>
+      </Td>
+      <Td>
+        <Content justify="center">
+          {new Date(book.endDate).toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })}
+        </Content>
+      </Td>
+
+      <Td>
+        <Content justify="flex-end">
+          <Popover book={book} />
+        </Content>
+      </Td>
+    </Tr>
+  );
 }
