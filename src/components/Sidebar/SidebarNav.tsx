@@ -8,11 +8,9 @@ import { TbBooks } from "react-icons/tb";
 
 import { Flex, Stack, useBreakpointValue, VStack } from "@chakra-ui/react";
 import Image from "next/image";
-// import { setTimeout } from "timers";
 
 import biblioctecaLogo from "../../assets/images/bibliocteca-simple-logo.svg";
 import vercelLogo from "../../assets/images/vercel-horizontal-logo.svg";
-// import { toggleSidebar } from "../../store/sidebar/actions";
 import { NavLink } from "./NavLink";
 
 interface SidebarNavProps {
@@ -25,24 +23,6 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
     base: true,
     md: false,
   });
-
-  // let mouseOver = false;
-
-  // const onMouseLeave = () => {
-  //   mouseOver = false;
-  //   toggleSidebar(false);
-  // };
-
-  // const onMouseEnter = () => {
-  //   mouseOver = true;
-  //   new Promise((res) => setTimeout(res, 1000)).then(() => {
-  //     if (mouseOver === true) {
-  //       toggleSidebar(true);
-  //     } else {
-  //       toggleSidebar(false);
-  //     }
-  //   });
-  // };
 
   return (
     <Flex
@@ -60,10 +40,6 @@ export function SidebarNav({ size, isOpen }: SidebarNavProps) {
       justify="space-between"
       overflow="clip"
       transition="0.3s"
-      // onMouseEnter={onMouseEnter}
-      // onMouseLeave={() => {
-      //   onMouseLeave();
-      // }}
       bg="white"
     >
       <Stack spacing="4" align="flex-start" paddingTop={["10", "0"]}>
