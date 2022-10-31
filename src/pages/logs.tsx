@@ -33,6 +33,8 @@ const Logs: NextPage = () => {
         pb="6"
         borderBottom="1px"
         borderColor="gray.200"
+        flexWrap="wrap"
+        rowGap="3"
       >
         <Heading as="h1" fontSize="xl">
           Registros
@@ -62,34 +64,40 @@ const Logs: NextPage = () => {
           align="flex-start"
           direction="column"
           overflow="clip"
-          w="max-content"
+          w="100%"
         >
           {list.map((registry: RegistryProps) => {
             return (
-              <Text verticalAlign="center" as="p" gap="1" key={registry.id}>
-                {new Date(registry.date).toLocaleDateString("pt-BR", {
-                  dateStyle: "short",
-                })}
-                {" às "}
-                {new Date(registry.date).toLocaleTimeString("pt-BR", {
-                  timeStyle: "short",
-                })}
-                {" | O livro"}
-                <Text display="inline" fontWeight="bold">
-                  <Link href={`/library/${registry.book.id}`}>
-                    {` ${registry.book.name} ↗ `}
-                  </Link>
+              <Flex
+                borderBottom="solid 1px var(--chakra-colors-chakra-border-color)"
+                w="100%"
+                py="3"
+              >
+                <Text verticalAlign="center" as="p" gap="1" key={registry.id}>
+                  {new Date(registry.date).toLocaleDateString("pt-BR", {
+                    dateStyle: "short",
+                  })}
+                  {" às "}
+                  {new Date(registry.date).toLocaleTimeString("pt-BR", {
+                    timeStyle: "short",
+                  })}
+                  {" | O livro"}
+                  <Text display="inline" fontWeight="bold">
+                    <Link href={`/library/${registry.book.id}`}>
+                      {` ${registry.book.name} ↗ `}
+                    </Link>
+                  </Text>
+                  {`foi ${registry.action} por`}
+                  <Avatar
+                    src={`${registry.user.image}`}
+                    size="sm"
+                    ml="2"
+                    my="auto"
+                    verticalAlign="middle"
+                  />
+                  <Text as="b">{` ${registry.user.name}`}</Text>
                 </Text>
-                {`foi ${registry.action} por`}
-                <Avatar
-                  src={`${registry.user.image}`}
-                  size="sm"
-                  ml="2"
-                  my="auto"
-                  verticalAlign="middle"
-                />
-                <Text as="b">{` ${registry.user.name}`}</Text>
-              </Text>
+              </Flex>
             );
           })}
         </Flex>

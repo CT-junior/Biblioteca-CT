@@ -9,6 +9,7 @@ import {
   Stack,
   Tag,
   Text,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { doc, getDoc } from "firebase/firestore";
 import { GetServerSideProps } from "next";
@@ -30,6 +31,11 @@ export default function Library({ book }: any) {
     router.reload();
   };
 
+  const isMobileView = useBreakpointValue({
+    base: true,
+    md: false,
+  });
+
   return (
     <Box w="100%" maxW="1200" mx="auto" key={book.id}>
       <IconButton
@@ -43,8 +49,10 @@ export default function Library({ book }: any) {
       <Flex direction="column" align="flex-start" maxW="800" mx="auto" gap="5">
         <Flex
           align="flex-start"
+          justify="center"
           w="100%"
-          justify="space-between"
+          flexDir="row"
+          flexWrap={isMobileView ? "wrap" : "nowrap"}
           gap="10"
           py="16"
         >
@@ -55,9 +63,14 @@ export default function Library({ book }: any) {
             objectFit="cover"
             priority
           />
-          <Stack align="flex-end" spacing="40">
-            <Stack fontSize="xl">
-              <Text as="h1" fontSize="5xl">
+          <Stack align={isMobileView ? "center" : "flex-start"} spacing="10">
+            <Stack fontSize="xl" align={isMobileView ? "center" : "flex-start"}>
+              <Text
+                as="h1"
+                fontSize={isMobileView ? "3xl" : "5xl"}
+                paddingBottom={isMobileView ? "5" : "0"}
+                alignItems={isMobileView ? "center" : "flex-start"}
+              >
                 {book.name}
               </Text>
               <Text>{book.volume}</Text>
@@ -65,11 +78,11 @@ export default function Library({ book }: any) {
               <Text>{book.category}</Text>
             </Stack>
             {book.status === "available" ? (
-              <Tag mt="4" bg="green.400" color="white">
+              <Tag mt="4" bg="green.400" color="white" size="lg">
                 Disponível
               </Tag>
             ) : (
-              <Tag mt="4" bg="orange.400" color="white">
+              <Tag mt="4" bg="orange.400" color="white" size="lg">
                 Indisponível
               </Tag>
             )}

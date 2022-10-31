@@ -51,30 +51,37 @@ const LibraryManager: NextPage = () => {
         <title>BiblioCTeca | Gerenciador de Biblioteca</title>
       </Head>
       <Flex
-        align={["flex-start", "center"]}
+        align="center"
+        justify="space-between"
         aria-label="second-header"
         pb="6"
+        w=" 100%"
         borderBottom="1px"
         borderColor="gray.200"
         gap="2"
         direction={["column", "column", "row"]}
       >
-        <Heading as="h1" fontSize="xl">
-          Gerenciador de biblioteca
-        </Heading>
-        <HStack>
-          <Button
-            onClick={onOpenAddBookModal}
-            size="sm"
-            width="100%"
-            maxW="40"
-            leftIcon={<Icon as={HiPlus} color="white" />}
-            borderRadius="full"
-            {...colorSchemeOrangeCt}
-          >
-            Adicionar Livro
-          </Button>
-          {isWideVersion && (
+        <Flex
+          gap="3"
+          flexWrap={["wrap", "wrap", "nowrap"]}
+          align="center"
+          direction={["column", "column", "row"]}
+        >
+          <Heading as="h1" fontSize="xl">
+            Gerenciador de biblioteca
+          </Heading>
+          <Flex gap="3" flexWrap={["wrap", "nowrap", "nowrap"]}>
+            <Button
+              onClick={onOpenAddBookModal}
+              size="sm"
+              width="100%"
+              maxW="40"
+              leftIcon={<Icon as={HiPlus} color="white" />}
+              borderRadius="full"
+              {...colorSchemeOrangeCt}
+            >
+              Adicionar Livro
+            </Button>
             <InputGroup w="32" size="sm">
               <InputLeftElement>
                 <Icon as={HiSearch} color="orange.ct" />
@@ -87,8 +94,8 @@ const LibraryManager: NextPage = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </InputGroup>
-          )}
-        </HStack>
+          </Flex>
+        </Flex>
         <Button
           variant="outline"
           size="sm"
@@ -99,12 +106,12 @@ const LibraryManager: NextPage = () => {
           maxW="28"
           fontWeight="sm"
           px="8"
-          ml={["unset", "unset", "auto"]}
+          mt={["10", "5", "unset"]}
         >
           Exportar
         </Button>
       </Flex>
-      <TableLibraryManager>
+      <TableLibraryManager overflowY="scroll" h="75vh">
         {filteredBookList.map((book: BookProps) => {
           return (
             <Tr key={book.id}>

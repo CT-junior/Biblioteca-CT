@@ -19,6 +19,7 @@ import {
   FormLabel,
   Icon,
   Image,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -45,6 +46,11 @@ export function AddBookModal() {
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm({
     resolver: yupResolver(bookSchema),
+  });
+
+  const isMobileView = useBreakpointValue({
+    base: true,
+    md: false,
   });
 
   const handleAddBook: SubmitHandler<BookProps> = async (values) => {
@@ -89,17 +95,22 @@ export function AddBookModal() {
       size="3xl"
       isCentered
     >
-      <ModalOverlay />
-      <ModalContent>
+      <ModalOverlay bgSize="100%" w="100%" h="100%" alignItems="center" />
+      <ModalContent
+        w={isMobileView ? "80%" : "inherit"}
+        h={isMobileView ? "80%" : "max-content"}
+      >
         <ModalHeader>Adicionar livro</ModalHeader>
-        <ModalCloseButton onClick={resetUseStates} />
-        <ModalBody>
+        <ModalCloseButton onClick={resetUseStates} size="lg" />
+
+        <ModalBody overflowY="scroll">
           <Flex
             as="form"
             w="100%"
-            p="8"
+            p={isMobileView ? "0" : "8"}
+            pb={isMobileView ? "5" : "8"}
             borderRadius={8}
-            flexDir="row"
+            flexDir={isMobileView ? "column" : "row"}
             gap="6"
             onSubmit={handleSubmit(handleAddBook)}
           >
@@ -114,6 +125,7 @@ export function AddBookModal() {
                 }}
                 h="100%"
                 w="100%"
+                p={isMobileView ? "20" : "0"}
                 borderRadius="15px"
                 border="1px"
                 borderColor="gray.200"
